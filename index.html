@@ -28,7 +28,7 @@
 
     .container {
       max-width: 600px;
-      padding: 48px 24px;
+      padding: 48px 24px 120px;
     }
 
     /* ---- Staggered fade-in ---- */
@@ -53,6 +53,7 @@
     .fade-in:nth-child(9)  { animation-delay: 1.3s; }
     .fade-in:nth-child(10) { animation-delay: 1.45s; }
     .fade-in:nth-child(11) { animation-delay: 1.6s; }
+    .fade-in:nth-child(12) { animation-delay: 1.75s; }
 
     /* ---- Greeting ---- */
     .greeting {
@@ -91,6 +92,12 @@
       color: #fff;
       font-weight: 600;
       font-size: 1.15rem;
+    }
+
+    .line.dimmed {
+      color: #666;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.85rem;
     }
 
     /* ---- Terminal ---- */
@@ -217,7 +224,6 @@
       font-size: 0.78rem;
       color: #333;
       margin-bottom: 28px;
-      transition: color 0.3s;
     }
 
     /* ---- Closer ---- */
@@ -310,10 +316,11 @@
 
     /* ---- Responsive ---- */
     @media (max-width: 480px) {
-      .container { padding: 36px 20px; }
+      .container { padding: 36px 20px 100px; }
       .greeting { font-size: 1.4rem; }
       .closer { font-size: 1.15rem; }
       .cookie-banner { flex-direction: column; text-align: center; padding: 16px; }
+      .leave-btn { font-size: 0.78rem; padding: 10px 22px; }
     }
   </style>
 </head>
@@ -321,6 +328,7 @@
 
   <main class="container">
 
+    <!-- V2 content — preserved exactly -->
     <h1 class="greeting fade-in">Yo, thanks for visiting!<span class="cursor"></span></h1>
 
     <p class="line bold fade-in">
@@ -331,10 +339,6 @@
       Like, seriously. There's a whole internet out there. Cats doing backflips.
       Wikipedia rabbit holes. That one recipe you bookmarked in 2019.
       And you chose... this?
-    </p>
-
-    <p class="line fade-in">
-      Bold move. Questionable judgement. But okay.
     </p>
 
     <div class="terminal fade-in">
@@ -352,19 +356,19 @@
         <div class="indent"><span class="prefix">&rsaquo;</span> Tester is on leave.</div>
         <div class="indent"><span class="prefix">&rsaquo;</span> His manager is also on leave.</div>
         <div class="indent"><span class="prefix">&rsaquo;</span> The manager's manager doesn't know what UAT means.</div>
-        <div class="indent"><span class="prefix">&rsaquo;</span> The intern pushed to prod. Again.</div>
       </div>
     </div>
 
     <p class="line fade-in">
       Come back by Monday. Or Tuesday. Actually, let's say "next sprint"
-      and quietly move the ticket to the backlog where dreams go to die.
+      and quietly move the ticket to the backlog.
     </p>
 
-    <p class="line fade-in" style="color: #555; font-size: 0.9rem;">
-      Estimated time to completion: somewhere between "soon" and the heat death of the universe.
+    <p class="line dimmed fade-in">
+      Current build: 0.0.1-alpha-pre-beta-almost-there-not-really
     </p>
 
+    <!-- Interactive section — new additions below V2 content -->
     <p class="line bold fade-in">
       Anyway, here's a button. You should probably click it.
     </p>
@@ -376,13 +380,14 @@
 
     <p class="timer fade-in" id="timer"></p>
 
+    <!-- V2 closer — preserved exactly -->
     <p class="closer fade-in">Also, go get a life, man.</p>
     <p class="subtext fade-in">
-      (says the guy who mass-texted his friends to visit this page)
+      (says the guy who bought a domain just to write this)
     </p>
 
     <footer class="footer fade-in">
-      <p>&copy; 2026 Rachit Tiwari &middot; Built with mass delusion and a mass subscription he didn't need</p>
+      <p>&copy; 2026 Rachit Tiwari &middot; Built with mass delusion and a domain he didn't need</p>
       <p class="footer-links">
         <a href="mailto:rachittiwari10@gmail.com">email</a> &middot;
         <a href="https://github.com/namesrachittiwari" target="_blank" rel="noopener">github</a>
@@ -410,37 +415,29 @@
       { time: 300000, text: "you win. i give up." },
     ];
 
-    const originalTitle = document.title;
-    let titleIndex = 0;
-
     titles.forEach(({ time, text }) => {
-      setTimeout(() => {
-        document.title = text;
-      }, time);
+      setTimeout(() => { document.title = text; }, time);
     });
 
-    // Restore title when tab becomes visible
     document.addEventListener('visibilitychange', () => {
-      if (document.hidden) {
-        document.title = "come back :(";
-      }
+      if (document.hidden) document.title = "come back :(";
     });
 
     // ===== Time wasted counter =====
     const startTime = Date.now();
     const timerEl = document.getElementById('timer');
-    const messages = [
+    const timerMessages = [
       { at: 0,   text: (s) => `You've been here for ${s} seconds. The developer spent fewer building this.` },
       { at: 30,  text: (s) => `${s} seconds. That's ${s} seconds of your life you're not getting back.` },
       { at: 60,  text: (s) => `${s} seconds now. Your screen time report is going to be embarrassing.` },
-      { at: 120, text: (s) => `${Math.floor(s/60)} minutes. At this point, you could've learned a chord on guitar.` },
+      { at: 120, text: (s) => `${Math.floor(s/60)} minutes. At this point you could've learned a chord on guitar.` },
       { at: 300, text: (s) => `${Math.floor(s/60)} minutes. I'm genuinely concerned about you.` },
     ];
 
     setInterval(() => {
       const seconds = Math.floor((Date.now() - startTime) / 1000);
       if (seconds < 5) return;
-      const msg = [...messages].reverse().find(m => seconds >= m.at);
+      const msg = [...timerMessages].reverse().find(m => seconds >= m.at);
       if (msg) timerEl.textContent = msg.text(seconds);
     }, 1000);
 
@@ -449,6 +446,7 @@
     const wrapper = btn.parentElement;
     const gaveUp = document.getElementById('gaveUpText');
     let dodgeCount = 0;
+
     const dodgeMessages = [
       "Not that easy.",
       "Nice try.",
@@ -465,15 +463,11 @@
       const btnRect = btn.getBoundingClientRect();
       const maxLeft = wrapperRect.width - btnRect.width;
 
-      // Jump to a random position
       let newLeft = Math.random() * maxLeft;
-
-      // Make sure it actually moves away from cursor
       const cursorRelX = e.clientX - wrapperRect.left;
       if (Math.abs(newLeft - cursorRelX) < 100) {
         newLeft = cursorRelX < maxLeft / 2 ? maxLeft : 0;
       }
-
       btn.style.left = Math.max(0, Math.min(newLeft, maxLeft)) + 'px';
 
       dodgeCount++;
@@ -484,7 +478,6 @@
       }
 
       if (dodgeCount >= 10) {
-        // Finally let them "catch" it
         btn.style.transition = 'none';
         btn.textContent = "Fine, you win";
         btn.style.background = '#333';
@@ -493,9 +486,7 @@
         btn.onmouseenter = null;
         btn.addEventListener('click', () => {
           btn.textContent = "...just kidding";
-          setTimeout(() => {
-            btn.textContent = "There's nowhere to go";
-          }, 1500);
+          setTimeout(() => { btn.textContent = "There's nowhere to go"; }, 1500);
           setTimeout(() => {
             btn.textContent = "This is it. This is the whole site.";
             btn.style.color = '#555';
@@ -505,31 +496,31 @@
       }
     });
 
-    // If they actually click early
     btn.addEventListener('click', () => {
       if (dodgeCount < 10) {
-        // They somehow clicked it
-        btn.textContent = "Wait, how did you—";
+        btn.textContent = "Wait, how did you\u2014";
         btn.style.background = '#333';
         btn.style.color = '#888';
-        setTimeout(() => {
-          btn.textContent = "Doesn't matter. There's no exit.";
-        }, 2000);
+        setTimeout(() => { btn.textContent = "Doesn't matter. There's no exit."; }, 2000);
       }
     });
 
     // ===== Cookie banner =====
-    document.getElementById('cookieBtn').addEventListener('click', () => {
-      const banner = document.getElementById('cookieBanner');
-      banner.querySelector('.cookie-text').innerHTML =
-        "Great. Your acknowledgment of the emptiness has been noted. You may now continue staring at nothing.";
-      banner.querySelector('.cookie-btn').textContent = "I'm okay with this";
+    const cookieBtn = document.getElementById('cookieBtn');
+    const banner = document.getElementById('cookieBanner');
+    let cookieClicks = 0;
 
-      document.getElementById('cookieBtn').addEventListener('click', () => {
+    cookieBtn.addEventListener('click', () => {
+      cookieClicks++;
+      if (cookieClicks === 1) {
+        banner.querySelector('.cookie-text').innerHTML =
+          "Great. Your acknowledgment of the emptiness has been noted. You may now continue staring at nothing.";
+        cookieBtn.textContent = "I'm okay with this";
+      } else if (cookieClicks === 2) {
         banner.style.transform = 'translateY(100%)';
         banner.style.transition = 'transform 0.4s ease';
-      }, { once: true });
-    }, { once: true });
+      }
+    });
 
     // ===== Console easter eggs =====
     console.log(
