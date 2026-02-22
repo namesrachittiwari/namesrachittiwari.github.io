@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rachit Tiwari</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Georgia', 'Times New Roman', serif;
+      background-color: #fafafa;
+      color: #2c2c2c;
+      line-height: 1.7;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .container {
+      max-width: 620px;
+      margin: 0 auto;
+      padding: 60px 24px 80px;
+    }
+
+    .header {
+      margin-bottom: 36px;
+    }
+
+    .header h1 {
+      font-size: 2rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: #1a1a1a;
+    }
+
+    .profile-photo {
+      width: 160px;
+      height: 160px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin-bottom: 32px;
+      background-color: #d4d4d4;
+      display: block;
+    }
+
+    /* Placeholder avatar when no image is set */
+    .photo-placeholder {
+      width: 160px;
+      height: 160px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 32px;
+      color: #fff;
+      font-size: 3rem;
+      font-family: 'Georgia', serif;
+      font-weight: 700;
+      user-select: none;
+    }
+
+    .bio {
+      margin-bottom: 36px;
+    }
+
+    .bio p {
+      font-size: 1.05rem;
+      color: #3a3a3a;
+      margin-bottom: 16px;
+    }
+
+    .bio a {
+      color: #2563eb;
+      text-decoration: none;
+      border-bottom: 1px solid transparent;
+      transition: border-color 0.2s;
+    }
+
+    .bio a:hover {
+      border-bottom-color: #2563eb;
+    }
+
+    .links {
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .links a {
+      font-size: 0.95rem;
+      color: #2563eb;
+      text-decoration: none;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      border-bottom: 1px solid transparent;
+      transition: border-color 0.2s;
+    }
+
+    .links a:hover {
+      border-bottom-color: #2563eb;
+    }
+
+    @media (max-width: 480px) {
+      .container {
+        padding: 40px 20px 60px;
+      }
+
+      .header h1 {
+        font-size: 1.6rem;
+      }
+
+      .photo-placeholder,
+      .profile-photo {
+        width: 120px;
+        height: 120px;
+        font-size: 2.4rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="container">
+    <header class="header">
+      <h1>Rachit Tiwari</h1>
+    </header>
+
+    <!-- Replace this div with an <img class="profile-photo" src="your-photo.jpg" alt="Rachit Tiwari"> -->
+    <div class="photo-placeholder" aria-label="Profile photo placeholder">RT</div>
+
+    <section class="bio">
+      <p>
+        I am a software engineer and researcher working at the intersection of
+        technology and design. I enjoy building products that make a difference
+        and exploring new ideas in my spare time.
+      </p>
+      <p>
+        Previously, I have worked on projects spanning web development, data
+        analysis, and open-source contributions. I hold a degree in Computer
+        Science and am always looking for interesting problems to solve.
+      </p>
+      <p>
+        Outside of work, I enjoy reading, writing, and connecting with people
+        who share a passion for creating things.
+      </p>
+    </section>
+
+    <nav class="links">
+      <a href="mailto:rachit@example.com">Email</a>
+      <a href="https://github.com/rachittiwari" target="_blank" rel="noopener">GitHub</a>
+      <a href="https://linkedin.com/in/rachittiwari" target="_blank" rel="noopener">LinkedIn</a>
+      <a href="https://twitter.com/rachittiwari" target="_blank" rel="noopener">Twitter</a>
+    </nav>
+  </main>
+</body>
+</html>
