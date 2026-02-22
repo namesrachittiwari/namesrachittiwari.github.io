@@ -4,9 +4,10 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Rachit Tiwari</title>
+  <meta name="description" content="You really shouldn't be here.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after {
       margin: 0;
@@ -15,19 +16,28 @@
     }
 
     :root {
-      --white: #f5f5f5;
+      --white: #e8e8e8;
       --white-bright: #ffffff;
-      --gray-100: #c8c8c8;
-      --gray-200: #999;
-      --gray-300: #666;
-      --gray-400: #444;
-      --gray-500: #333;
-      --gray-600: #222;
-      --gray-700: #1a1a1a;
+      --gray-50: #d4d4d4;
+      --gray-100: #b0b0b0;
+      --gray-200: #888;
+      --gray-300: #555;
+      --gray-400: #3a3a3a;
+      --gray-500: #2a2a2a;
+      --gray-600: #1e1e1e;
+      --gray-700: #161616;
       --gray-800: #111;
-      --black: #0a0a0a;
+      --gray-900: #0c0c0c;
+      --black: #080808;
       --red: #ef4444;
-      --red-glow: rgba(239, 68, 68, 0.4);
+      --red-dim: #dc2626;
+      --red-glow: rgba(239, 68, 68, 0.35);
+      --accent: #818cf8;
+      --accent-glow: rgba(129, 140, 248, 0.15);
+    }
+
+    html {
+      scroll-behavior: smooth;
     }
 
     body {
@@ -35,89 +45,107 @@
       background-color: var(--black);
       color: var(--white);
       min-height: 100vh;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      cursor: default;
+    }
+
+    /* ===== Mouse-tracking ambient light ===== */
+    .mouse-glow {
+      position: fixed;
+      width: 800px;
+      height: 800px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(255,255,255,0.025) 0%, transparent 65%);
+      pointer-events: none;
+      z-index: 0;
+      transform: translate(-50%, -50%);
+      transition: left 0.3s ease-out, top 0.3s ease-out;
+      will-change: left, top;
+    }
+
+    /* ===== Noise grain overlay ===== */
+    .noise {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 1;
+      opacity: 0.035;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      background-repeat: repeat;
+    }
+
+    /* ===== Vignette ===== */
+    .vignette {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 1;
+      background: radial-gradient(ellipse at center, transparent 50%, rgba(0,0,0,0.5) 100%);
+    }
+
+    /* ===== Page layout ===== */
+    .page {
       display: flex;
       align-items: center;
       justify-content: center;
-      -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
-      overflow-x: hidden;
-    }
-
-    /* Subtle noise grain overlay */
-    body::before {
-      content: '';
-      position: fixed;
-      inset: 0;
-      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
-      pointer-events: none;
-      z-index: 1;
-    }
-
-    /* Subtle radial glow behind content */
-    body::after {
-      content: '';
-      position: fixed;
-      top: 30%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      width: 600px;
-      height: 600px;
-      background: radial-gradient(circle, rgba(255,255,255,0.015) 0%, transparent 70%);
-      pointer-events: none;
-      z-index: 0;
-    }
-
-    .container {
-      max-width: 600px;
-      padding: 48px 28px;
-      text-align: left;
+      min-height: 100vh;
+      padding: 80px 24px;
       position: relative;
       z-index: 2;
     }
 
-    /* ---- Staggered fade-in animations ---- */
-    .fade-in {
+    .container {
+      max-width: 640px;
+      width: 100%;
+    }
+
+    /* ===== Reveal animations ===== */
+    .reveal {
       opacity: 0;
-      transform: translateY(16px);
-      animation: fadeUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      transform: translateY(30px);
+      transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1),
+                  transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
-    .fade-in:nth-child(1) { animation-delay: 0.1s; }
-    .fade-in:nth-child(2) { animation-delay: 0.25s; }
-    .fade-in:nth-child(3) { animation-delay: 0.4s; }
-    .fade-in:nth-child(4) { animation-delay: 0.55s; }
-    .fade-in:nth-child(5) { animation-delay: 0.7s; }
-    .fade-in:nth-child(6) { animation-delay: 0.85s; }
-    .fade-in:nth-child(7) { animation-delay: 1.0s; }
-    .fade-in:nth-child(8) { animation-delay: 1.15s; }
-
-    @keyframes fadeUp {
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
     }
 
-    /* ---- Greeting ---- */
+    /* Stagger delays set via JS */
+
+    /* ===== Greeting with typewriter ===== */
+    .greeting-wrapper {
+      margin-bottom: 56px;
+      min-height: 4em;
+    }
+
     .greeting {
       font-family: 'Inter', sans-serif;
-      font-size: 2.2rem;
-      font-weight: 700;
-      margin-bottom: 48px;
-      line-height: 1.2;
-      letter-spacing: -0.03em;
+      font-size: clamp(2rem, 5vw, 3rem);
+      font-weight: 800;
+      line-height: 1.15;
+      letter-spacing: -0.04em;
       color: var(--white-bright);
+      display: inline;
+    }
+
+    .greeting .typed-text {
+      display: inline;
     }
 
     .cursor {
       display: inline-block;
       width: 3px;
-      height: 0.85em;
-      background: var(--white-bright);
-      margin-left: 6px;
+      height: 0.9em;
+      background: var(--accent);
+      margin-left: 4px;
       animation: cursorBlink 1s step-end infinite;
-      vertical-align: baseline;
-      border-radius: 1px;
+      vertical-align: text-bottom;
+      border-radius: 2px;
+      box-shadow: 0 0 8px var(--accent-glow);
     }
 
     @keyframes cursorBlink {
@@ -125,75 +153,162 @@
       50% { opacity: 0; }
     }
 
-    /* ---- Text lines ---- */
+    /* ===== Horizontal rule ===== */
+    .divider {
+      width: 48px;
+      height: 2px;
+      background: linear-gradient(90deg, var(--accent), transparent);
+      border: none;
+      margin: 0 0 48px 0;
+      border-radius: 2px;
+    }
+
+    /* ===== Text sections ===== */
+    .section {
+      margin-bottom: 40px;
+    }
+
     .line {
-      margin-bottom: 28px;
-      font-size: 1.05rem;
-      line-height: 1.8;
-      color: var(--gray-100);
+      font-size: clamp(1rem, 2.5vw, 1.1rem);
+      line-height: 1.85;
+      color: var(--gray-50);
       font-weight: 400;
     }
 
-    .line.bold {
+    .line.hero {
       color: var(--white-bright);
       font-weight: 600;
-      font-size: 1.2rem;
-      letter-spacing: -0.01em;
+      font-size: clamp(1.15rem, 3vw, 1.35rem);
+      letter-spacing: -0.015em;
+      line-height: 1.6;
     }
 
-    .line.dimmed {
-      color: var(--gray-300);
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.78rem;
-      letter-spacing: -0.02em;
-      padding: 8px 12px;
-      background: var(--gray-800);
-      border-radius: 6px;
-      display: inline-block;
+    .line em {
+      color: var(--gray-100);
+      font-style: normal;
+      opacity: 0.7;
     }
 
-    /* ---- Terminal status box ---- */
+    /* ===== Terminal ===== */
     .terminal {
-      margin: 40px 0;
-      border: 1px solid var(--gray-600);
-      border-radius: 10px;
+      margin: 48px 0;
+      border-radius: 14px;
       overflow: hidden;
-      background: var(--gray-800);
+      background: var(--gray-900);
+      border: 1px solid var(--gray-500);
+      box-shadow:
+        0 4px 6px rgba(0,0,0,0.3),
+        0 12px 40px rgba(0,0,0,0.4),
+        inset 0 1px 0 rgba(255,255,255,0.03);
+      position: relative;
+    }
+
+    /* Animated gradient border glow */
+    .terminal::before {
+      content: '';
+      position: absolute;
+      inset: -1px;
+      border-radius: 15px;
+      padding: 1px;
+      background: linear-gradient(
+        135deg,
+        rgba(129,140,248,0.3),
+        transparent 40%,
+        transparent 60%,
+        rgba(239,68,68,0.2)
+      );
+      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+      pointer-events: none;
+      z-index: 1;
     }
 
     .terminal-header {
       display: flex;
       align-items: center;
-      gap: 7px;
-      padding: 12px 16px;
-      background: var(--gray-700);
-      border-bottom: 1px solid var(--gray-600);
+      gap: 8px;
+      padding: 14px 18px;
+      background: linear-gradient(180deg, var(--gray-600) 0%, var(--gray-700) 100%);
+      border-bottom: 1px solid var(--gray-500);
+      position: relative;
+    }
+
+    .terminal-dots {
+      display: flex;
+      gap: 8px;
     }
 
     .terminal-dot {
-      width: 11px;
-      height: 11px;
+      width: 12px;
+      height: 12px;
       border-radius: 50%;
+      position: relative;
     }
 
-    .terminal-dot.red { background: #ff5f57; }
-    .terminal-dot.yellow { background: #febc2e; }
-    .terminal-dot.green { background: #28c840; }
+    .terminal-dot::after {
+      content: '';
+      position: absolute;
+      inset: 3px;
+      border-radius: 50%;
+      background: rgba(0,0,0,0.15);
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+
+    .terminal:hover .terminal-dot::after {
+      opacity: 1;
+    }
+
+    .terminal-dot.red { background: #ff5f57; box-shadow: inset 0 -1px 2px rgba(0,0,0,0.2); }
+    .terminal-dot.yellow { background: #febc2e; box-shadow: inset 0 -1px 2px rgba(0,0,0,0.2); }
+    .terminal-dot.green { background: #28c840; box-shadow: inset 0 -1px 2px rgba(0,0,0,0.2); }
 
     .terminal-title {
       font-family: 'JetBrains Mono', monospace;
-      font-size: 0.72rem;
-      color: var(--gray-300);
-      margin-left: 8px;
-      letter-spacing: 0.02em;
+      font-size: 0.7rem;
+      color: var(--gray-200);
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      letter-spacing: 0.04em;
+      white-space: nowrap;
     }
 
     .terminal-body {
-      padding: 20px 20px;
+      padding: 24px 22px;
       font-family: 'JetBrains Mono', monospace;
-      font-size: 0.82rem;
-      line-height: 2;
-      color: var(--gray-200);
+      font-size: clamp(0.72rem, 1.8vw, 0.84rem);
+      line-height: 2.1;
+      color: var(--gray-100);
+      position: relative;
+    }
+
+    /* Scanlines */
+    .terminal-body::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 2px,
+        rgba(0,0,0,0.08) 2px,
+        rgba(0,0,0,0.08) 4px
+      );
+      pointer-events: none;
+    }
+
+    .terminal-line {
+      opacity: 0;
+      transform: translateX(-8px);
+      transition: opacity 0.4s ease, transform 0.4s ease;
+    }
+
+    .terminal-line.typed {
+      opacity: 1;
+      transform: translateX(0);
     }
 
     .terminal-body .status-line {
@@ -208,173 +323,407 @@
       height: 8px;
       border-radius: 50%;
       background: var(--red);
-      box-shadow: 0 0 8px var(--red-glow), 0 0 20px var(--red-glow);
+      box-shadow: 0 0 6px var(--red-glow), 0 0 16px var(--red-glow), 0 0 32px rgba(239,68,68,0.15);
       animation: pulse 2s ease-in-out infinite;
       flex-shrink: 0;
     }
 
     @keyframes pulse {
-      0%, 100% { opacity: 1; box-shadow: 0 0 8px var(--red-glow), 0 0 20px var(--red-glow); }
-      50% { opacity: 0.5; box-shadow: 0 0 4px var(--red-glow); }
+      0%, 100% {
+        box-shadow: 0 0 6px var(--red-glow), 0 0 16px var(--red-glow), 0 0 32px rgba(239,68,68,0.15);
+      }
+      50% {
+        opacity: 0.6;
+        box-shadow: 0 0 3px var(--red-glow);
+      }
     }
 
     .terminal-body .indent {
-      padding-left: 18px;
-      color: var(--gray-300);
+      padding-left: 20px;
+      color: var(--gray-200);
     }
 
     .terminal-body .prefix {
-      color: var(--gray-400);
+      color: var(--accent);
       user-select: none;
+      margin-right: 4px;
     }
 
-    /* ---- Closer ---- */
-    .closer {
-      margin-top: 48px;
-      font-size: 1.5rem;
+    .terminal-body .status-label {
+      color: var(--gray-200);
+    }
+
+    .terminal-body .status-value {
+      color: var(--red);
       font-weight: 700;
+    }
+
+    /* ===== Sprint line ===== */
+    .sprint-line {
+      color: var(--gray-50);
+    }
+
+    .sprint-line .highlight {
       color: var(--white-bright);
-      letter-spacing: -0.03em;
-      line-height: 1.3;
+      background: var(--gray-500);
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-weight: 500;
+      font-size: 0.95em;
+    }
+
+    /* ===== Version badge ===== */
+    .version-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.74rem;
+      color: var(--gray-200);
+      padding: 10px 16px;
+      background: var(--gray-800);
+      border: 1px solid var(--gray-500);
+      border-radius: 8px;
+      letter-spacing: -0.01em;
+    }
+
+    .version-badge .tag {
+      font-size: 0.6rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      font-weight: 700;
+      color: var(--black);
+      background: var(--red-dim);
+      padding: 2px 6px;
+      border-radius: 3px;
+    }
+
+    /* ===== Closer ===== */
+    .closer-section {
+      margin-top: 56px;
+    }
+
+    .closer {
+      font-size: clamp(1.5rem, 4vw, 2rem);
+      font-weight: 800;
+      color: var(--white-bright);
+      letter-spacing: -0.04em;
+      line-height: 1.2;
+      transition: letter-spacing 0.4s ease;
+    }
+
+    .closer:hover {
+      letter-spacing: 0.02em;
     }
 
     .subtext {
-      margin-top: 10px;
-      font-size: 0.82rem;
-      color: var(--gray-400);
+      margin-top: 12px;
+      font-size: 0.85rem;
+      color: var(--gray-300);
       font-style: italic;
+      font-weight: 300;
     }
 
-    /* ---- Footer ---- */
+    /* ===== Footer ===== */
     .footer {
-      margin-top: 64px;
-      padding-top: 24px;
-      border-top: 1px solid var(--gray-700);
-      font-size: 0.78rem;
-      color: var(--gray-400);
+      margin-top: 80px;
+      padding-top: 28px;
+      border-top: 1px solid var(--gray-600);
       display: flex;
       justify-content: space-between;
       align-items: center;
       flex-wrap: wrap;
-      gap: 12px;
+      gap: 16px;
+    }
+
+    .footer-credit {
+      font-size: 0.75rem;
+      color: var(--gray-300);
+      line-height: 1.6;
+      max-width: 360px;
     }
 
     .footer-links {
       display: flex;
-      gap: 16px;
+      gap: 6px;
     }
 
-    .footer a {
-      color: var(--gray-300);
+    .footer-links a {
+      color: var(--gray-200);
       text-decoration: none;
-      padding: 4px 0;
-      position: relative;
-      transition: color 0.3s ease;
+      font-size: 0.78rem;
       font-weight: 500;
+      padding: 6px 14px;
+      border-radius: 6px;
+      border: 1px solid transparent;
+      transition: all 0.3s ease;
+      letter-spacing: 0.01em;
     }
 
-    .footer a::after {
+    .footer-links a:hover {
+      color: var(--white-bright);
+      border-color: var(--gray-400);
+      background: var(--gray-700);
+    }
+
+    /* ===== Easter egg tooltip ===== */
+    .easter-egg {
+      position: relative;
+      cursor: pointer;
+      border-bottom: 1px dashed var(--gray-400);
+    }
+
+    .easter-egg .tooltip {
+      position: absolute;
+      bottom: calc(100% + 10px);
+      left: 50%;
+      transform: translateX(-50%) scale(0.95);
+      background: var(--gray-600);
+      color: var(--white);
+      font-size: 0.78rem;
+      padding: 8px 14px;
+      border-radius: 8px;
+      white-space: nowrap;
+      pointer-events: none;
+      opacity: 0;
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      border: 1px solid var(--gray-400);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+      font-family: 'Inter', sans-serif;
+    }
+
+    .easter-egg .tooltip::after {
       content: '';
       position: absolute;
-      bottom: 0;
+      top: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+      border: 6px solid transparent;
+      border-top-color: var(--gray-600);
+    }
+
+    .easter-egg:hover .tooltip {
+      opacity: 1;
+      transform: translateX(-50%) scale(1);
+    }
+
+    /* ===== Scroll progress bar ===== */
+    .progress-bar {
+      position: fixed;
+      top: 0;
       left: 0;
-      width: 0;
-      height: 1px;
-      background: var(--white-bright);
-      transition: width 0.3s ease;
+      height: 2px;
+      background: linear-gradient(90deg, var(--accent), var(--red));
+      z-index: 100;
+      width: 0%;
+      transition: width 0.1s linear;
     }
 
-    .footer a:hover {
-      color: var(--white-bright);
-    }
-
-    .footer a:hover::after {
-      width: 100%;
-    }
-
-    /* ---- Responsive ---- */
-    @media (max-width: 480px) {
-      .greeting {
-        font-size: 1.7rem;
+    /* ===== Responsive ===== */
+    @media (max-width: 640px) {
+      .page {
+        padding: 60px 20px;
       }
 
-      .container {
-        padding: 36px 20px;
-      }
-
-      .closer {
-        font-size: 1.25rem;
+      .terminal-title {
+        position: static;
+        transform: none;
+        margin-left: 8px;
       }
 
       .terminal-body {
-        font-size: 0.75rem;
-        padding: 16px;
+        padding: 18px 16px;
       }
 
       .footer {
         flex-direction: column;
         align-items: flex-start;
       }
+
+      .footer-links {
+        width: 100%;
+      }
+
+      .footer-links a {
+        flex: 1;
+        text-align: center;
+      }
+
+      .closer-section {
+        margin-top: 44px;
+      }
+
+      .mouse-glow {
+        display: none;
+      }
+    }
+
+    /* ===== Selection color ===== */
+    ::selection {
+      background: rgba(129, 140, 248, 0.3);
+      color: var(--white-bright);
     }
   </style>
 </head>
 <body>
-  <main class="container">
 
-    <h1 class="greeting fade-in">Yo, thanks for visiting!<span class="cursor"></span></h1>
+  <!-- Ambient layers -->
+  <div class="progress-bar" id="progressBar"></div>
+  <div class="mouse-glow" id="mouseGlow"></div>
+  <div class="noise"></div>
+  <div class="vignette"></div>
 
-    <p class="line bold fade-in">
-      But quite frankly... what are you doing here?
-    </p>
+  <!-- Main content -->
+  <section class="page">
+    <main class="container">
 
-    <p class="line fade-in">
-      Like, seriously. There's a whole internet out there. Cats doing backflips.
-      Wikipedia rabbit holes. That one recipe you bookmarked in 2019.
-      And you chose... this?
-    </p>
-
-    <div class="terminal fade-in">
-      <div class="terminal-header">
-        <span class="terminal-dot red"></span>
-        <span class="terminal-dot yellow"></span>
-        <span class="terminal-dot green"></span>
-        <span class="terminal-title">status &mdash; rachittiwari.com</span>
+      <div class="greeting-wrapper reveal">
+        <h1 class="greeting">
+          <span class="typed-text" id="typedText"></span><span class="cursor" id="cursor"></span>
+        </h1>
       </div>
-      <div class="terminal-body">
-        <div class="status-line">
-          <span class="status-dot"></span>
-          <span>SITE STATUS: <strong style="color: var(--white);">Did not pass UAT</strong></span>
+
+      <hr class="divider reveal">
+
+      <div class="section reveal">
+        <p class="line hero">
+          But quite frankly... what are you doing here?
+        </p>
+      </div>
+
+      <div class="section reveal">
+        <p class="line">
+          Like, seriously. There's a whole internet out there.
+          <span class="easter-egg">Cats doing backflips<span class="tooltip">You'd rather be watching those, admit it.</span></span>.
+          Wikipedia rabbit holes. That one recipe you bookmarked in 2019.
+          And you chose... <em>this?</em>
+        </p>
+      </div>
+
+      <div class="terminal reveal">
+        <div class="terminal-header">
+          <div class="terminal-dots">
+            <span class="terminal-dot red"></span>
+            <span class="terminal-dot yellow"></span>
+            <span class="terminal-dot green"></span>
+          </div>
+          <span class="terminal-title">status &mdash; rachittiwari.com</span>
         </div>
-        <div class="indent"><span class="prefix">&rsaquo;</span> Tester is on leave.</div>
-        <div class="indent"><span class="prefix">&rsaquo;</span> His manager is also on leave.</div>
-        <div class="indent"><span class="prefix">&rsaquo;</span> The manager's manager doesn't know what UAT means.</div>
+        <div class="terminal-body" id="terminalBody">
+          <div class="terminal-line status-line">
+            <span class="status-dot"></span>
+            <span><span class="status-label">SITE STATUS: </span><span class="status-value">Did not pass UAT</span></span>
+          </div>
+          <div class="terminal-line indent"><span class="prefix">$</span> Tester is on leave.</div>
+          <div class="terminal-line indent"><span class="prefix">$</span> His manager is also on leave.</div>
+          <div class="terminal-line indent"><span class="prefix">$</span> The manager's manager doesn't know what UAT means.</div>
+        </div>
       </div>
-    </div>
 
-    <p class="line fade-in">
-      Come back by Monday. Or Tuesday. Actually, let's say "next sprint"
-      and quietly move the ticket to the backlog.
-    </p>
-
-    <p class="line dimmed fade-in">
-      v0.0.1-alpha-pre-beta-almost-there-not-really
-    </p>
-
-    <p class="closer fade-in">
-      Also, go get a life, man.
-    </p>
-    <p class="subtext fade-in">
-      (says the guy who bought a domain just to write this)
-    </p>
-
-    <footer class="footer fade-in">
-      <span>&copy; 2026 Rachit Tiwari &middot; Built with mass delusion and a domain he didn't need</span>
-      <div class="footer-links">
-        <a href="mailto:rachittiwari10@gmail.com">email</a>
-        <a href="https://github.com/namesrachittiwari" target="_blank" rel="noopener">github</a>
+      <div class="section reveal">
+        <p class="line sprint-line">
+          Come back by Monday. Or Tuesday. Actually, let's say
+          <span class="highlight">"next sprint"</span>
+          and quietly move the ticket to the backlog.
+        </p>
       </div>
-    </footer>
 
-  </main>
+      <div class="section reveal">
+        <span class="version-badge">
+          <span class="tag">unstable</span>
+          v0.0.1-alpha-pre-beta-almost-there-not-really
+        </span>
+      </div>
+
+      <div class="closer-section reveal">
+        <p class="closer">Also, go get a life, man.</p>
+        <p class="subtext">
+          (says the guy who bought a domain just to write this)
+        </p>
+      </div>
+
+      <footer class="footer reveal">
+        <span class="footer-credit">
+          &copy; 2026 Rachit Tiwari &middot; Built with mass delusion and a domain he didn't need
+        </span>
+        <div class="footer-links">
+          <a href="mailto:rachittiwari10@gmail.com">email</a>
+          <a href="https://github.com/namesrachittiwari" target="_blank" rel="noopener">github</a>
+        </div>
+      </footer>
+
+    </main>
+  </section>
+
+  <script>
+    // ===== Typewriter Effect =====
+    const text = "Yo, thanks for visiting!";
+    const typedEl = document.getElementById('typedText');
+    let i = 0;
+
+    function typeWriter() {
+      if (i < text.length) {
+        typedEl.textContent += text.charAt(i);
+        i++;
+        setTimeout(typeWriter, 60 + Math.random() * 40);
+      }
+    }
+
+    setTimeout(typeWriter, 600);
+
+    // ===== Scroll Reveal =====
+    const reveals = document.querySelectorAll('.reveal');
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry, index) => {
+        if (entry.isIntersecting) {
+          setTimeout(() => {
+            entry.target.classList.add('visible');
+          }, index * 120);
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
+
+    reveals.forEach((el, i) => {
+      el.style.transitionDelay = `${i * 0.1}s`;
+      observer.observe(el);
+    });
+
+    // ===== Terminal line-by-line reveal =====
+    const terminalObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const lines = entry.target.querySelectorAll('.terminal-line');
+          lines.forEach((line, i) => {
+            setTimeout(() => {
+              line.classList.add('typed');
+            }, 400 + i * 250);
+          });
+          terminalObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.3 });
+
+    terminalObserver.observe(document.getElementById('terminalBody'));
+
+    // ===== Mouse-tracking glow =====
+    const glow = document.getElementById('mouseGlow');
+
+    document.addEventListener('mousemove', (e) => {
+      glow.style.left = e.clientX + 'px';
+      glow.style.top = e.clientY + 'px';
+    });
+
+    // ===== Scroll progress bar =====
+    const progressBar = document.getElementById('progressBar');
+
+    window.addEventListener('scroll', () => {
+      const scrollTop = window.scrollY;
+      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+      const progress = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+      progressBar.style.width = progress + '%';
+    });
+  </script>
 </body>
 </html>
