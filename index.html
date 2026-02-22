@@ -4,119 +4,120 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Rachit Tiwari</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
   <style>
-    * {
+    *, *::before, *::after {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
     }
 
+    :root {
+      --white: #f5f5f5;
+      --white-bright: #ffffff;
+      --gray-100: #c8c8c8;
+      --gray-200: #999;
+      --gray-300: #666;
+      --gray-400: #444;
+      --gray-500: #333;
+      --gray-600: #222;
+      --gray-700: #1a1a1a;
+      --gray-800: #111;
+      --black: #0a0a0a;
+      --red: #ef4444;
+      --red-glow: rgba(239, 68, 68, 0.4);
+    }
+
     body {
-      font-family: 'Courier New', Courier, monospace;
-      background-color: #000;
-      color: #fff;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background-color: var(--black);
+      color: var(--white);
       min-height: 100vh;
       display: flex;
       align-items: center;
       justify-content: center;
       -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      overflow-x: hidden;
+    }
+
+    /* Subtle noise grain overlay */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    /* Subtle radial glow behind content */
+    body::after {
+      content: '';
+      position: fixed;
+      top: 30%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, rgba(255,255,255,0.015) 0%, transparent 70%);
+      pointer-events: none;
+      z-index: 0;
     }
 
     .container {
-      max-width: 560px;
-      padding: 40px 24px;
+      max-width: 600px;
+      padding: 48px 28px;
       text-align: left;
+      position: relative;
+      z-index: 2;
     }
 
+    /* ---- Staggered fade-in animations ---- */
+    .fade-in {
+      opacity: 0;
+      transform: translateY(16px);
+      animation: fadeUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    .fade-in:nth-child(1) { animation-delay: 0.1s; }
+    .fade-in:nth-child(2) { animation-delay: 0.25s; }
+    .fade-in:nth-child(3) { animation-delay: 0.4s; }
+    .fade-in:nth-child(4) { animation-delay: 0.55s; }
+    .fade-in:nth-child(5) { animation-delay: 0.7s; }
+    .fade-in:nth-child(6) { animation-delay: 0.85s; }
+    .fade-in:nth-child(7) { animation-delay: 1.0s; }
+    .fade-in:nth-child(8) { animation-delay: 1.15s; }
+
+    @keyframes fadeUp {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* ---- Greeting ---- */
     .greeting {
-      font-size: 1.6rem;
+      font-family: 'Inter', sans-serif;
+      font-size: 2.2rem;
       font-weight: 700;
-      margin-bottom: 40px;
-      line-height: 1.3;
-    }
-
-    .line {
-      margin-bottom: 28px;
-      font-size: 1.05rem;
-      line-height: 1.7;
-      color: #ccc;
-    }
-
-    .line.dimmed {
-      color: #666;
-      font-size: 0.85rem;
-    }
-
-    .line.bold {
-      color: #fff;
-      font-weight: 700;
-      font-size: 1.15rem;
-    }
-
-    .status {
-      margin: 36px 0;
-      padding: 16px 20px;
-      border: 1px solid #333;
-      font-size: 0.9rem;
-      color: #888;
-      line-height: 1.8;
-    }
-
-    .status-dot {
-      display: inline-block;
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      background: #ff4444;
-      margin-right: 8px;
-      animation: blink 1.5s ease-in-out infinite;
-    }
-
-    @keyframes blink {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.3; }
-    }
-
-    .closer {
-      margin-top: 48px;
-      font-size: 1.3rem;
-      font-weight: 700;
-      color: #fff;
-    }
-
-    .subtext {
-      margin-top: 8px;
-      font-size: 0.8rem;
-      color: #444;
-    }
-
-    .footer {
-      margin-top: 56px;
-      padding-top: 20px;
-      border-top: 1px solid #1a1a1a;
-      font-size: 0.75rem;
-      color: #333;
-    }
-
-    .footer a {
-      color: #555;
-      text-decoration: none;
-      border-bottom: 1px solid #333;
-      transition: color 0.2s;
-    }
-
-    .footer a:hover {
-      color: #fff;
+      margin-bottom: 48px;
+      line-height: 1.2;
+      letter-spacing: -0.03em;
+      color: var(--white-bright);
     }
 
     .cursor {
       display: inline-block;
-      width: 2px;
-      height: 1em;
-      background: #fff;
-      margin-left: 4px;
+      width: 3px;
+      height: 0.85em;
+      background: var(--white-bright);
+      margin-left: 6px;
       animation: cursorBlink 1s step-end infinite;
-      vertical-align: text-bottom;
+      vertical-align: baseline;
+      border-radius: 1px;
     }
 
     @keyframes cursorBlink {
@@ -124,61 +125,256 @@
       50% { opacity: 0; }
     }
 
+    /* ---- Text lines ---- */
+    .line {
+      margin-bottom: 28px;
+      font-size: 1.05rem;
+      line-height: 1.8;
+      color: var(--gray-100);
+      font-weight: 400;
+    }
+
+    .line.bold {
+      color: var(--white-bright);
+      font-weight: 600;
+      font-size: 1.2rem;
+      letter-spacing: -0.01em;
+    }
+
+    .line.dimmed {
+      color: var(--gray-300);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.78rem;
+      letter-spacing: -0.02em;
+      padding: 8px 12px;
+      background: var(--gray-800);
+      border-radius: 6px;
+      display: inline-block;
+    }
+
+    /* ---- Terminal status box ---- */
+    .terminal {
+      margin: 40px 0;
+      border: 1px solid var(--gray-600);
+      border-radius: 10px;
+      overflow: hidden;
+      background: var(--gray-800);
+    }
+
+    .terminal-header {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      padding: 12px 16px;
+      background: var(--gray-700);
+      border-bottom: 1px solid var(--gray-600);
+    }
+
+    .terminal-dot {
+      width: 11px;
+      height: 11px;
+      border-radius: 50%;
+    }
+
+    .terminal-dot.red { background: #ff5f57; }
+    .terminal-dot.yellow { background: #febc2e; }
+    .terminal-dot.green { background: #28c840; }
+
+    .terminal-title {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.72rem;
+      color: var(--gray-300);
+      margin-left: 8px;
+      letter-spacing: 0.02em;
+    }
+
+    .terminal-body {
+      padding: 20px 20px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.82rem;
+      line-height: 2;
+      color: var(--gray-200);
+    }
+
+    .terminal-body .status-line {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .status-dot {
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--red);
+      box-shadow: 0 0 8px var(--red-glow), 0 0 20px var(--red-glow);
+      animation: pulse 2s ease-in-out infinite;
+      flex-shrink: 0;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; box-shadow: 0 0 8px var(--red-glow), 0 0 20px var(--red-glow); }
+      50% { opacity: 0.5; box-shadow: 0 0 4px var(--red-glow); }
+    }
+
+    .terminal-body .indent {
+      padding-left: 18px;
+      color: var(--gray-300);
+    }
+
+    .terminal-body .prefix {
+      color: var(--gray-400);
+      user-select: none;
+    }
+
+    /* ---- Closer ---- */
+    .closer {
+      margin-top: 48px;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--white-bright);
+      letter-spacing: -0.03em;
+      line-height: 1.3;
+    }
+
+    .subtext {
+      margin-top: 10px;
+      font-size: 0.82rem;
+      color: var(--gray-400);
+      font-style: italic;
+    }
+
+    /* ---- Footer ---- */
+    .footer {
+      margin-top: 64px;
+      padding-top: 24px;
+      border-top: 1px solid var(--gray-700);
+      font-size: 0.78rem;
+      color: var(--gray-400);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 16px;
+    }
+
+    .footer a {
+      color: var(--gray-300);
+      text-decoration: none;
+      padding: 4px 0;
+      position: relative;
+      transition: color 0.3s ease;
+      font-weight: 500;
+    }
+
+    .footer a::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 0;
+      height: 1px;
+      background: var(--white-bright);
+      transition: width 0.3s ease;
+    }
+
+    .footer a:hover {
+      color: var(--white-bright);
+    }
+
+    .footer a:hover::after {
+      width: 100%;
+    }
+
+    /* ---- Responsive ---- */
     @media (max-width: 480px) {
       .greeting {
-        font-size: 1.3rem;
+        font-size: 1.7rem;
       }
 
       .container {
-        padding: 32px 20px;
+        padding: 36px 20px;
+      }
+
+      .closer {
+        font-size: 1.25rem;
+      }
+
+      .terminal-body {
+        font-size: 0.75rem;
+        padding: 16px;
+      }
+
+      .footer {
+        flex-direction: column;
+        align-items: flex-start;
       }
     }
   </style>
 </head>
 <body>
   <main class="container">
-    <h1 class="greeting">Yo, thanks for visiting!<span class="cursor"></span></h1>
 
-    <p class="line bold">
+    <h1 class="greeting fade-in">Yo, thanks for visiting!<span class="cursor"></span></h1>
+
+    <p class="line bold fade-in">
       But quite frankly... what are you doing here?
     </p>
 
-    <p class="line">
+    <p class="line fade-in">
       Like, seriously. There's a whole internet out there. Cats doing backflips.
       Wikipedia rabbit holes. That one recipe you bookmarked in 2019.
       And you chose... this?
     </p>
 
-    <div class="status">
-      <span class="status-dot"></span> SITE STATUS: <strong>Did not pass UAT</strong><br>
-      <span style="margin-left: 16px; color: #555;">Tester is on leave.</span><br>
-      <span style="margin-left: 16px; color: #555;">His manager is also on leave.</span><br>
-      <span style="margin-left: 16px; color: #555;">The manager's manager doesn't know what UAT means.</span>
+    <div class="terminal fade-in">
+      <div class="terminal-header">
+        <span class="terminal-dot red"></span>
+        <span class="terminal-dot yellow"></span>
+        <span class="terminal-dot green"></span>
+        <span class="terminal-title">status &mdash; rachittiwari.com</span>
+      </div>
+      <div class="terminal-body">
+        <div class="status-line">
+          <span class="status-dot"></span>
+          <span>SITE STATUS: <strong style="color: var(--white);">Did not pass UAT</strong></span>
+        </div>
+        <div class="indent"><span class="prefix">&rsaquo;</span> Tester is on leave.</div>
+        <div class="indent"><span class="prefix">&rsaquo;</span> His manager is also on leave.</div>
+        <div class="indent"><span class="prefix">&rsaquo;</span> The manager's manager doesn't know what UAT means.</div>
+      </div>
     </div>
 
-    <p class="line">
+    <p class="line fade-in">
       Come back by Monday. Or Tuesday. Actually, let's say "next sprint"
       and quietly move the ticket to the backlog.
     </p>
 
-    <p class="line dimmed">
-      Current build: 0.0.1-alpha-pre-beta-almost-there-not-really
+    <p class="line dimmed fade-in">
+      v0.0.1-alpha-pre-beta-almost-there-not-really
     </p>
 
-    <p class="closer">
+    <p class="closer fade-in">
       Also, go get a life, man.
     </p>
-    <p class="subtext">
+    <p class="subtext fade-in">
       (says the guy who bought a domain just to write this)
     </p>
 
-    <div class="footer">
-      <p>&copy; 2026 Rachit Tiwari &middot; Built with mass delusion and a domain he didn't need</p>
-      <p style="margin-top: 6px;">
-        <a href="mailto:rachittiwari10@gmail.com">email</a> &middot;
+    <footer class="footer fade-in">
+      <span>&copy; 2026 Rachit Tiwari &middot; Built with mass delusion and a domain he didn't need</span>
+      <div class="footer-links">
+        <a href="mailto:rachittiwari10@gmail.com">email</a>
         <a href="https://github.com/namesrachittiwari" target="_blank" rel="noopener">github</a>
-      </p>
-    </div>
+      </div>
+    </footer>
+
   </main>
 </body>
 </html>
