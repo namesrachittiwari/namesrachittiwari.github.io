@@ -249,7 +249,6 @@
       margin: 36px 0;
       min-height: 100px;
       position: relative;
-      overflow: hidden;
     }
 
     .leave-btn {
@@ -492,7 +491,7 @@
       }
 
       .leave-wrapper {
-        min-height: 100px;
+        min-height: 160px;
         margin: 20px 0;
       }
 
@@ -776,7 +775,8 @@
 
     // ================================================================
     //  7. LEAVE BUTTON — dodges with personality & spring physics
-    //     Uses transform: translateX() for buttery 60fps movement
+    //     Desktop: 1D horizontal dodge on hover
+    //     Mobile: 2D whack-a-mole dodge on tap (anywhere in wrapper)
     // ================================================================
     const btn = document.getElementById('leaveBtn');
     const wrapper = btn.parentElement;
@@ -784,7 +784,9 @@
     let dodgeCount = 0;
     let surrendered = false;
     let currentX = 0;
-    let dodgeLock = false; // prevent rapid-fire dodges
+    let currentY = 0;
+    let dodgeLock = false;
+    const isMobile = ('ontouchstart' in window) || navigator.maxTouchPoints > 0;
 
     const dodgeMessages = [
       "Nope.",
@@ -805,72 +807,95 @@
       "I'd slow-clap but I don't have hands.",
     ];
 
-    function getMaxTravel() {
+    function getMaxX() {
       return Math.max(0, wrapper.offsetWidth - btn.offsetWidth);
     }
 
-    function dodge(fromX) {
+    function getMaxY() {
+      return Math.max(0, wrapper.offsetHeight - btn.offsetHeight - 30);
+    }
+
+    function dodge(fromX, fromY) {
       if (surrendered || dodgeLock) return;
       dodgeLock = true;
-      setTimeout(() => { dodgeLock = false; }, 250);
+      setTimeout(() => { dodgeLock = false; }, isMobile ? 180 : 250);
 
-      const max = getMaxTravel();
-      if (max <= 10) return; // wrapper too narrow
+      const maxX = getMaxX();
+      if (maxX <= 10) return;
 
       dodgeCount++;
 
-      // ---- Pick new position AWAY from interaction point ----
+      // ---- Pick new X away from touch/cursor ----
+      const rect = wrapper.getBoundingClientRect();
+      const relX = (typeof fromX === 'number') ? fromX - rect.left : currentX;
+      const midX = maxX / 2;
       let newX;
-      const wrapperLeft = wrapper.getBoundingClientRect().left;
-      const rel = (typeof fromX === 'number') ? fromX - wrapperLeft : currentX;
-      const mid = max / 2;
 
-      if (rel < mid) {
-        newX = mid + Math.random() * (max - mid); // go right
+      if (relX < midX) {
+        newX = midX + Math.random() * (maxX - midX);
       } else {
-        newX = Math.random() * mid; // go left
+        newX = Math.random() * midX;
       }
-      // Ensure meaningful movement
-      if (Math.abs(newX - currentX) < max * 0.25) {
-        newX = currentX < mid ? max : 0;
+      if (Math.abs(newX - currentX) < maxX * 0.25) {
+        newX = currentX < midX ? maxX : 0;
       }
-      newX = Math.max(0, Math.min(newX, max));
+      newX = Math.max(0, Math.min(newX, maxX));
 
-      // ---- Dodge animation style varies for delight ----
+      // ---- Mobile: also pick new Y for 2D dodge ----
+      let newY = 0;
+      if (isMobile) {
+        const maxY = getMaxY();
+        if (maxY > 15) {
+          const relY = (typeof fromY === 'number') ? fromY - rect.top : currentY;
+          const midY = maxY / 2;
+          if (relY < midY) {
+            newY = midY + Math.random() * (maxY - midY);
+          } else {
+            newY = Math.random() * midY;
+          }
+          if (Math.abs(newY - currentY) < maxY * 0.2) {
+            newY = currentY < midY ? maxY : 0;
+          }
+          newY = Math.max(0, Math.min(newY, maxY));
+        }
+      }
+
+      // ---- Dodge animation style varies ----
       const style = dodgeCount % 5;
+      const t = (x, y) => isMobile ? `translate(${x}px, ${y}px)` : `translateX(${x}px)`;
 
       if (style === 0 && dodgeCount > 3) {
-        // TELEPORT: shrink → vanish → reappear at new spot
+        // TELEPORT: shrink → vanish → reappear
         btn.style.transition = 'transform 0.12s ease, opacity 0.12s ease';
-        btn.style.transform = `translateX(${currentX}px) scale(0.3)`;
+        btn.style.transform = t(currentX, currentY) + ' scale(0.3)';
         btn.style.opacity = '0';
         setTimeout(() => {
           btn.style.transition = 'none';
-          currentX = newX;
-          btn.style.transform = `translateX(${newX}px) scale(0.3)`;
+          currentX = newX; currentY = newY;
+          btn.style.transform = t(newX, newY) + ' scale(0.3)';
           requestAnimationFrame(() => {
             requestAnimationFrame(() => {
               btn.style.transition = 'transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.15s ease';
-              btn.style.transform = `translateX(${newX}px) scale(1)`;
+              btn.style.transform = t(newX, newY) + ' scale(1)';
               btn.style.opacity = '1';
             });
           });
         }, 140);
       } else if (style === 3 && dodgeCount > 2) {
-        // TILT: slide with a cheeky rotation
+        // TILT: slide with rotation
         const tilt = (newX > currentX) ? 6 : -6;
         btn.style.transition = 'transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)';
-        currentX = newX;
-        btn.style.transform = `translateX(${newX}px) rotate(${tilt}deg)`;
+        currentX = newX; currentY = newY;
+        btn.style.transform = t(newX, newY) + ` rotate(${tilt}deg)`;
         setTimeout(() => {
           btn.style.transition = 'transform 0.3s ease';
-          btn.style.transform = `translateX(${newX}px) rotate(0deg)`;
+          btn.style.transform = t(newX, newY) + ' rotate(0deg)';
         }, 350);
       } else {
-        // SPRING SLIDE: classic buttery dodge
+        // SPRING SLIDE
         btn.style.transition = 'transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)';
-        currentX = newX;
-        btn.style.transform = `translateX(${newX}px)`;
+        currentX = newX; currentY = newY;
+        btn.style.transform = t(newX, newY);
       }
 
       // ---- Button text evolves ----
@@ -884,12 +909,12 @@
         gaveUp.classList.add('visible');
       }
 
-      // ---- Surrender after 10 dodges ----
+      // ---- Surrender after 10 ----
       if (dodgeCount >= 10) {
         surrendered = true;
         setTimeout(() => {
           btn.style.transition = 'all 0.6s cubic-bezier(0.22, 1, 0.36, 1)';
-          btn.style.transform = 'translateX(0) scale(1) rotate(0deg)';
+          btn.style.transform = 'translate(0, 0) scale(1) rotate(0deg)';
           btn.style.opacity = '1';
           btn.textContent = "Fine, you win";
           btn.style.background = '#333';
@@ -901,18 +926,21 @@
       }
     }
 
-    // ---- Desktop: dodge on hover ----
+    // ---- Desktop: hover on button ----
     btn.addEventListener('mouseenter', (e) => {
-      if (!surrendered) dodge(e.clientX);
+      if (!surrendered) dodge(e.clientX, e.clientY);
     });
 
-    // ---- Mobile: dodge on tap ----
-    btn.addEventListener('touchstart', (e) => {
-      if (!surrendered) {
-        e.preventDefault();
-        dodge(e.touches[0].clientX);
-      }
-    }, { passive: false });
+    // ---- Mobile: tap ANYWHERE in the wrapper (whack-a-mole) ----
+    if (isMobile) {
+      wrapper.addEventListener('touchstart', (e) => {
+        if (!surrendered) {
+          e.preventDefault();
+          const t = e.touches[0];
+          dodge(t.clientX, t.clientY);
+        }
+      }, { passive: false });
+    }
 
     // ---- Click: post-surrender comedy sequence ----
     let postClickStage = 0;
@@ -935,7 +963,6 @@
           gaveUp.textContent = "You broke it. Happy now?";
         }
       } else if (!surrendered) {
-        // Somehow clicked before surrender (nearly impossible)
         btn.textContent = "Wait, how did you\u2014";
         btn.style.background = '#333';
         btn.style.color = '#888';
