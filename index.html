@@ -7,7 +7,7 @@
   <meta name="description" content="You really shouldn't be here.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after {
       margin: 0;
@@ -15,715 +15,536 @@
       box-sizing: border-box;
     }
 
-    :root {
-      --white: #e8e8e8;
-      --white-bright: #ffffff;
-      --gray-50: #d4d4d4;
-      --gray-100: #b0b0b0;
-      --gray-200: #888;
-      --gray-300: #555;
-      --gray-400: #3a3a3a;
-      --gray-500: #2a2a2a;
-      --gray-600: #1e1e1e;
-      --gray-700: #161616;
-      --gray-800: #111;
-      --gray-900: #0c0c0c;
-      --black: #080808;
-      --red: #ef4444;
-      --red-dim: #dc2626;
-      --red-glow: rgba(239, 68, 68, 0.35);
-      --accent: #818cf8;
-      --accent-glow: rgba(129, 140, 248, 0.15);
-    }
-
-    html {
-      scroll-behavior: smooth;
-    }
-
     body {
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-      background-color: var(--black);
-      color: var(--white);
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: #000;
+      color: #e8e8e8;
       min-height: 100vh;
-      overflow-x: hidden;
-      -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
-      cursor: default;
-    }
-
-    /* ===== Mouse-tracking ambient light ===== */
-    .mouse-glow {
-      position: fixed;
-      width: 800px;
-      height: 800px;
-      border-radius: 50%;
-      background: radial-gradient(circle, rgba(255,255,255,0.025) 0%, transparent 65%);
-      pointer-events: none;
-      z-index: 0;
-      transform: translate(-50%, -50%);
-      transition: left 0.3s ease-out, top 0.3s ease-out;
-      will-change: left, top;
-    }
-
-    /* ===== Noise grain overlay ===== */
-    .noise {
-      position: fixed;
-      inset: 0;
-      pointer-events: none;
-      z-index: 1;
-      opacity: 0.035;
-      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-      background-repeat: repeat;
-    }
-
-    /* ===== Vignette ===== */
-    .vignette {
-      position: fixed;
-      inset: 0;
-      pointer-events: none;
-      z-index: 1;
-      background: radial-gradient(ellipse at center, transparent 50%, rgba(0,0,0,0.5) 100%);
-    }
-
-    /* ===== Page layout ===== */
-    .page {
       display: flex;
       align-items: center;
       justify-content: center;
-      min-height: 100vh;
-      padding: 80px 24px;
-      position: relative;
-      z-index: 2;
+      -webkit-font-smoothing: antialiased;
     }
 
     .container {
-      max-width: 640px;
-      width: 100%;
+      max-width: 600px;
+      padding: 48px 24px;
     }
 
-    /* ===== Reveal animations ===== */
-    .reveal {
+    /* ---- Staggered fade-in ---- */
+    .fade-in {
       opacity: 0;
-      transform: translateY(30px);
-      transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1),
-                  transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+      transform: translateY(18px);
+      animation: fadeUp 0.65s cubic-bezier(0.16, 1, 0.3, 1) forwards;
     }
 
-    .reveal.visible {
-      opacity: 1;
-      transform: translateY(0);
+    @keyframes fadeUp {
+      to { opacity: 1; transform: translateY(0); }
     }
 
-    /* Stagger delays set via JS */
+    .fade-in:nth-child(1)  { animation-delay: 0.1s; }
+    .fade-in:nth-child(2)  { animation-delay: 0.25s; }
+    .fade-in:nth-child(3)  { animation-delay: 0.4s; }
+    .fade-in:nth-child(4)  { animation-delay: 0.55s; }
+    .fade-in:nth-child(5)  { animation-delay: 0.7s; }
+    .fade-in:nth-child(6)  { animation-delay: 0.85s; }
+    .fade-in:nth-child(7)  { animation-delay: 1.0s; }
+    .fade-in:nth-child(8)  { animation-delay: 1.15s; }
+    .fade-in:nth-child(9)  { animation-delay: 1.3s; }
+    .fade-in:nth-child(10) { animation-delay: 1.45s; }
+    .fade-in:nth-child(11) { animation-delay: 1.6s; }
 
-    /* ===== Greeting with typewriter ===== */
-    .greeting-wrapper {
-      margin-bottom: 56px;
-      min-height: 4em;
-    }
-
+    /* ---- Greeting ---- */
     .greeting {
-      font-family: 'Inter', sans-serif;
-      font-size: clamp(2rem, 5vw, 3rem);
-      font-weight: 800;
-      line-height: 1.15;
-      letter-spacing: -0.04em;
-      color: var(--white-bright);
-      display: inline;
-    }
-
-    .greeting .typed-text {
-      display: inline;
+      font-size: 1.75rem;
+      font-weight: 700;
+      margin-bottom: 48px;
+      line-height: 1.3;
+      letter-spacing: -0.03em;
+      color: #fff;
     }
 
     .cursor {
       display: inline-block;
-      width: 3px;
-      height: 0.9em;
-      background: var(--accent);
+      width: 2px;
+      height: 0.85em;
+      background: #fff;
       margin-left: 4px;
-      animation: cursorBlink 1s step-end infinite;
+      animation: blink 1s step-end infinite;
       vertical-align: text-bottom;
-      border-radius: 2px;
-      box-shadow: 0 0 8px var(--accent-glow);
     }
 
-    @keyframes cursorBlink {
+    @keyframes blink {
       0%, 100% { opacity: 1; }
       50% { opacity: 0; }
     }
 
-    /* ===== Horizontal rule ===== */
-    .divider {
-      width: 48px;
-      height: 2px;
-      background: linear-gradient(90deg, var(--accent), transparent);
-      border: none;
-      margin: 0 0 48px 0;
-      border-radius: 2px;
-    }
-
-    /* ===== Text sections ===== */
-    .section {
-      margin-bottom: 40px;
-    }
-
+    /* ---- Body text ---- */
     .line {
-      font-size: clamp(1rem, 2.5vw, 1.1rem);
-      line-height: 1.85;
-      color: var(--gray-50);
-      font-weight: 400;
+      margin-bottom: 28px;
+      font-size: 1.05rem;
+      line-height: 1.8;
+      color: #ccc;
     }
 
-    .line.hero {
-      color: var(--white-bright);
+    .line.bold {
+      color: #fff;
       font-weight: 600;
-      font-size: clamp(1.15rem, 3vw, 1.35rem);
-      letter-spacing: -0.015em;
-      line-height: 1.6;
+      font-size: 1.15rem;
     }
 
-    .line em {
-      color: var(--gray-100);
-      font-style: normal;
-      opacity: 0.7;
-    }
-
-    /* ===== Terminal ===== */
+    /* ---- Terminal ---- */
     .terminal {
-      margin: 48px 0;
-      border-radius: 14px;
+      margin: 40px 0;
+      border: 1px solid #222;
+      border-radius: 10px;
       overflow: hidden;
-      background: var(--gray-900);
-      border: 1px solid var(--gray-500);
-      box-shadow:
-        0 4px 6px rgba(0,0,0,0.3),
-        0 12px 40px rgba(0,0,0,0.4),
-        inset 0 1px 0 rgba(255,255,255,0.03);
-      position: relative;
-    }
-
-    /* Animated gradient border glow */
-    .terminal::before {
-      content: '';
-      position: absolute;
-      inset: -1px;
-      border-radius: 15px;
-      padding: 1px;
-      background: linear-gradient(
-        135deg,
-        rgba(129,140,248,0.3),
-        transparent 40%,
-        transparent 60%,
-        rgba(239,68,68,0.2)
-      );
-      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-      mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-      -webkit-mask-composite: xor;
-      mask-composite: exclude;
-      pointer-events: none;
-      z-index: 1;
+      background: #0a0a0a;
     }
 
     .terminal-header {
       display: flex;
       align-items: center;
-      gap: 8px;
-      padding: 14px 18px;
-      background: linear-gradient(180deg, var(--gray-600) 0%, var(--gray-700) 100%);
-      border-bottom: 1px solid var(--gray-500);
-      position: relative;
-    }
-
-    .terminal-dots {
-      display: flex;
-      gap: 8px;
+      gap: 7px;
+      padding: 12px 16px;
+      background: #151515;
+      border-bottom: 1px solid #222;
     }
 
     .terminal-dot {
-      width: 12px;
-      height: 12px;
+      width: 11px;
+      height: 11px;
       border-radius: 50%;
-      position: relative;
     }
 
-    .terminal-dot::after {
-      content: '';
-      position: absolute;
-      inset: 3px;
-      border-radius: 50%;
-      background: rgba(0,0,0,0.15);
-      opacity: 0;
-      transition: opacity 0.2s;
-    }
-
-    .terminal:hover .terminal-dot::after {
-      opacity: 1;
-    }
-
-    .terminal-dot.red { background: #ff5f57; box-shadow: inset 0 -1px 2px rgba(0,0,0,0.2); }
-    .terminal-dot.yellow { background: #febc2e; box-shadow: inset 0 -1px 2px rgba(0,0,0,0.2); }
-    .terminal-dot.green { background: #28c840; box-shadow: inset 0 -1px 2px rgba(0,0,0,0.2); }
+    .terminal-dot.red    { background: #ff5f57; }
+    .terminal-dot.yellow { background: #febc2e; }
+    .terminal-dot.green  { background: #28c840; }
 
     .terminal-title {
       font-family: 'JetBrains Mono', monospace;
       font-size: 0.7rem;
-      color: var(--gray-200);
-      position: absolute;
-      left: 50%;
-      transform: translateX(-50%);
-      letter-spacing: 0.04em;
-      white-space: nowrap;
+      color: #555;
+      margin-left: 8px;
     }
 
     .terminal-body {
-      padding: 24px 22px;
+      padding: 20px;
       font-family: 'JetBrains Mono', monospace;
-      font-size: clamp(0.72rem, 1.8vw, 0.84rem);
-      line-height: 2.1;
-      color: var(--gray-100);
-      position: relative;
+      font-size: 0.82rem;
+      line-height: 2;
+      color: #888;
     }
 
-    /* Scanlines */
-    .terminal-body::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: repeating-linear-gradient(
-        0deg,
-        transparent,
-        transparent 2px,
-        rgba(0,0,0,0.08) 2px,
-        rgba(0,0,0,0.08) 4px
-      );
-      pointer-events: none;
-    }
-
-    .terminal-line {
-      opacity: 0;
-      transform: translateX(-8px);
-      transition: opacity 0.4s ease, transform 0.4s ease;
-    }
-
-    .terminal-line.typed {
-      opacity: 1;
-      transform: translateX(0);
-    }
-
-    .terminal-body .status-line {
+    .status-line {
       display: flex;
       align-items: center;
       gap: 10px;
     }
 
     .status-dot {
-      display: inline-block;
       width: 8px;
       height: 8px;
       border-radius: 50%;
-      background: var(--red);
-      box-shadow: 0 0 6px var(--red-glow), 0 0 16px var(--red-glow), 0 0 32px rgba(239,68,68,0.15);
+      background: #ef4444;
+      box-shadow: 0 0 8px rgba(239,68,68,0.4), 0 0 20px rgba(239,68,68,0.2);
       animation: pulse 2s ease-in-out infinite;
       flex-shrink: 0;
     }
 
     @keyframes pulse {
-      0%, 100% {
-        box-shadow: 0 0 6px var(--red-glow), 0 0 16px var(--red-glow), 0 0 32px rgba(239,68,68,0.15);
-      }
-      50% {
-        opacity: 0.6;
-        box-shadow: 0 0 3px var(--red-glow);
-      }
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.4; }
     }
 
-    .terminal-body .indent {
-      padding-left: 20px;
-      color: var(--gray-200);
+    .indent {
+      padding-left: 18px;
+      color: #666;
     }
 
-    .terminal-body .prefix {
-      color: var(--accent);
+    .prefix {
+      color: #555;
       user-select: none;
-      margin-right: 4px;
     }
 
-    .terminal-body .status-label {
-      color: var(--gray-200);
-    }
-
-    .terminal-body .status-value {
-      color: var(--red);
+    .status-value {
+      color: #ef4444;
       font-weight: 700;
     }
 
-    /* ===== Sprint line ===== */
-    .sprint-line {
-      color: var(--gray-50);
+    /* ---- Leave button ---- */
+    .leave-wrapper {
+      margin: 36px 0;
+      height: 52px;
+      position: relative;
     }
 
-    .sprint-line .highlight {
-      color: var(--white-bright);
-      background: var(--gray-500);
-      padding: 2px 8px;
-      border-radius: 4px;
-      font-weight: 500;
-      font-size: 0.95em;
-    }
-
-    /* ===== Version badge ===== */
-    .version-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.74rem;
-      color: var(--gray-200);
-      padding: 10px 16px;
-      background: var(--gray-800);
-      border: 1px solid var(--gray-500);
+    .leave-btn {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: #000;
+      background: #fff;
+      border: none;
+      padding: 12px 28px;
       border-radius: 8px;
-      letter-spacing: -0.01em;
+      cursor: pointer;
+      position: absolute;
+      transition: left 0.3s cubic-bezier(0.34, 1.56, 0.64, 1),
+                  top 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+      left: 0;
+      top: 0;
+      white-space: nowrap;
+      user-select: none;
+      z-index: 5;
     }
 
-    .version-badge .tag {
-      font-size: 0.6rem;
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-      font-weight: 700;
-      color: var(--black);
-      background: var(--red-dim);
-      padding: 2px 6px;
-      border-radius: 3px;
+    .leave-btn:active {
+      transform: scale(0.95);
     }
 
-    /* ===== Closer ===== */
-    .closer-section {
-      margin-top: 56px;
+    .gave-up-text {
+      font-size: 0.82rem;
+      color: #444;
+      margin-top: 8px;
+      display: none;
+      font-style: italic;
     }
 
+    /* ---- Timer ---- */
+    .timer {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.78rem;
+      color: #333;
+      margin-bottom: 28px;
+      transition: color 0.3s;
+    }
+
+    /* ---- Closer ---- */
     .closer {
-      font-size: clamp(1.5rem, 4vw, 2rem);
-      font-weight: 800;
-      color: var(--white-bright);
-      letter-spacing: -0.04em;
-      line-height: 1.2;
-      transition: letter-spacing 0.4s ease;
-    }
-
-    .closer:hover {
-      letter-spacing: 0.02em;
+      margin-top: 44px;
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: #fff;
+      letter-spacing: -0.03em;
     }
 
     .subtext {
-      margin-top: 12px;
-      font-size: 0.85rem;
-      color: var(--gray-300);
+      margin-top: 8px;
+      font-size: 0.82rem;
+      color: #444;
       font-style: italic;
-      font-weight: 300;
     }
 
-    /* ===== Footer ===== */
+    /* ---- Footer ---- */
     .footer {
-      margin-top: 80px;
-      padding-top: 28px;
-      border-top: 1px solid var(--gray-600);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 16px;
-    }
-
-    .footer-credit {
+      margin-top: 60px;
+      padding-top: 20px;
+      border-top: 1px solid #1a1a1a;
       font-size: 0.75rem;
-      color: var(--gray-300);
-      line-height: 1.6;
-      max-width: 360px;
+      color: #333;
     }
 
     .footer-links {
-      display: flex;
-      gap: 6px;
+      margin-top: 6px;
     }
 
-    .footer-links a {
-      color: var(--gray-200);
+    .footer a {
+      color: #555;
       text-decoration: none;
-      font-size: 0.78rem;
-      font-weight: 500;
-      padding: 6px 14px;
-      border-radius: 6px;
-      border: 1px solid transparent;
-      transition: all 0.3s ease;
-      letter-spacing: 0.01em;
+      border-bottom: 1px solid #222;
+      transition: color 0.2s;
     }
 
-    .footer-links a:hover {
-      color: var(--white-bright);
-      border-color: var(--gray-400);
-      background: var(--gray-700);
+    .footer a:hover {
+      color: #fff;
     }
 
-    /* ===== Easter egg tooltip ===== */
-    .easter-egg {
-      position: relative;
-      cursor: pointer;
-      border-bottom: 1px dashed var(--gray-400);
-    }
-
-    .easter-egg .tooltip {
-      position: absolute;
-      bottom: calc(100% + 10px);
-      left: 50%;
-      transform: translateX(-50%) scale(0.95);
-      background: var(--gray-600);
-      color: var(--white);
-      font-size: 0.78rem;
-      padding: 8px 14px;
-      border-radius: 8px;
-      white-space: nowrap;
-      pointer-events: none;
-      opacity: 0;
-      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-      border: 1px solid var(--gray-400);
-      box-shadow: 0 8px 24px rgba(0,0,0,0.4);
-      font-family: 'Inter', sans-serif;
-    }
-
-    .easter-egg .tooltip::after {
-      content: '';
-      position: absolute;
-      top: 100%;
-      left: 50%;
-      transform: translateX(-50%);
-      border: 6px solid transparent;
-      border-top-color: var(--gray-600);
-    }
-
-    .easter-egg:hover .tooltip {
-      opacity: 1;
-      transform: translateX(-50%) scale(1);
-    }
-
-    /* ===== Scroll progress bar ===== */
-    .progress-bar {
+    /* ---- Cookie banner ---- */
+    .cookie-banner {
       position: fixed;
-      top: 0;
+      bottom: 0;
       left: 0;
-      height: 2px;
-      background: linear-gradient(90deg, var(--accent), var(--red));
-      z-index: 100;
-      width: 0%;
-      transition: width 0.1s linear;
+      right: 0;
+      background: #111;
+      border-top: 1px solid #222;
+      padding: 14px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      z-index: 50;
+      transform: translateY(100%);
+      animation: slideUp 0.5s ease forwards;
+      animation-delay: 3s;
     }
 
-    /* ===== Responsive ===== */
-    @media (max-width: 640px) {
-      .page {
-        padding: 60px 20px;
-      }
-
-      .terminal-title {
-        position: static;
-        transform: none;
-        margin-left: 8px;
-      }
-
-      .terminal-body {
-        padding: 18px 16px;
-      }
-
-      .footer {
-        flex-direction: column;
-        align-items: flex-start;
-      }
-
-      .footer-links {
-        width: 100%;
-      }
-
-      .footer-links a {
-        flex: 1;
-        text-align: center;
-      }
-
-      .closer-section {
-        margin-top: 44px;
-      }
-
-      .mouse-glow {
-        display: none;
-      }
+    @keyframes slideUp {
+      to { transform: translateY(0); }
     }
 
-    /* ===== Selection color ===== */
-    ::selection {
-      background: rgba(129, 140, 248, 0.3);
-      color: var(--white-bright);
+    .cookie-text {
+      font-size: 0.8rem;
+      color: #888;
+      line-height: 1.5;
+    }
+
+    .cookie-btn {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: #000;
+      background: #fff;
+      border: none;
+      padding: 8px 18px;
+      border-radius: 6px;
+      cursor: pointer;
+      white-space: nowrap;
+      flex-shrink: 0;
+      transition: opacity 0.2s;
+    }
+
+    .cookie-btn:hover {
+      opacity: 0.85;
+    }
+
+    /* ---- Responsive ---- */
+    @media (max-width: 480px) {
+      .container { padding: 36px 20px; }
+      .greeting { font-size: 1.4rem; }
+      .closer { font-size: 1.15rem; }
+      .cookie-banner { flex-direction: column; text-align: center; padding: 16px; }
     }
   </style>
 </head>
 <body>
 
-  <!-- Ambient layers -->
-  <div class="progress-bar" id="progressBar"></div>
-  <div class="mouse-glow" id="mouseGlow"></div>
-  <div class="noise"></div>
-  <div class="vignette"></div>
+  <main class="container">
 
-  <!-- Main content -->
-  <section class="page">
-    <main class="container">
+    <h1 class="greeting fade-in">Yo, thanks for visiting!<span class="cursor"></span></h1>
 
-      <div class="greeting-wrapper reveal">
-        <h1 class="greeting">
-          <span class="typed-text" id="typedText"></span><span class="cursor" id="cursor"></span>
-        </h1>
+    <p class="line bold fade-in">
+      But quite frankly... what are you doing here?
+    </p>
+
+    <p class="line fade-in">
+      Like, seriously. There's a whole internet out there. Cats doing backflips.
+      Wikipedia rabbit holes. That one recipe you bookmarked in 2019.
+      And you chose... this?
+    </p>
+
+    <p class="line fade-in">
+      Bold move. Questionable judgement. But okay.
+    </p>
+
+    <div class="terminal fade-in">
+      <div class="terminal-header">
+        <span class="terminal-dot red"></span>
+        <span class="terminal-dot yellow"></span>
+        <span class="terminal-dot green"></span>
+        <span class="terminal-title">status &mdash; rachittiwari.com</span>
       </div>
-
-      <hr class="divider reveal">
-
-      <div class="section reveal">
-        <p class="line hero">
-          But quite frankly... what are you doing here?
-        </p>
-      </div>
-
-      <div class="section reveal">
-        <p class="line">
-          Like, seriously. There's a whole internet out there.
-          <span class="easter-egg">Cats doing backflips<span class="tooltip">You'd rather be watching those, admit it.</span></span>.
-          Wikipedia rabbit holes. That one recipe you bookmarked in 2019.
-          And you chose... <em>this?</em>
-        </p>
-      </div>
-
-      <div class="terminal reveal">
-        <div class="terminal-header">
-          <div class="terminal-dots">
-            <span class="terminal-dot red"></span>
-            <span class="terminal-dot yellow"></span>
-            <span class="terminal-dot green"></span>
-          </div>
-          <span class="terminal-title">status &mdash; rachittiwari.com</span>
+      <div class="terminal-body">
+        <div class="status-line">
+          <span class="status-dot"></span>
+          <span>SITE STATUS: <span class="status-value">Did not pass UAT</span></span>
         </div>
-        <div class="terminal-body" id="terminalBody">
-          <div class="terminal-line status-line">
-            <span class="status-dot"></span>
-            <span><span class="status-label">SITE STATUS: </span><span class="status-value">Did not pass UAT</span></span>
-          </div>
-          <div class="terminal-line indent"><span class="prefix">$</span> Tester is on leave.</div>
-          <div class="terminal-line indent"><span class="prefix">$</span> His manager is also on leave.</div>
-          <div class="terminal-line indent"><span class="prefix">$</span> The manager's manager doesn't know what UAT means.</div>
-        </div>
+        <div class="indent"><span class="prefix">&rsaquo;</span> Tester is on leave.</div>
+        <div class="indent"><span class="prefix">&rsaquo;</span> His manager is also on leave.</div>
+        <div class="indent"><span class="prefix">&rsaquo;</span> The manager's manager doesn't know what UAT means.</div>
+        <div class="indent"><span class="prefix">&rsaquo;</span> The intern pushed to prod. Again.</div>
       </div>
+    </div>
 
-      <div class="section reveal">
-        <p class="line sprint-line">
-          Come back by Monday. Or Tuesday. Actually, let's say
-          <span class="highlight">"next sprint"</span>
-          and quietly move the ticket to the backlog.
-        </p>
-      </div>
+    <p class="line fade-in">
+      Come back by Monday. Or Tuesday. Actually, let's say "next sprint"
+      and quietly move the ticket to the backlog where dreams go to die.
+    </p>
 
-      <div class="section reveal">
-        <span class="version-badge">
-          <span class="tag">unstable</span>
-          v0.0.1-alpha-pre-beta-almost-there-not-really
-        </span>
-      </div>
+    <p class="line fade-in" style="color: #555; font-size: 0.9rem;">
+      Estimated time to completion: somewhere between "soon" and the heat death of the universe.
+    </p>
 
-      <div class="closer-section reveal">
-        <p class="closer">Also, go get a life, man.</p>
-        <p class="subtext">
-          (says the guy who bought a domain just to write this)
-        </p>
-      </div>
+    <p class="line bold fade-in">
+      Anyway, here's a button. You should probably click it.
+    </p>
 
-      <footer class="footer reveal">
-        <span class="footer-credit">
-          &copy; 2026 Rachit Tiwari &middot; Built with mass delusion and a domain he didn't need
-        </span>
-        <div class="footer-links">
-          <a href="mailto:rachittiwari10@gmail.com">email</a>
-          <a href="https://github.com/namesrachittiwari" target="_blank" rel="noopener">github</a>
-        </div>
-      </footer>
+    <div class="leave-wrapper fade-in">
+      <button class="leave-btn" id="leaveBtn">Leave this website</button>
+      <p class="gave-up-text" id="gaveUpText"></p>
+    </div>
 
-    </main>
-  </section>
+    <p class="timer fade-in" id="timer"></p>
+
+    <p class="closer fade-in">Also, go get a life, man.</p>
+    <p class="subtext fade-in">
+      (says the guy who mass-texted his friends to visit this page)
+    </p>
+
+    <footer class="footer fade-in">
+      <p>&copy; 2026 Rachit Tiwari &middot; Built with mass delusion and a mass subscription he didn't need</p>
+      <p class="footer-links">
+        <a href="mailto:rachittiwari10@gmail.com">email</a> &middot;
+        <a href="https://github.com/namesrachittiwari" target="_blank" rel="noopener">github</a>
+      </p>
+    </footer>
+
+  </main>
+
+  <!-- Cookie banner -->
+  <div class="cookie-banner" id="cookieBanner">
+    <span class="cookie-text">
+      This site uses <strong>0</strong> cookies. There's literally nothing here worth remembering.
+    </span>
+    <button class="cookie-btn" id="cookieBtn">I understand the emptiness</button>
+  </div>
 
   <script>
-    // ===== Typewriter Effect =====
-    const text = "Yo, thanks for visiting!";
-    const typedEl = document.getElementById('typedText');
-    let i = 0;
+    // ===== Tab title changes =====
+    const titles = [
+      { time: 15000, text: "...you're still here?" },
+      { time: 30000, text: "okay, fine. stay." },
+      { time: 60000, text: "it's been a minute. literally." },
+      { time: 120000, text: "bro." },
+      { time: 180000, text: "i'm running out of titles." },
+      { time: 300000, text: "you win. i give up." },
+    ];
 
-    function typeWriter() {
-      if (i < text.length) {
-        typedEl.textContent += text.charAt(i);
-        i++;
-        setTimeout(typeWriter, 60 + Math.random() * 40);
+    const originalTitle = document.title;
+    let titleIndex = 0;
+
+    titles.forEach(({ time, text }) => {
+      setTimeout(() => {
+        document.title = text;
+      }, time);
+    });
+
+    // Restore title when tab becomes visible
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden) {
+        document.title = "come back :(";
       }
-    }
+    });
 
-    setTimeout(typeWriter, 600);
+    // ===== Time wasted counter =====
+    const startTime = Date.now();
+    const timerEl = document.getElementById('timer');
+    const messages = [
+      { at: 0,   text: (s) => `You've been here for ${s} seconds. The developer spent fewer building this.` },
+      { at: 30,  text: (s) => `${s} seconds. That's ${s} seconds of your life you're not getting back.` },
+      { at: 60,  text: (s) => `${s} seconds now. Your screen time report is going to be embarrassing.` },
+      { at: 120, text: (s) => `${Math.floor(s/60)} minutes. At this point, you could've learned a chord on guitar.` },
+      { at: 300, text: (s) => `${Math.floor(s/60)} minutes. I'm genuinely concerned about you.` },
+    ];
 
-    // ===== Scroll Reveal =====
-    const reveals = document.querySelectorAll('.reveal');
+    setInterval(() => {
+      const seconds = Math.floor((Date.now() - startTime) / 1000);
+      if (seconds < 5) return;
+      const msg = [...messages].reverse().find(m => seconds >= m.at);
+      if (msg) timerEl.textContent = msg.text(seconds);
+    }, 1000);
 
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach((entry, index) => {
-        if (entry.isIntersecting) {
+    // ===== Leave button that dodges cursor =====
+    const btn = document.getElementById('leaveBtn');
+    const wrapper = btn.parentElement;
+    const gaveUp = document.getElementById('gaveUpText');
+    let dodgeCount = 0;
+    const dodgeMessages = [
+      "Not that easy.",
+      "Nice try.",
+      "You really thought?",
+      "I can do this all day.",
+      "Maybe try a different angle?",
+      "Your mouse-hand coordination is concerning.",
+      "Okay this is getting sad.",
+      "I respect the persistence though.",
+    ];
+
+    btn.addEventListener('mouseenter', (e) => {
+      const wrapperRect = wrapper.getBoundingClientRect();
+      const btnRect = btn.getBoundingClientRect();
+      const maxLeft = wrapperRect.width - btnRect.width;
+
+      // Jump to a random position
+      let newLeft = Math.random() * maxLeft;
+
+      // Make sure it actually moves away from cursor
+      const cursorRelX = e.clientX - wrapperRect.left;
+      if (Math.abs(newLeft - cursorRelX) < 100) {
+        newLeft = cursorRelX < maxLeft / 2 ? maxLeft : 0;
+      }
+
+      btn.style.left = Math.max(0, Math.min(newLeft, maxLeft)) + 'px';
+
+      dodgeCount++;
+
+      if (dodgeCount <= dodgeMessages.length) {
+        gaveUp.style.display = 'block';
+        gaveUp.textContent = dodgeMessages[dodgeCount - 1];
+      }
+
+      if (dodgeCount >= 10) {
+        // Finally let them "catch" it
+        btn.style.transition = 'none';
+        btn.textContent = "Fine, you win";
+        btn.style.background = '#333';
+        btn.style.color = '#888';
+        btn.style.cursor = 'default';
+        btn.onmouseenter = null;
+        btn.addEventListener('click', () => {
+          btn.textContent = "...just kidding";
           setTimeout(() => {
-            entry.target.classList.add('visible');
-          }, index * 120);
-          observer.unobserve(entry.target);
-        }
-      });
-    }, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
-
-    reveals.forEach((el, i) => {
-      el.style.transitionDelay = `${i * 0.1}s`;
-      observer.observe(el);
+            btn.textContent = "There's nowhere to go";
+          }, 1500);
+          setTimeout(() => {
+            btn.textContent = "This is it. This is the whole site.";
+            btn.style.color = '#555';
+          }, 3500);
+        });
+        gaveUp.textContent = "Took you long enough.";
+      }
     });
 
-    // ===== Terminal line-by-line reveal =====
-    const terminalObserver = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          const lines = entry.target.querySelectorAll('.terminal-line');
-          lines.forEach((line, i) => {
-            setTimeout(() => {
-              line.classList.add('typed');
-            }, 400 + i * 250);
-          });
-          terminalObserver.unobserve(entry.target);
-        }
-      });
-    }, { threshold: 0.3 });
-
-    terminalObserver.observe(document.getElementById('terminalBody'));
-
-    // ===== Mouse-tracking glow =====
-    const glow = document.getElementById('mouseGlow');
-
-    document.addEventListener('mousemove', (e) => {
-      glow.style.left = e.clientX + 'px';
-      glow.style.top = e.clientY + 'px';
+    // If they actually click early
+    btn.addEventListener('click', () => {
+      if (dodgeCount < 10) {
+        // They somehow clicked it
+        btn.textContent = "Wait, how did you—";
+        btn.style.background = '#333';
+        btn.style.color = '#888';
+        setTimeout(() => {
+          btn.textContent = "Doesn't matter. There's no exit.";
+        }, 2000);
+      }
     });
 
-    // ===== Scroll progress bar =====
-    const progressBar = document.getElementById('progressBar');
+    // ===== Cookie banner =====
+    document.getElementById('cookieBtn').addEventListener('click', () => {
+      const banner = document.getElementById('cookieBanner');
+      banner.querySelector('.cookie-text').innerHTML =
+        "Great. Your acknowledgment of the emptiness has been noted. You may now continue staring at nothing.";
+      banner.querySelector('.cookie-btn').textContent = "I'm okay with this";
 
-    window.addEventListener('scroll', () => {
-      const scrollTop = window.scrollY;
-      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
-      const progress = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
-      progressBar.style.width = progress + '%';
-    });
+      document.getElementById('cookieBtn').addEventListener('click', () => {
+        banner.style.transform = 'translateY(100%)';
+        banner.style.transition = 'transform 0.4s ease';
+      }, { once: true });
+    }, { once: true });
+
+    // ===== Console easter eggs =====
+    console.log(
+      '%c Hey, you opened DevTools! ',
+      'background: #fff; color: #000; font-size: 14px; font-weight: bold; padding: 8px 12px; border-radius: 4px;'
+    );
+    console.log(
+      '%c Looking for bugs? There are no bugs. Only "undocumented features." ',
+      'color: #888; font-size: 11px;'
+    );
+    console.log(
+      '%c PS: The entire site is one HTML file. Yes, that\'s the tech stack. Fight me. ',
+      'color: #555; font-size: 11px;'
+    );
   </script>
+
 </body>
 </html>
