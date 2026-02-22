@@ -15,6 +15,10 @@
       box-sizing: border-box;
     }
 
+    html {
+      scroll-behavior: smooth;
+    }
+
     body {
       font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
       background: #000;
@@ -568,9 +572,9 @@
     </p>
 
     <p class="line anim">
-      Brain rot reels you'll regret tomorrow. AI writing
-      your breakup texts. That morning routine you saved
-      and never tried. And you ended up... here?
+      You could be doom-scrolling reels right now. Letting
+      AI write your breakup texts. Finally trying that morning
+      routine you saved six months ago. But no... you're here.
     </p>
 
     <div class="terminal anim" id="terminal">
@@ -637,6 +641,10 @@
   </div>
 
   <script>
+    // Force scroll to top on page load/reload
+    window.scrollTo(0, 0);
+    if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+
     // ================================================================
     //  1. SPLIT-WORD GREETING ANIMATION
     //     Each word slides up individually with staggered delay
