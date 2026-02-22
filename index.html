@@ -24,6 +24,7 @@
       align-items: center;
       justify-content: center;
       -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
     }
 
     .container {
@@ -31,31 +32,39 @@
       padding: 48px 24px 120px;
     }
 
-    /* ---- Staggered fade-in ---- */
-    .fade-in {
+    /* ================================================================
+       WORLD-CLASS ANIMATIONS
+       Blur-deblur entrance + vertical slide + stagger
+       ================================================================ */
+
+    .anim {
       opacity: 0;
-      transform: translateY(18px);
-      animation: fadeUp 0.65s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      transform: translateY(28px);
+      filter: blur(6px);
+      will-change: opacity, transform, filter;
     }
 
-    @keyframes fadeUp {
-      to { opacity: 1; transform: translateY(0); }
+    .anim.show {
+      animation: reveal 0.9s cubic-bezier(0.22, 1, 0.36, 1) forwards;
     }
 
-    .fade-in:nth-child(1)  { animation-delay: 0.1s; }
-    .fade-in:nth-child(2)  { animation-delay: 0.25s; }
-    .fade-in:nth-child(3)  { animation-delay: 0.4s; }
-    .fade-in:nth-child(4)  { animation-delay: 0.55s; }
-    .fade-in:nth-child(5)  { animation-delay: 0.7s; }
-    .fade-in:nth-child(6)  { animation-delay: 0.85s; }
-    .fade-in:nth-child(7)  { animation-delay: 1.0s; }
-    .fade-in:nth-child(8)  { animation-delay: 1.15s; }
-    .fade-in:nth-child(9)  { animation-delay: 1.3s; }
-    .fade-in:nth-child(10) { animation-delay: 1.45s; }
-    .fade-in:nth-child(11) { animation-delay: 1.6s; }
-    .fade-in:nth-child(12) { animation-delay: 1.75s; }
+    @keyframes reveal {
+      0% {
+        opacity: 0;
+        transform: translateY(28px);
+        filter: blur(6px);
+      }
+      60% {
+        filter: blur(0px);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0);
+        filter: blur(0px);
+      }
+    }
 
-    /* ---- Greeting ---- */
+    /* ---- Greeting: split word animation ---- */
     .greeting {
       font-size: 1.75rem;
       font-weight: 700;
@@ -63,6 +72,31 @@
       line-height: 1.3;
       letter-spacing: -0.03em;
       color: #fff;
+      overflow: hidden;
+    }
+
+    .greeting .word {
+      display: inline-block;
+      opacity: 0;
+      transform: translateY(100%);
+      filter: blur(4px);
+      animation: wordUp 0.7s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    }
+
+    @keyframes wordUp {
+      0% {
+        opacity: 0;
+        transform: translateY(100%);
+        filter: blur(4px);
+      }
+      60% {
+        filter: blur(0px);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0);
+        filter: blur(0px);
+      }
     }
 
     .cursor {
@@ -71,8 +105,13 @@
       height: 0.85em;
       background: #fff;
       margin-left: 4px;
-      animation: blink 1s step-end infinite;
       vertical-align: text-bottom;
+      opacity: 0;
+      animation: cursorAppear 0.01s forwards, blink 1s step-end infinite;
+    }
+
+    @keyframes cursorAppear {
+      to { opacity: 1; }
     }
 
     @keyframes blink {
@@ -107,6 +146,12 @@
       border-radius: 10px;
       overflow: hidden;
       background: #0a0a0a;
+      box-shadow: 0 0 0 0 rgba(239,68,68,0);
+      transition: box-shadow 1s ease;
+    }
+
+    .terminal.glow {
+      box-shadow: 0 0 30px -10px rgba(239,68,68,0.15);
     }
 
     .terminal-header {
@@ -143,6 +188,20 @@
       color: #888;
     }
 
+    /* Terminal lines: type-in one by one */
+    .term-line {
+      opacity: 0;
+      transform: translateX(-12px);
+      filter: blur(3px);
+      transition: all 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .term-line.typed {
+      opacity: 1;
+      transform: translateX(0);
+      filter: blur(0);
+    }
+
     .status-line {
       display: flex;
       align-items: center;
@@ -160,8 +219,8 @@
     }
 
     @keyframes pulse {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.4; }
+      0%, 100% { opacity: 1; box-shadow: 0 0 8px rgba(239,68,68,0.4), 0 0 20px rgba(239,68,68,0.2); }
+      50% { opacity: 0.4; box-shadow: 0 0 4px rgba(239,68,68,0.2); }
     }
 
     .indent {
@@ -197,13 +256,20 @@
       border-radius: 8px;
       cursor: pointer;
       position: absolute;
-      transition: left 0.3s cubic-bezier(0.34, 1.56, 0.64, 1),
-                  top 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+      transition: left 0.35s cubic-bezier(0.34, 1.56, 0.64, 1),
+                  top 0.25s cubic-bezier(0.34, 1.56, 0.64, 1),
+                  transform 0.15s ease,
+                  box-shadow 0.3s ease;
       left: 0;
       top: 0;
       white-space: nowrap;
       user-select: none;
       z-index: 5;
+      box-shadow: 0 2px 12px rgba(255,255,255,0.08);
+    }
+
+    .leave-btn:hover {
+      box-shadow: 0 4px 20px rgba(255,255,255,0.15);
     }
 
     .leave-btn:active {
@@ -216,6 +282,12 @@
       margin-top: 8px;
       display: none;
       font-style: italic;
+      animation: fadeInQuick 0.3s ease;
+    }
+
+    @keyframes fadeInQuick {
+      from { opacity: 0; transform: translateY(4px); }
+      to { opacity: 1; transform: translateY(0); }
     }
 
     /* ---- Timer ---- */
@@ -224,6 +296,7 @@
       font-size: 0.78rem;
       color: #333;
       margin-bottom: 28px;
+      transition: color 1s ease;
     }
 
     /* ---- Closer ---- */
@@ -258,12 +331,27 @@
     .footer a {
       color: #555;
       text-decoration: none;
-      border-bottom: 1px solid #222;
-      transition: color 0.2s;
+      position: relative;
+      transition: color 0.3s ease;
+    }
+
+    .footer a::after {
+      content: '';
+      position: absolute;
+      bottom: -2px;
+      left: 0;
+      width: 0;
+      height: 1px;
+      background: #fff;
+      transition: width 0.3s ease;
     }
 
     .footer a:hover {
       color: #fff;
+    }
+
+    .footer a:hover::after {
+      width: 100%;
     }
 
     /* ---- Cookie banner ---- */
@@ -281,12 +369,22 @@
       gap: 16px;
       z-index: 50;
       transform: translateY(100%);
-      animation: slideUp 0.5s ease forwards;
-      animation-delay: 3s;
+      opacity: 0;
     }
 
-    @keyframes slideUp {
-      to { transform: translateY(0); }
+    .cookie-banner.show {
+      animation: bannerSlide 0.6s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    }
+
+    @keyframes bannerSlide {
+      from {
+        transform: translateY(100%);
+        opacity: 0;
+      }
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
     }
 
     .cookie-text {
@@ -307,11 +405,16 @@
       cursor: pointer;
       white-space: nowrap;
       flex-shrink: 0;
-      transition: opacity 0.2s;
+      transition: opacity 0.2s, transform 0.15s;
     }
 
     .cookie-btn:hover {
       opacity: 0.85;
+      transform: scale(1.02);
+    }
+
+    .cookie-btn:active {
+      transform: scale(0.97);
     }
 
     /* ---- Responsive ---- */
@@ -322,6 +425,17 @@
       .cookie-banner { flex-direction: column; text-align: center; padding: 16px; }
       .leave-btn { font-size: 0.78rem; padding: 10px 22px; }
     }
+
+    /* ---- Prefers reduced motion ---- */
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+      }
+      .anim { opacity: 1; transform: none; filter: none; }
+      .greeting .word { opacity: 1; transform: none; filter: none; }
+      .term-line { opacity: 1; transform: none; filter: none; }
+    }
   </style>
 </head>
 <body>
@@ -329,64 +443,64 @@
   <main class="container">
 
     <!-- V2 content — preserved exactly -->
-    <h1 class="greeting fade-in">Yo, thanks for visiting!<span class="cursor"></span></h1>
+    <h1 class="greeting anim" id="greeting">Yo, thanks for visiting!<span class="cursor" id="cursor"></span></h1>
 
-    <p class="line bold fade-in">
+    <p class="line bold anim">
       But quite frankly... what are you doing here?
     </p>
 
-    <p class="line fade-in">
+    <p class="line anim">
       Like, seriously. There's a whole internet out there. Cats doing backflips.
       Wikipedia rabbit holes. That one recipe you bookmarked in 2019.
       And you chose... this?
     </p>
 
-    <div class="terminal fade-in">
+    <div class="terminal anim" id="terminal">
       <div class="terminal-header">
         <span class="terminal-dot red"></span>
         <span class="terminal-dot yellow"></span>
         <span class="terminal-dot green"></span>
         <span class="terminal-title">status &mdash; rachittiwari.com</span>
       </div>
-      <div class="terminal-body">
-        <div class="status-line">
+      <div class="terminal-body" id="terminalBody">
+        <div class="term-line status-line">
           <span class="status-dot"></span>
           <span>SITE STATUS: <span class="status-value">Did not pass UAT</span></span>
         </div>
-        <div class="indent"><span class="prefix">&rsaquo;</span> Tester is on leave.</div>
-        <div class="indent"><span class="prefix">&rsaquo;</span> His manager is also on leave.</div>
-        <div class="indent"><span class="prefix">&rsaquo;</span> The manager's manager doesn't know what UAT means.</div>
+        <div class="term-line indent"><span class="prefix">&rsaquo;</span> Tester is on leave.</div>
+        <div class="term-line indent"><span class="prefix">&rsaquo;</span> His manager is also on leave.</div>
+        <div class="term-line indent"><span class="prefix">&rsaquo;</span> The manager's manager doesn't know what UAT means.</div>
       </div>
     </div>
 
-    <p class="line fade-in">
+    <p class="line anim">
       Come back by Monday. Or Tuesday. Actually, let's say "next sprint"
       and quietly move the ticket to the backlog.
     </p>
 
-    <p class="line dimmed fade-in">
+    <p class="line dimmed anim">
       Current build: 0.0.1-alpha-pre-beta-almost-there-not-really
     </p>
 
-    <!-- Interactive section — new additions below V2 content -->
-    <p class="line bold fade-in">
+    <!-- Interactive section -->
+    <p class="line bold anim">
       Anyway, here's a button. You should probably click it.
     </p>
 
-    <div class="leave-wrapper fade-in">
+    <div class="leave-wrapper anim">
       <button class="leave-btn" id="leaveBtn">Leave this website</button>
       <p class="gave-up-text" id="gaveUpText"></p>
     </div>
 
-    <p class="timer fade-in" id="timer"></p>
+    <p class="timer anim" id="timer"></p>
 
     <!-- V2 closer — preserved exactly -->
-    <p class="closer fade-in">Also, go get a life, man.</p>
-    <p class="subtext fade-in">
+    <p class="closer anim">Also, go get a life, man.</p>
+    <p class="subtext anim">
       (says the guy who bought a domain just to write this)
     </p>
 
-    <footer class="footer fade-in">
+    <footer class="footer anim">
       <p>&copy; 2026 Rachit Tiwari &middot; Built with mass delusion and a domain he didn't need</p>
       <p class="footer-links">
         <a href="mailto:rachittiwari10@gmail.com">email</a> &middot;
@@ -405,7 +519,96 @@
   </div>
 
   <script>
-    // ===== Tab title changes =====
+    // ================================================================
+    //  1. SPLIT-WORD GREETING ANIMATION
+    //     Each word slides up individually with staggered delay
+    // ================================================================
+    const greetingEl = document.getElementById('greeting');
+    const cursorEl = document.getElementById('cursor');
+    const originalText = 'Yo, thanks for visiting!';
+
+    // Remove text, keep cursor
+    greetingEl.textContent = '';
+
+    // Split into words and create spans
+    const words = originalText.split(' ');
+    words.forEach((word, i) => {
+      const span = document.createElement('span');
+      span.className = 'word';
+      span.textContent = word;
+      span.style.animationDelay = `${0.2 + i * 0.12}s`;
+      greetingEl.appendChild(span);
+
+      // Add space between words
+      if (i < words.length - 1) {
+        const space = document.createTextNode('\u00A0');
+        greetingEl.appendChild(space);
+      }
+    });
+
+    // Re-append cursor after last word
+    cursorEl.style.animationDelay = `${0.2 + words.length * 0.12}s`;
+    greetingEl.appendChild(cursorEl);
+
+    // Mark greeting as already animated (skip the generic .anim reveal)
+    greetingEl.classList.remove('anim');
+    greetingEl.style.opacity = '1';
+    greetingEl.style.transform = 'none';
+    greetingEl.style.filter = 'none';
+
+    // ================================================================
+    //  2. INTERSECTION OBSERVER — blur-deblur staggered reveal
+    // ================================================================
+    const elements = document.querySelectorAll('.anim');
+    let globalDelay = 0.5; // start after greeting finishes
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const el = entry.target;
+          el.style.animationDelay = `${globalDelay}s`;
+          el.classList.add('show');
+          globalDelay += 0.15;
+          observer.unobserve(el);
+        }
+      });
+    }, { threshold: 0.1, rootMargin: '0px 0px -30px 0px' });
+
+    elements.forEach(el => observer.observe(el));
+
+    // ================================================================
+    //  3. TERMINAL LINE-BY-LINE TYPING
+    // ================================================================
+    const terminalEl = document.getElementById('terminal');
+    const termLines = document.querySelectorAll('.term-line');
+
+    const termObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          // Add glow to terminal
+          setTimeout(() => terminalEl.classList.add('glow'), 600);
+
+          // Type each line with stagger
+          termLines.forEach((line, i) => {
+            setTimeout(() => line.classList.add('typed'), 700 + i * 280);
+          });
+          termObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.4 });
+
+    termObserver.observe(document.getElementById('terminalBody'));
+
+    // ================================================================
+    //  4. COOKIE BANNER — smooth entrance after 3s
+    // ================================================================
+    setTimeout(() => {
+      document.getElementById('cookieBanner').classList.add('show');
+    }, 3000);
+
+    // ================================================================
+    //  5. TAB TITLE CHANGES
+    // ================================================================
     const titles = [
       { time: 15000, text: "...you're still here?" },
       { time: 30000, text: "okay, fine. stay." },
@@ -423,7 +626,9 @@
       if (document.hidden) document.title = "come back :(";
     });
 
-    // ===== Time wasted counter =====
+    // ================================================================
+    //  6. TIME WASTED COUNTER
+    // ================================================================
     const startTime = Date.now();
     const timerEl = document.getElementById('timer');
     const timerMessages = [
@@ -441,7 +646,9 @@
       if (msg) timerEl.textContent = msg.text(seconds);
     }, 1000);
 
-    // ===== Leave button that dodges cursor =====
+    // ================================================================
+    //  7. LEAVE BUTTON — dodges cursor with spring physics
+    // ================================================================
     const btn = document.getElementById('leaveBtn');
     const wrapper = btn.parentElement;
     const gaveUp = document.getElementById('gaveUpText');
@@ -482,6 +689,7 @@
         btn.textContent = "Fine, you win";
         btn.style.background = '#333';
         btn.style.color = '#888';
+        btn.style.boxShadow = 'none';
         btn.style.cursor = 'default';
         btn.onmouseenter = null;
         btn.addEventListener('click', () => {
@@ -501,28 +709,34 @@
         btn.textContent = "Wait, how did you\u2014";
         btn.style.background = '#333';
         btn.style.color = '#888';
+        btn.style.boxShadow = 'none';
         setTimeout(() => { btn.textContent = "Doesn't matter. There's no exit."; }, 2000);
       }
     });
 
-    // ===== Cookie banner =====
+    // ================================================================
+    //  8. COOKIE BANNER INTERACTION
+    // ================================================================
     const cookieBtn = document.getElementById('cookieBtn');
-    const banner = document.getElementById('cookieBanner');
+    const bannerEl = document.getElementById('cookieBanner');
     let cookieClicks = 0;
 
     cookieBtn.addEventListener('click', () => {
       cookieClicks++;
       if (cookieClicks === 1) {
-        banner.querySelector('.cookie-text').innerHTML =
+        bannerEl.querySelector('.cookie-text').innerHTML =
           "Great. Your acknowledgment of the emptiness has been noted. You may now continue staring at nothing.";
         cookieBtn.textContent = "I'm okay with this";
       } else if (cookieClicks === 2) {
-        banner.style.transform = 'translateY(100%)';
-        banner.style.transition = 'transform 0.4s ease';
+        bannerEl.style.transform = 'translateY(100%)';
+        bannerEl.style.opacity = '0';
+        bannerEl.style.transition = 'transform 0.5s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.4s ease';
       }
     });
 
-    // ===== Console easter eggs =====
+    // ================================================================
+    //  9. CONSOLE EASTER EGGS
+    // ================================================================
     console.log(
       '%c Hey, you opened DevTools! ',
       'background: #fff; color: #000; font-size: 14px; font-weight: bold; padding: 8px 12px; border-radius: 4px;'
