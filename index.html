@@ -241,8 +241,9 @@
     /* ---- Leave button ---- */
     .leave-wrapper {
       margin: 36px 0;
-      height: 52px;
+      min-height: 100px;
       position: relative;
+      overflow: hidden;
     }
 
     .leave-btn {
@@ -255,39 +256,43 @@
       padding: 12px 28px;
       border-radius: 8px;
       cursor: pointer;
-      position: absolute;
-      transition: left 0.35s cubic-bezier(0.34, 1.56, 0.64, 1),
-                  top 0.25s cubic-bezier(0.34, 1.56, 0.64, 1),
-                  transform 0.15s ease,
-                  box-shadow 0.3s ease;
-      left: 0;
-      top: 0;
+      position: relative;
       white-space: nowrap;
       user-select: none;
       z-index: 5;
       box-shadow: 0 2px 12px rgba(255,255,255,0.08);
+      transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1),
+                  box-shadow 0.3s ease;
+      display: inline-block;
+      -webkit-tap-highlight-color: transparent;
+      touch-action: manipulation;
     }
 
     .leave-btn:hover {
       box-shadow: 0 4px 20px rgba(255,255,255,0.15);
     }
 
-    .leave-btn:active {
-      transform: scale(0.95);
+    .leave-btn.shrink {
+      animation: btnShrink 0.15s ease forwards;
+    }
+
+    @keyframes btnShrink {
+      to { transform: scale(0.92); }
     }
 
     .gave-up-text {
       font-size: 0.82rem;
       color: #444;
-      margin-top: 8px;
-      display: none;
+      margin-top: 12px;
       font-style: italic;
-      animation: fadeInQuick 0.3s ease;
+      opacity: 0;
+      transform: translateY(6px);
+      transition: opacity 0.35s ease, transform 0.35s ease;
     }
 
-    @keyframes fadeInQuick {
-      from { opacity: 0; transform: translateY(4px); }
-      to { opacity: 1; transform: translateY(0); }
+    .gave-up-text.visible {
+      opacity: 1;
+      transform: translateY(0);
     }
 
     /* ---- Timer ---- */
@@ -481,7 +486,7 @@
       }
 
       .leave-wrapper {
-        height: 48px;
+        min-height: 80px;
         margin: 28px 0;
       }
 
@@ -562,8 +567,9 @@
     </p>
 
     <p class="line anim">
-      Like, seriously. There's a whole internet out there. Cats doing backflips.
-      Wikipedia rabbit holes. That one recipe you bookmarked in 2019.
+      Like, seriously. There's a whole internet out there. LinkedIn influencers
+      posting "I got rejected 847 times and now I'm a CEO." ChatGPT writing
+      your emails. Reels you've been scrolling for 3 hours.
       And you chose... this?
     </p>
 
@@ -759,81 +765,172 @@
     }, 1000);
 
     // ================================================================
-    //  7. LEAVE BUTTON — dodges cursor with spring physics
+    //  7. LEAVE BUTTON — dodges with personality & spring physics
+    //     Uses transform: translateX() for buttery 60fps movement
     // ================================================================
     const btn = document.getElementById('leaveBtn');
     const wrapper = btn.parentElement;
     const gaveUp = document.getElementById('gaveUpText');
     let dodgeCount = 0;
+    let surrendered = false;
+    let currentX = 0;
+    let dodgeLock = false; // prevent rapid-fire dodges
 
     const dodgeMessages = [
+      "Nope.",
       "Not that easy.",
-      "Nice try.",
+      "Nice try though.",
       "You really thought?",
       "I can do this all day.",
-      "Maybe try a different angle?",
-      "Your mouse-hand coordination is concerning.",
-      "Okay this is getting sad.",
-      "I respect the persistence though.",
+      "This button has trust issues.",
+      "Have you tried closing the tab instead?",
+      "Your hand-eye coordination is... brave.",
+      "Almost! Just kidding. Not even close.",
+      "Okay, I respect the grind.",
     ];
 
-    // On mobile: tapping the button triggers dodge instead of mouseenter
-    btn.addEventListener('touchstart', (e) => {
-      if (dodgeCount < 10) {
-        e.preventDefault();
-        const touch = e.touches[0];
-        btn.dispatchEvent(new MouseEvent('mouseenter', {
-          clientX: touch.clientX,
-          clientY: touch.clientY
-        }));
-      }
-    }, { passive: false });
+    const surrenderRoasts = [
+      "Took you long enough.",
+      "My grandma would've caught that faster. She's 87.",
+      "I'd slow-clap but I don't have hands.",
+    ];
 
-    btn.addEventListener('mouseenter', (e) => {
-      const wrapperRect = wrapper.getBoundingClientRect();
-      const btnRect = btn.getBoundingClientRect();
-      const maxLeft = wrapperRect.width - btnRect.width;
+    function getMaxTravel() {
+      return Math.max(0, wrapper.offsetWidth - btn.offsetWidth);
+    }
 
-      let newLeft = Math.random() * maxLeft;
-      const cursorRelX = e.clientX - wrapperRect.left;
-      if (Math.abs(newLeft - cursorRelX) < 100) {
-        newLeft = cursorRelX < maxLeft / 2 ? maxLeft : 0;
-      }
-      btn.style.left = Math.max(0, Math.min(newLeft, maxLeft)) + 'px';
+    function dodge(fromX) {
+      if (surrendered || dodgeLock) return;
+      dodgeLock = true;
+      setTimeout(() => { dodgeLock = false; }, 250);
+
+      const max = getMaxTravel();
+      if (max <= 10) return; // wrapper too narrow
 
       dodgeCount++;
 
-      if (dodgeCount <= dodgeMessages.length) {
-        gaveUp.style.display = 'block';
-        gaveUp.textContent = dodgeMessages[dodgeCount - 1];
+      // ---- Pick new position AWAY from interaction point ----
+      let newX;
+      const wrapperLeft = wrapper.getBoundingClientRect().left;
+      const rel = (typeof fromX === 'number') ? fromX - wrapperLeft : currentX;
+      const mid = max / 2;
+
+      if (rel < mid) {
+        newX = mid + Math.random() * (max - mid); // go right
+      } else {
+        newX = Math.random() * mid; // go left
+      }
+      // Ensure meaningful movement
+      if (Math.abs(newX - currentX) < max * 0.25) {
+        newX = currentX < mid ? max : 0;
+      }
+      newX = Math.max(0, Math.min(newX, max));
+
+      // ---- Dodge animation style varies for delight ----
+      const style = dodgeCount % 5;
+
+      if (style === 0 && dodgeCount > 3) {
+        // TELEPORT: shrink → vanish → reappear at new spot
+        btn.style.transition = 'transform 0.12s ease, opacity 0.12s ease';
+        btn.style.transform = `translateX(${currentX}px) scale(0.3)`;
+        btn.style.opacity = '0';
+        setTimeout(() => {
+          btn.style.transition = 'none';
+          currentX = newX;
+          btn.style.transform = `translateX(${newX}px) scale(0.3)`;
+          requestAnimationFrame(() => {
+            requestAnimationFrame(() => {
+              btn.style.transition = 'transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.15s ease';
+              btn.style.transform = `translateX(${newX}px) scale(1)`;
+              btn.style.opacity = '1';
+            });
+          });
+        }, 140);
+      } else if (style === 3 && dodgeCount > 2) {
+        // TILT: slide with a cheeky rotation
+        const tilt = (newX > currentX) ? 6 : -6;
+        btn.style.transition = 'transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)';
+        currentX = newX;
+        btn.style.transform = `translateX(${newX}px) rotate(${tilt}deg)`;
+        setTimeout(() => {
+          btn.style.transition = 'transform 0.3s ease';
+          btn.style.transform = `translateX(${newX}px) rotate(0deg)`;
+        }, 350);
+      } else {
+        // SPRING SLIDE: classic buttery dodge
+        btn.style.transition = 'transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)';
+        currentX = newX;
+        btn.style.transform = `translateX(${newX}px)`;
       }
 
-      if (dodgeCount >= 10) {
-        btn.style.transition = 'none';
-        btn.textContent = "Fine, you win";
-        btn.style.background = '#333';
-        btn.style.color = '#888';
-        btn.style.boxShadow = 'none';
-        btn.style.cursor = 'default';
-        btn.onmouseenter = null;
-        btn.addEventListener('click', () => {
-          btn.textContent = "...just kidding";
-          setTimeout(() => { btn.textContent = "There's nowhere to go"; }, 1500);
-          setTimeout(() => {
-            btn.textContent = "This is it. This is the whole site.";
-            btn.style.color = '#555';
-          }, 3500);
-        });
-        gaveUp.textContent = "Took you long enough.";
+      // ---- Button text evolves ----
+      if (dodgeCount === 4) btn.textContent = "Leave (please?)";
+      if (dodgeCount === 7) btn.textContent = "LEAVE.";
+      if (dodgeCount === 9) btn.textContent = "ok wait stop";
+
+      // ---- Show dodge message ----
+      if (dodgeCount <= dodgeMessages.length) {
+        gaveUp.textContent = dodgeMessages[dodgeCount - 1];
+        gaveUp.classList.add('visible');
       }
+
+      // ---- Surrender after 10 dodges ----
+      if (dodgeCount >= 10) {
+        surrendered = true;
+        setTimeout(() => {
+          btn.style.transition = 'all 0.6s cubic-bezier(0.22, 1, 0.36, 1)';
+          btn.style.transform = 'translateX(0) scale(1) rotate(0deg)';
+          btn.style.opacity = '1';
+          btn.textContent = "Fine, you win";
+          btn.style.background = '#333';
+          btn.style.color = '#888';
+          btn.style.boxShadow = 'none';
+          btn.style.cursor = 'default';
+          gaveUp.textContent = surrenderRoasts[Math.floor(Math.random() * surrenderRoasts.length)];
+        }, 450);
+      }
+    }
+
+    // ---- Desktop: dodge on hover ----
+    btn.addEventListener('mouseenter', (e) => {
+      if (!surrendered) dodge(e.clientX);
     });
 
+    // ---- Mobile: dodge on tap ----
+    btn.addEventListener('touchstart', (e) => {
+      if (!surrendered) {
+        e.preventDefault();
+        dodge(e.touches[0].clientX);
+      }
+    }, { passive: false });
+
+    // ---- Click: post-surrender comedy sequence ----
+    let postClickStage = 0;
     btn.addEventListener('click', () => {
-      if (dodgeCount < 10) {
+      if (surrendered && dodgeCount >= 10) {
+        postClickStage++;
+        if (postClickStage === 1) {
+          btn.textContent = "...just kidding";
+        } else if (postClickStage === 2) {
+          btn.textContent = "There's nowhere to go";
+        } else if (postClickStage === 3) {
+          btn.textContent = "This is it. This is the whole site.";
+          btn.style.color = '#555';
+        } else if (postClickStage === 4) {
+          btn.textContent = "Stop clicking me.";
+        } else if (postClickStage >= 5) {
+          btn.textContent = "...";
+          btn.style.transition = 'opacity 2s ease';
+          btn.style.opacity = '0.3';
+          gaveUp.textContent = "You broke it. Happy now?";
+        }
+      } else if (!surrendered) {
+        // Somehow clicked before surrender (nearly impossible)
         btn.textContent = "Wait, how did you\u2014";
         btn.style.background = '#333';
         btn.style.color = '#888';
         btn.style.boxShadow = 'none';
+        surrendered = true;
         setTimeout(() => { btn.textContent = "Doesn't matter. There's no exit."; }, 2000);
       }
     });
