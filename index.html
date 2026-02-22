@@ -425,69 +425,69 @@
     /* ---- Responsive ---- */
     @media (max-width: 640px) {
       .container {
-        padding: 36px 18px 130px;
+        padding: 28px 18px 120px;
         max-width: 100%;
       }
 
       .greeting {
         font-size: 1.35rem;
-        margin-bottom: 36px;
+        margin-bottom: 28px;
         word-break: break-word;
       }
 
       .line {
-        font-size: 0.97rem;
-        margin-bottom: 22px;
-        line-height: 1.75;
+        font-size: 0.92rem;
+        margin-bottom: 16px;
+        line-height: 1.7;
       }
 
       .line.bold {
-        font-size: 1.05rem;
+        font-size: 1rem;
       }
 
       .line.dimmed {
-        font-size: 0.75rem;
+        font-size: 0.72rem;
         word-break: break-all;
       }
 
       .terminal {
-        margin: 32px -18px;
+        margin: 24px -18px;
         border-radius: 0;
         border-left: none;
         border-right: none;
       }
 
       .terminal-body {
-        padding: 16px;
-        font-size: 0.72rem;
-        line-height: 1.9;
+        padding: 14px;
+        font-size: 0.7rem;
+        line-height: 1.85;
         overflow-x: auto;
       }
 
       .terminal-header {
-        padding: 10px 16px;
+        padding: 10px 14px;
       }
 
       .terminal-title {
-        font-size: 0.62rem;
+        font-size: 0.6rem;
       }
 
       .indent {
-        padding-left: 14px;
+        padding-left: 12px;
       }
 
       .closer {
-        font-size: 1.15rem;
-        margin-top: 36px;
+        font-size: 1.1rem;
+        margin-top: 28px;
       }
 
       .subtext {
-        font-size: 0.78rem;
+        font-size: 0.75rem;
       }
 
       .leave-wrapper {
-        min-height: 80px;
-        margin: 28px 0;
+        min-height: 100px;
+        margin: 20px 0;
       }
 
       .leave-btn {
@@ -496,22 +496,23 @@
       }
 
       .gave-up-text {
-        font-size: 0.75rem;
+        font-size: 0.72rem;
       }
 
       .timer {
-        font-size: 0.7rem;
+        font-size: 0.68rem;
+        margin-bottom: 20px;
       }
 
       .cookie-banner {
         flex-direction: column;
         text-align: center;
-        padding: 16px 18px;
-        gap: 12px;
+        padding: 14px 18px;
+        gap: 10px;
       }
 
       .cookie-text {
-        font-size: 0.75rem;
+        font-size: 0.72rem;
       }
 
       .cookie-btn {
@@ -520,27 +521,28 @@
       }
 
       .footer {
-        margin-top: 48px;
-        font-size: 0.7rem;
+        margin-top: 36px;
+        font-size: 0.68rem;
       }
 
       .footer-links {
-        margin-top: 8px;
+        margin-top: 6px;
       }
     }
 
     @media (max-width: 360px) {
       .greeting {
-        font-size: 1.2rem;
+        font-size: 1rem;
       }
 
       .line {
-        font-size: 0.92rem;
+        font-size: 0.85rem;
       }
 
       .terminal-body {
-        font-size: 0.65rem;
+        font-size: 0.62rem;
       }
+
     }
 
     /* ---- Prefers reduced motion ---- */
@@ -559,7 +561,6 @@
 
   <main class="container">
 
-    <!-- V2 content — preserved exactly -->
     <h1 class="greeting anim" id="greeting">Yo, thanks for visiting!<span class="cursor" id="cursor"></span></h1>
 
     <p class="line bold anim">
@@ -567,11 +568,9 @@
     </p>
 
     <p class="line anim">
-      Like, seriously. The whole internet is right there. Brain rot reels
-      at 3 AM. LinkedIn influencers who got rejected 847 times and want
-      you to know about it. AI writing your emails, your essays, your
-      breakup texts. That "productive morning routine" you saved six
-      months ago. And you ended up... here?
+      Brain rot reels you'll regret tomorrow. AI writing
+      your breakup texts. That morning routine you saved
+      and never tried. And you ended up... here?
     </p>
 
     <div class="terminal anim" id="terminal">
