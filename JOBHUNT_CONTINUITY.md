@@ -28,7 +28,7 @@ Lives on branch `claude/job-app-finding-architecture-0e30h1` of `namesrachittiwa
 
 ## 2. Binding decisions from the current chat (user-mandated, already in force)
 
-1. **Review console loop**: every substantive agent reply publishes/updates the annotatable review page (URL in §0.3) — and per user mandate 2026-07-17 it must be a VISUAL EXPLAINER: diagrams, flows, wireframe-style blocks with tiny captions; chat replies stay short (a few sentences + the link), never long text walls.
+1. **Review console loop**: every substantive agent reply publishes/updates the annotatable review page (URL in §0.3) — and per user mandate 2026-07-17 it must be a VISUAL EXPLAINER: diagrams, flows, wireframe-style blocks with tiny captions; chat replies stay short (a few sentences + the link), never long text walls. FINAL THEME (v6, user-mandated): strict black-and-white only, NO emojis anywhere on the page; status encoded via border weight/style and text glyphs.
 2. **Harness first**: no build work (B2 etc.) until the Agent Harness is ratified by the user.
 3. **Continuity protocol** (this file): the working session persists chat-level decisions + state to git so a fresh chat resumes with zero loss. Update cadence: at session end and before context exhaustion. This becomes harness rule L2 at ratification.
 
