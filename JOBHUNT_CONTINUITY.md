@@ -62,6 +62,12 @@ Processed so far: none (channel-test doc 2026-07-17 only, not feedback).
 ### Ratification path
 User annotates/picks → agent resolves changes in next console version → on approval commit harness v1.0 to its D1 home + amended backend CLAUDE.md + new frontend CLAUDE.md, PROGRESS.md logs the approval verbatim → build resumes (B2 was the recommended lane, user pick still open).
 
+## 3b. Conversation topology (user decision 2026-07-17) + meetyoinky recon status
+Two tracks: **Backend = the existing Claude Code session** (this continuity file's owner); **Frontend/Design = a separate claude.ai conversation** using the Figma connector (there is no "claude-design" MCP on this account — Figma is the design surface; its mobile app gives phone commenting).
+**meetyoinky.com 1:1 recreation task — BLOCKED in the backend session:** the environment's network egress policy 403s general web CONNECTs (meetyoinky.com, google.com, web.archive.org all denied at the gateway), the site 403s the harness WebFetch and reader proxies (bot protection), and it is absent from search indexes. Playwright itself works (pre-provisioned Chromium launches; recon script ready in-session at scratchpad/recon/recon.js — trivially re-derivable). No fabrication: no tokens or Figma file were invented.
+Unblock paths: **(A — recommended)** run recon+design in the Frontend conversation: user attaches full-page phone screenshots (desktop-mode + mobile) or claude.ai fetches the site; derive design_tokens.md; build Figma desktop 1440 + mobile 390 artboards; fidelity-first; numbered assumptions; share Figma link for phone comments. **(B)** user saves full-page screenshots to Google Drive; backend session reads them (read_file_content supports png/jpeg) and drives the Figma build itself. **(C)** recreate the environment with a permissive network policy.
+⚠ **Backend implication of the same egress policy:** future B-module live verifications (scrapers, LLM calls, VPS reachability tests) from THIS environment will hit the same wall — live testing must run on the VPS via GitHub Actions (already the plan) or in a permissive-network environment. Do not burn sessions debugging "broken scrapers" that are actually gateway 403s.
+
 ## 4. Pending user actions (phone-doable)
 1. Ratify the harness: pick D1–D5 + agree/change per layer on the console, paste feedback (or just reply in chat).
 2. Issue #3 checklist (unblocks B1 live acceptance; ~15 min for VPS+DNS+webhook).
