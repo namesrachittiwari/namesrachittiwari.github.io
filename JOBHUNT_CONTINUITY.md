@@ -51,6 +51,9 @@ Governs HOW agents work; BACKEND_PACK.md governs WHAT gets built. On conflict: u
 - **D4 adversarial review gate**: (rec) every module before DoD (07-08 audit found 15 real bugs tests missed) | only B7 + final integration | per parallel wave.
 - **D5 frontend pack**: (rec) agent derives FRONTEND_PACK.md + DESIGN/PRODUCT drafts from frozen openapi.yaml, user ratifies via console | user supplies original pack from the Fable chat (wins if it exists).
 
+### Also open — wireframe decisions (console v3, 2026-07-17)
+Console v3 replaced verdict-chips with **point-mode** annotation (tap ✏️ Point → tap any element → pin + optional note → Copy feedback). It contains the full frontend wireframe: 9 phone-first screens (S1 Needs-You home, S2 jobs feed, S3 job detail w/ evidence map, S4 doc review, S5 applications+confirm queue, S6 pipeline board, S7 sources health+repair, S8 vault+memory, S9 settings+system), each mapped to frozen openapi.yaml routes — this is step one of the D5-recommended derived frontend pack. New open decisions: **W1** landing screen (rec: Needs-You home | jobs feed | pipeline) and **W2** bottom tabs (rec: Home·Jobs·Pipeline·More | Applications as first-class tab).
+
 ### Ratification path
 User annotates/picks → agent resolves changes in next console version → on approval commit harness v1.0 to its D1 home + amended backend CLAUDE.md + new frontend CLAUDE.md, PROGRESS.md logs the approval verbatim → build resumes (B2 was the recommended lane, user pick still open).
 
