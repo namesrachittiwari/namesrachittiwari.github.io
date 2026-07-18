@@ -85,7 +85,7 @@ const $ = (s, el = document) => el.querySelector(s);
 const wait = ms => new Promise(r => setTimeout(r, reduced ? Math.min(ms, 40) : ms));
 
 /* ================= Elements ================= */
-const app = $('#app'), feed = $('#feed'), chat = $('#chat'), zero = $('#zero');
+const app = $('#app'), feed = $('#feed'), chat = $('#chat'), work = $('#work');
 const input = $('#input'), send = $('#send'), deepTog = $('#deepTog');
 const canvasBtn = $('#canvasBtn'), cvCount = $('#cvCount'), canvasCt = $('#canvasCt');
 const paneList = $('#paneList'), paneAct = $('#paneAct'), paneSrc = $('#paneSrc');
@@ -128,27 +128,20 @@ function visibleJobs() {
 }
 
 /* ================= Canvas render ================= */
-function ringColor(m) { return m >= 90 ? '#F0439B' : m >= 70 ? '#6D3FB4' : m >= 50 ? '#B4540A' : '#8B8172'; }
 function salText(j) { return j.salListed ? `₹${j.salMin}–${j.salMax}L` : '“Competitive” 🙄'; }
 
 function jobCardHTML(j) {
-  const C = 2 * Math.PI * 14.5, off = C * (1 - j.match / 100);
-  const noteClass = j.kind === 'bad' ? 'bad' : j.kind === 'ghost' ? 'ghost' : '';
   return `<article class="jcard ${state.pinned.has(j.id) ? 'pinned' : ''} ${j.ghost ? 'ghosty' : ''}" data-id="${j.id}">
     <div class="j-top">
-      <span class="j-logo" style="background:${j.bg}">${j.co[0]}</span>
+      <span class="j-logo">${j.co[0]}</span>
       <span class="j-name"><b>${j.role}</b><span>${j.co} · ${j.where}</span></span>
-      <span class="match" title="How much this role deserves you">
-        <svg viewBox="0 0 36 36"><circle class="tr" cx="18" cy="18" r="14.5" fill="none" stroke-width="3.6"/>
-        <circle class="br" cx="18" cy="18" r="14.5" fill="none" stroke-width="3.6" stroke="${ringColor(j.match)}" stroke-dasharray="${C}" stroke-dashoffset="${off}"/></svg>
-        <span class="mn">${j.match}</span><span class="ml">match</span>
-      </span>
+      <span class="j-match" title="How much this role deserves you">${j.match}% match</span>
     </div>
     <div class="j-mid">
       <span class="j-sal">${salText(j)}</span>
       ${j.tags.map(t => `<span class="j-tag">${t}</span>`).join('')}
     </div>
-    <p class="j-note ${noteClass}">${j.note}</p>
+    <p class="j-note">${j.note}</p>
     <div class="j-act">
       <button class="jb apply ${state.applied.has(j.id) ? 'did' : ''}" data-a="apply">${state.applied.has(j.id) ? 'Applied ✓' : 'Apply'}</button>
       <button class="jb pin ${state.pinned.has(j.id) ? 'did' : ''}" data-a="pin">${state.pinned.has(j.id) ? '📌 Pinned' : '📌 Pin'}</button>
@@ -238,7 +231,11 @@ document.querySelectorAll('.cv-tab').forEach(t => t.addEventListener('click', ()
 /* ================= Chat ================= */
 function el(html) { const d = document.createElement('div'); d.innerHTML = html; return d.firstElementChild; }
 function scrollDown() { chat.scrollTop = chat.scrollHeight; }
-function clearZero() { if (zero.parentNode) zero.remove(); }
+function clearZero() {
+  work.classList.remove('zero');
+  const h = $('#zeroH');
+  if (h) h.remove();
+}
 
 function userSay(text) {
   clearZero();
@@ -247,14 +244,14 @@ function userSay(text) {
 }
 function botSay(html, { headline } = {}) {
   clearZero();
-  const m = el(`<div class="m bot"><span class="who"><svg width="13" height="13"><use href="#logo-d"/></svg></span><div class="bub">${headline ? `<p class="hl">${headline}</p>` : ''}${html.startsWith('<') ? html : `<p>${html}</p>`}</div></div>`);
+  const m = el(`<div class="m bot"><div class="bub">${headline ? `<p class="hl">${headline}</p>` : ''}${html.startsWith('<') ? html : `<p>${html}</p>`}</div></div>`);
   feed.appendChild(m);
   scrollDown();
   return m;
 }
 async function botThink(ms = 700) {
   clearZero();
-  const t = el(`<div class="m bot"><span class="who"><svg width="13" height="13"><use href="#logo-d"/></svg></span><div class="bub"><span class="typing"><i></i><i></i><i></i></span></div></div>`);
+  const t = el(`<div class="m bot"><div class="bub"><span class="typing"><i></i><i></i><i></i></span></div></div>`);
   feed.appendChild(t); scrollDown();
   await wait(ms);
   t.remove();
@@ -336,7 +333,7 @@ async function runDeepHunt() {
 
   await botThink(500);
   const card = botSay(`<div class="deep" id="deepCard">
-      <div class="deep-head"><span class="sig">🔭</span><span style="flex:1"><b>Deep hunt</b><span class="st" id="deepSt">Warming up the boards…</span></span></div>
+      <div class="deep-head"><span class="sig">🔎</span><span style="flex:1"><b>Deep hunt</b><span class="st" id="deepSt">Warming up the boards…</span></span></div>
       <div class="deep-prog"><i id="deepBar"></i></div>
       <div class="deep-foot"><span id="deepMeta">0 sources · 0 steps</span><button id="deepView">View activity</button></div>
     </div>`);
@@ -375,7 +372,7 @@ async function runDeepHunt() {
     `<p>Eight roles survived — the market is better than your mood suggests. Papercrane wants a <b>Design Engineer</b> at ₹52–68L <button class="cite" data-src>1</button>, and their founder actually answers email. Mintleaf pays ₹45–60L fully remote with zero “hustle” mentions <button class="cite" data-src>2</button>.</p>
      <p>Warnings from the field: Glowfish says “family” three times <button class="cite" data-src>3</button>, Copperbeam wants a rockstar for ₹18L <button class="cite" data-src>5</button>, and Hexadecimal’s posting is officially a fossil — 247 days <button class="cite" data-src>4</button>.</p>
      <p>Everything’s ranked in the canvas. Say “pin the top two” and I’ll hold them. Or “remote only, above 40L” and watch the list obey.</p>`,
-    { headline: 'The state of <em>your market.</em>' }
+    { headline: 'The state of your market' }
   );
   showToast('Deep hunt complete. 8 roles ranked in the canvas. ✨');
 }
