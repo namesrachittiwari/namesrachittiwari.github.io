@@ -1,0 +1,1722 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hired-ish — a job hunt that runs itself</title>
+  <meta name="description" content="The AI job hunt for people who are tired. It runs the hunt, flags the red flags, and yeets the rest.">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📌</text></svg>">
+  <link rel="preload" href="fonts/instrument-serif-normal-400.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="fonts/inter-normal-400-700.woff2" as="font" type="font/woff2" crossorigin>
+  <style>
+    @font-face {
+      font-family: 'Instrument Serif';
+      font-style: normal;
+      font-weight: 400;
+      font-display: swap;
+      src: url('fonts/instrument-serif-normal-400.woff2') format('woff2');
+    }
+    @font-face {
+      font-family: 'Instrument Serif';
+      font-style: italic;
+      font-weight: 400;
+      font-display: swap;
+      src: url('fonts/instrument-serif-italic-400.woff2') format('woff2');
+    }
+    @font-face {
+      font-family: 'Inter';
+      font-style: normal;
+      font-weight: 400 700;
+      font-display: swap;
+      src: url('fonts/inter-normal-400-700.woff2') format('woff2');
+    }
+    @font-face {
+      font-family: 'JetBrains Mono';
+      font-style: normal;
+      font-weight: 400 600;
+      font-display: swap;
+      src: url('fonts/jetbrains-mono-normal-400-600.woff2') format('woff2');
+    }
+
+    /* ============================================================
+       HIRED-ISH · design tokens
+       Visual language: cream canvas, ink text, one pink accent,
+       sunset-gradient feature panels, near-black side rail.
+       ============================================================ */
+    :root {
+      --bg: #FAF3EA;
+      --surface: #FFFDF8;
+      --surface-2: #F4EBDE;
+      --ink: #221C14;
+      --ink-soft: #5A5248;
+      --muted: #75695A;
+      --hairline: #E8DECD;
+      --hairline-strong: #D9CDB8;
+
+      --pink: #E13A8C;
+      --pink-deep: #C42875;
+      --pink-soft: #FBE4F0;
+      --pink-border: #F2BCD9;
+
+      --grape: #5B3AA6;
+      --dark: #171209;
+      --dark-2: #221B10;
+      --cream-on-dark: #F5EDDF;
+
+      --good: #2E7D4F;
+      --warn: #B4540A;
+
+      --sunset: linear-gradient(to bottom, #1D1342 0%, #35205F 24%, #5A2E86 42%, #8E3E9E 56%, #C5539B 68%, #E87A6F 80%, #F7A369 90%, #FFC97E 100%);
+
+      --font-ui: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-display: 'Instrument Serif', Georgia, serif;
+      --font-mono: 'JetBrains Mono', ui-monospace, monospace;
+
+      --r-sm: 8px;
+      --r-md: 14px;
+      --r-lg: 20px;
+      --r-pill: 999px;
+
+      --shadow-card: 0 1px 2px rgba(34, 28, 20, 0.05), 0 6px 18px -8px rgba(34, 28, 20, 0.12);
+      --shadow-float: 0 4px 10px rgba(23, 18, 9, 0.10), 0 18px 44px -14px rgba(23, 18, 9, 0.28);
+
+      --z-drawer: 40;
+      --z-scrim: 30;
+      --z-topbar: 20;
+      --z-composer: 10;
+      --z-toast: 50;
+    }
+
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html { height: 100%; }
+
+    body {
+      font-family: var(--font-ui);
+      background: var(--bg);
+      color: var(--ink);
+      height: 100dvh;
+      overflow: hidden;
+      -webkit-font-smoothing: antialiased;
+      font-size: 15px;
+      line-height: 1.5;
+    }
+
+    button { font: inherit; color: inherit; background: none; border: none; cursor: pointer; }
+    button:focus-visible, a:focus-visible, select:focus-visible, input:focus-visible {
+      outline: 2px solid var(--pink);
+      outline-offset: 2px;
+      border-radius: 4px;
+    }
+
+    /* ============ App shell ============ */
+    .app { display: flex; height: 100dvh; }
+
+    /* ============ Sidebar ============ */
+    .sidebar {
+      width: 292px;
+      flex-shrink: 0;
+      background: var(--dark);
+      color: var(--cream-on-dark);
+      display: flex;
+      flex-direction: column;
+      padding: 20px 14px 14px;
+      gap: 4px;
+    }
+
+    .brand {
+      display: flex; align-items: baseline; gap: 8px;
+      padding: 2px 10px 14px;
+    }
+    .brand-name {
+      font-family: var(--font-display);
+      font-size: 27px;
+      letter-spacing: -0.01em;
+      color: #FFF9EF;
+    }
+    .brand-name em { color: #F2A9CF; }
+    .brand-tag {
+      font-size: 11px;
+      color: rgba(245, 237, 223, 0.45);
+    }
+
+    .new-hunt {
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+      background: var(--pink);
+      color: #fff;
+      font-weight: 600;
+      font-size: 14px;
+      border-radius: var(--r-pill);
+      padding: 11px 16px;
+      margin: 0 2px 12px;
+      transition: transform 0.15s cubic-bezier(0.25, 1, 0.5, 1), background 0.15s;
+    }
+    .new-hunt:hover { background: var(--pink-deep); transform: translateY(-1px); }
+    .new-hunt:active { transform: translateY(1px); }
+
+    .side-label {
+      font-size: 11px;
+      font-weight: 600;
+      color: rgba(245, 237, 223, 0.55);
+      padding: 12px 10px 6px;
+    }
+
+    .hunt-list, .pin-list { list-style: none; display: flex; flex-direction: column; gap: 2px; }
+
+    .hunt-item {
+      width: 100%;
+      text-align: left;
+      display: flex; flex-direction: column; gap: 1px;
+      padding: 8px 10px;
+      border-radius: 10px;
+      color: rgba(245, 237, 223, 0.85);
+      transition: background 0.15s;
+    }
+    .hunt-item:hover { background: rgba(255, 249, 239, 0.07); }
+    .hunt-item[aria-current="true"] { background: rgba(255, 249, 239, 0.12); color: #FFF9EF; }
+    .hunt-item .hunt-name { font-size: 13.5px; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .hunt-item .hunt-meta { font-size: 11.5px; color: rgba(245, 237, 223, 0.55); }
+
+    .pin-list { min-height: 24px; }
+    .pin-item {
+      display: flex; align-items: center; gap: 9px;
+      padding: 7px 10px;
+      border-radius: 10px;
+      font-size: 13px;
+      color: rgba(245, 237, 223, 0.85);
+      animation: pin-in 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    .pin-item:hover { background: rgba(255, 249, 239, 0.07); }
+    .pin-dot {
+      width: 22px; height: 22px; border-radius: 6px;
+      display: grid; place-items: center;
+      font-size: 10px; font-weight: 700;
+      flex-shrink: 0;
+      color: #fff;
+    }
+    .pin-empty {
+      font-size: 12px;
+      color: rgba(245, 237, 223, 0.38);
+      padding: 4px 10px 6px;
+      line-height: 1.45;
+    }
+    @keyframes pin-in {
+      from { opacity: 0; transform: translateX(-8px); }
+      to   { opacity: 1; transform: none; }
+    }
+
+    .side-spacer { flex: 1; }
+
+    .me-card {
+      display: flex; align-items: center; gap: 10px;
+      padding: 10px;
+      border-top: 1px solid rgba(245, 237, 223, 0.1);
+      margin-top: 10px;
+    }
+    .me-avatar {
+      width: 34px; height: 34px; border-radius: 50%;
+      background: var(--sunset);
+      display: grid; place-items: center;
+      font-weight: 700; font-size: 13px; color: #fff;
+      flex-shrink: 0;
+    }
+    .me-name { font-size: 13.5px; font-weight: 600; color: #FFF9EF; }
+    .me-status { font-size: 11.5px; color: rgba(245, 237, 223, 0.45); }
+
+    /* ============ Main column ============ */
+    .main {
+      flex: 1;
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+
+    .topbar {
+      display: flex; align-items: center; gap: 12px;
+      padding: 12px 20px;
+      border-bottom: 1px solid var(--hairline);
+      background: color-mix(in srgb, var(--bg) 88%, white);
+      position: relative;
+      z-index: var(--z-topbar);
+    }
+
+    .menu-btn {
+      display: none;
+      width: 36px; height: 36px;
+      border-radius: 10px;
+      place-items: center;
+      border: 1px solid var(--hairline-strong);
+      background: var(--surface);
+      flex-shrink: 0;
+    }
+
+    .hunt-title-wrap { min-width: 0; }
+    .hunt-title { font-size: 15px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .hunt-status { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--muted); }
+    .live-dot {
+      width: 7px; height: 7px; border-radius: 50%;
+      background: var(--good);
+      animation: live-pulse 2.4s ease-in-out infinite;
+    }
+    @keyframes live-pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.35; } }
+
+    .topbar-right { margin-left: auto; display: flex; align-items: center; gap: 8px; }
+
+    .view-tabs {
+      display: flex;
+      background: var(--surface-2);
+      border-radius: var(--r-pill);
+      padding: 3px;
+    }
+    .view-tab {
+      padding: 6px 14px;
+      border-radius: var(--r-pill);
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--ink-soft);
+      transition: background 0.15s, color 0.15s;
+    }
+    .view-tab[aria-selected="true"] { background: var(--ink); color: var(--bg); }
+    .view-tab .tab-badge {
+      font-family: var(--font-mono);
+      font-size: 10.5px;
+      margin-left: 4px;
+      opacity: 0.7;
+    }
+
+    .desperation {
+      appearance: none;
+      -webkit-appearance: none;
+      border: 1px solid var(--hairline-strong);
+      background: var(--surface) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%238A8072' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E") no-repeat right 12px center;
+      border-radius: var(--r-pill);
+      padding: 7px 30px 7px 14px;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--ink);
+      cursor: pointer;
+    }
+
+    /* ============ Filter bar ============ */
+    .filterbar {
+      display: flex; align-items: center; gap: 8px;
+      padding: 10px 20px;
+      border-bottom: 1px solid var(--hairline);
+      overflow-x: auto;
+      scrollbar-width: none;
+      flex-shrink: 0;
+    }
+    .filterbar::-webkit-scrollbar { display: none; }
+    .filterbar-label {
+      font-size: 12px; font-weight: 600; color: var(--muted);
+      flex-shrink: 0;
+    }
+    .f-chip {
+      display: inline-flex; align-items: center; gap: 6px;
+      border: 1px solid var(--hairline-strong);
+      background: var(--surface);
+      color: var(--ink-soft);
+      border-radius: var(--r-pill);
+      padding: 6px 13px;
+      font-size: 12.5px;
+      font-weight: 500;
+      white-space: nowrap;
+      transition: border-color 0.15s, background 0.15s, color 0.15s, transform 0.1s;
+    }
+    .f-chip:hover { border-color: var(--pink-border); }
+    .f-chip:active { transform: scale(0.97); }
+    .f-chip[aria-pressed="true"] {
+      background: var(--pink-soft);
+      border-color: var(--pink-border);
+      color: var(--pink-deep);
+    }
+    .f-count {
+      font-size: 12px; color: var(--muted);
+      margin-left: auto; flex-shrink: 0;
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* ============ Views ============ */
+    .view { flex: 1; min-height: 0; display: flex; flex-direction: column; }
+    .view[hidden] { display: none; }
+
+    /* ============ Chat feed ============ */
+    .feed {
+      flex: 1;
+      overflow-y: auto;
+      padding: 28px 20px 24px;
+      scroll-behavior: smooth;
+    }
+    @media (prefers-reduced-motion: reduce) { .feed { scroll-behavior: auto; } }
+
+    .feed-inner {
+      max-width: 780px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 26px;
+    }
+
+    .msg { display: flex; gap: 12px; }
+    .msg.entering { animation: msg-in 0.35s cubic-bezier(0.22, 1, 0.36, 1); }
+    @keyframes msg-in {
+      from { opacity: 0; transform: translateY(10px); }
+      to   { opacity: 1; transform: none; }
+    }
+
+    .msg-avatar {
+      width: 30px; height: 30px;
+      border-radius: 50%;
+      flex-shrink: 0;
+      margin-top: 2px;
+      display: grid; place-items: center;
+      font-size: 12px; font-weight: 700; color: #fff;
+    }
+    .msg-avatar.agent { background: var(--sunset); }
+    .msg-avatar.user { background: var(--ink); color: var(--bg); }
+
+    .msg-body { min-width: 0; flex: 1; display: flex; flex-direction: column; gap: 10px; }
+    .msg-author { font-size: 12.5px; font-weight: 600; color: var(--muted); }
+    .msg-author .you { color: var(--muted); font-weight: 500; }
+    .msg-text { max-width: 68ch; }
+    .msg-text p + p { margin-top: 8px; }
+
+    .msg.user-msg .msg-text {
+      background: var(--surface);
+      border: 1px solid var(--hairline);
+      border-radius: var(--r-md);
+      padding: 10px 14px;
+      width: fit-content;
+    }
+
+    /* ---- Hero message ---- */
+    .hero-label {
+      display: inline-flex; align-items: center; gap: 6px;
+      border: 1px solid var(--pink-border);
+      background: var(--pink-soft);
+      color: var(--pink-deep);
+      font-size: 11.5px; font-weight: 600;
+      border-radius: var(--r-pill);
+      padding: 3px 11px;
+      width: fit-content;
+    }
+    .hero-headline {
+      font-family: var(--font-display);
+      font-weight: 400;
+      font-size: clamp(28px, 4vw, 40px);
+      line-height: 1.12;
+      letter-spacing: -0.01em;
+      text-wrap: balance;
+      max-width: 22ch;
+    }
+    .hero-headline em {
+      font-style: italic;
+      color: var(--grape);
+    }
+    .hero-sub { color: var(--ink-soft); max-width: 56ch; }
+
+    .hero-panel {
+      position: relative;
+      border-radius: var(--r-lg);
+      background: var(--sunset);
+      min-height: 250px;
+      overflow: hidden;
+      margin-top: 6px;
+      box-shadow: var(--shadow-card);
+    }
+    .hero-sun {
+      position: absolute;
+      left: 38%; bottom: 6%;
+      transform: translateX(-50%);
+      width: 300px; height: 300px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(255, 236, 180, 0.95) 0%, rgba(255, 200, 130, 0.55) 32%, rgba(248, 150, 110, 0.25) 55%, transparent 72%);
+    }
+    .hero-hills {
+      position: absolute; inset: auto 0 0 0; height: 34%;
+      background:
+        radial-gradient(90% 160% at 8% 118%, #241640 0%, #241640 52%, transparent 63%),
+        radial-gradient(95% 150% at 96% 122%, #2B1A4A 0%, #2B1A4A 50%, transparent 62%),
+        linear-gradient(to top, rgba(29, 17, 55, 0.95) 12%, transparent 60%);
+    }
+    .hero-toast {
+      position: absolute;
+      top: 26px; right: 26px;
+      width: min(300px, calc(100% - 52px));
+      background: rgba(23, 18, 9, 0.72);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border: 1px solid rgba(255, 249, 239, 0.14);
+      border-radius: var(--r-md);
+      padding: 14px 16px;
+      color: var(--cream-on-dark);
+      box-shadow: var(--shadow-float);
+    }
+    .hero-toast-title {
+      display: flex; align-items: center; gap: 7px;
+      font-size: 12px; font-weight: 600;
+      color: rgba(245, 237, 223, 0.65);
+      margin-bottom: 6px;
+    }
+    .hero-toast-body { font-size: 13px; line-height: 1.45; }
+    .hero-toast-actions { display: flex; gap: 8px; margin-top: 11px; }
+    .hero-toast-actions .t-btn {
+      font-size: 12px; font-weight: 600;
+      border-radius: var(--r-pill);
+      padding: 5px 12px;
+      background: var(--cream-on-dark);
+      color: var(--dark);
+      transition: transform 0.12s;
+    }
+    .hero-toast-actions .t-btn.ghost {
+      background: transparent;
+      color: var(--cream-on-dark);
+      border: 1px solid rgba(245, 237, 223, 0.3);
+    }
+    .hero-toast-actions .t-btn:hover { transform: translateY(-1px); }
+    .hero-caption {
+      position: absolute; left: 22px; bottom: 16px;
+      font-size: 12px;
+      color: rgba(255, 249, 239, 0.75);
+    }
+
+    /* ---- Run log ---- */
+    .runlog {
+      border: 1px solid var(--hairline);
+      background: var(--surface);
+      border-radius: var(--r-md);
+      padding: 6px 0;
+      max-width: 620px;
+      box-shadow: var(--shadow-card);
+    }
+    .runlog-head {
+      display: flex; align-items: center; gap: 8px;
+      padding: 8px 16px 6px;
+      font-size: 12.5px; font-weight: 600;
+      color: var(--ink-soft);
+    }
+    .runlog-head .spinner {
+      width: 12px; height: 12px;
+      border: 2px solid var(--pink-border);
+      border-top-color: var(--pink);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .runlog.done .spinner { display: none; }
+    .runlog ol { list-style: none; }
+    .runlog li {
+      display: flex; gap: 10px;
+      padding: 6px 16px;
+      font-size: 13.5px;
+      color: var(--ink-soft);
+      align-items: baseline;
+    }
+    .runlog li .tick {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--good);
+      flex-shrink: 0;
+      width: 14px;
+    }
+    .runlog li.pending { opacity: 0.45; }
+    .runlog li.step-in { animation: msg-in 0.3s cubic-bezier(0.22, 1, 0.36, 1); }
+    .runlog-foot {
+      padding: 8px 16px 6px;
+      border-top: 1px solid var(--hairline);
+      margin-top: 6px;
+      font-size: 12.5px;
+      color: var(--muted);
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* ---- Job cards ---- */
+    .job-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+      gap: 14px;
+    }
+    .job-card {
+      border: 1px solid var(--hairline);
+      background: var(--surface);
+      border-radius: var(--r-lg);
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      box-shadow: var(--shadow-card);
+      transition: transform 0.18s cubic-bezier(0.25, 1, 0.5, 1), box-shadow 0.18s, opacity 0.3s;
+      position: relative;
+    }
+    .job-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-float); }
+    .job-card.featured { grid-column: 1 / -1; }
+    .job-card.featured::before {
+      content: "";
+      position: absolute; inset: 0 0 auto 0;
+      height: 5px;
+      background: var(--sunset);
+      border-radius: var(--r-lg) var(--r-lg) 0 0;
+    }
+    .job-card.ghosted-listing {
+      border-style: dashed;
+      border-color: var(--hairline-strong);
+      background: color-mix(in srgb, var(--surface) 60%, var(--bg));
+    }
+    .job-card.ghosted-listing .job-role { color: var(--muted); }
+    .job-card.yeeting {
+      transform: translateX(60vw) rotate(18deg) !important;
+      opacity: 0;
+      transition: transform 0.5s cubic-bezier(0.5, 0, 0.75, 0), opacity 0.5s;
+    }
+    .job-card.filtered-out { display: none; }
+
+    .job-top { display: flex; align-items: flex-start; gap: 12px; }
+    .job-logo {
+      width: 42px; height: 42px;
+      border-radius: 12px;
+      display: grid; place-items: center;
+      font-weight: 700; font-size: 16px; color: #fff;
+      flex-shrink: 0;
+    }
+    .job-id { min-width: 0; flex: 1; }
+    .job-role { font-size: 16px; font-weight: 600; line-height: 1.3; }
+    .job-co { font-size: 13px; color: var(--muted); }
+
+    .match {
+      display: flex; flex-direction: column; align-items: center;
+      flex-shrink: 0; gap: 2px;
+    }
+    .match svg { width: 40px; height: 40px; transform: rotate(-90deg); }
+    .match .track { stroke: var(--surface-2); }
+    .match .bar { stroke-linecap: round; transition: stroke-dashoffset 0.8s cubic-bezier(0.22, 1, 0.36, 1); }
+    .match-num {
+      font-family: var(--font-mono);
+      font-size: 10.5px; font-weight: 600;
+      color: var(--ink-soft);
+      margin-top: -31px;
+      pointer-events: none;
+    }
+    .match-label { font-size: 9.5px; color: var(--muted); margin-top: 17px; }
+
+    .job-facts {
+      display: flex; flex-wrap: wrap; gap: 6px 14px;
+      font-size: 13px; color: var(--ink-soft);
+    }
+    .job-facts .salary { font-family: var(--font-mono); font-size: 12.5px; font-weight: 600; color: var(--ink); }
+
+    .job-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+    .job-tag {
+      font-size: 11.5px; font-weight: 500;
+      border: 1px solid var(--hairline);
+      background: var(--bg);
+      color: var(--ink-soft);
+      border-radius: var(--r-pill);
+      padding: 3px 10px;
+    }
+
+    .job-note {
+      font-size: 13px;
+      line-height: 1.45;
+      color: var(--ink-soft);
+      background: var(--surface-2);
+      border-radius: 10px;
+      padding: 9px 12px;
+    }
+    .job-note.flag { background: #FBEBE4; color: #8C4A18; }
+    .job-note.ghost-note { background: #EFEAF6; color: #574682; }
+
+    .job-actions { display: flex; gap: 8px; margin-top: auto; }
+    .j-btn {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: 13px; font-weight: 600;
+      border-radius: var(--r-pill);
+      padding: 8px 15px;
+      transition: transform 0.12s, background 0.15s, color 0.15s, border-color 0.15s;
+    }
+    .j-btn:active { transform: translateY(1px); }
+    .j-btn.apply { background: var(--ink); color: var(--bg); }
+    .j-btn.apply:hover { background: #000; }
+    .j-btn.apply.applied { background: var(--good); color: #fff; }
+    .j-btn.pin { border: 1px solid var(--hairline-strong); background: var(--surface); color: var(--ink-soft); }
+    .j-btn.pin:hover { border-color: var(--pink-border); color: var(--pink-deep); }
+    .j-btn.pin.pinned { background: var(--pink-soft); border-color: var(--pink-border); color: var(--pink-deep); }
+    .j-btn.yeet { color: var(--muted); margin-left: auto; padding: 8px 10px; }
+    .j-btn.yeet:hover { color: var(--warn); }
+
+    /* ---- Comparison table ---- */
+    .compare-wrap {
+      border: 1px solid var(--hairline);
+      border-radius: var(--r-lg);
+      background: var(--surface);
+      overflow-x: auto;
+      box-shadow: var(--shadow-card);
+    }
+    .compare {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+      min-width: 620px;
+    }
+    .compare caption {
+      text-align: left;
+      font-family: var(--font-display);
+      font-size: 22px;
+      padding: 16px 18px 4px;
+    }
+    .compare caption em { font-style: italic; color: var(--muted); }
+    .compare th, .compare td {
+      text-align: left;
+      padding: 11px 18px;
+      border-top: 1px solid var(--hairline);
+      vertical-align: top;
+    }
+    .compare thead th { border-top: none; font-size: 12px; color: var(--muted); font-weight: 600; padding-top: 14px; }
+    .compare thead th.us {
+      color: var(--pink-deep);
+    }
+    .compare td.us {
+      background: color-mix(in srgb, var(--pink-soft) 45%, var(--surface));
+      font-weight: 600;
+      color: var(--pink-deep);
+    }
+    .compare td { color: var(--ink-soft); }
+    .compare th[scope="row"] { font-weight: 600; color: var(--ink); font-size: 13px; }
+
+    /* ---- FAQ ---- */
+    .faq {
+      border: 1px solid var(--hairline);
+      border-radius: var(--r-lg);
+      background: var(--surface);
+      overflow: hidden;
+      box-shadow: var(--shadow-card);
+      max-width: 620px;
+    }
+    .faq-title {
+      font-family: var(--font-display);
+      font-size: 22px;
+      padding: 16px 18px 8px;
+    }
+    .faq-title em { font-style: italic; color: var(--muted); }
+    .faq details { border-top: 1px solid var(--hairline); }
+    .faq summary {
+      list-style: none;
+      display: flex; align-items: center; justify-content: space-between; gap: 12px;
+      padding: 13px 18px;
+      font-weight: 600; font-size: 14px;
+      cursor: pointer;
+    }
+    .faq summary::-webkit-details-marker { display: none; }
+    .faq summary::after {
+      content: "+";
+      font-family: var(--font-mono);
+      color: var(--muted);
+      transition: transform 0.2s;
+    }
+    .faq details[open] summary::after { transform: rotate(45deg); }
+    .faq details[open] summary { color: var(--pink-deep); }
+    .faq .faq-a {
+      padding: 0 18px 14px;
+      color: var(--ink-soft);
+      font-size: 13.5px;
+      max-width: 60ch;
+    }
+
+    /* ============ Composer ============ */
+    .composer {
+      flex-shrink: 0;
+      padding: 0 20px calc(14px + env(safe-area-inset-bottom));
+      background: linear-gradient(to top, var(--bg) 70%, transparent);
+      position: relative;
+      z-index: var(--z-composer);
+    }
+    .composer-inner { max-width: 780px; margin: 0 auto; }
+
+    .suggest-row {
+      display: flex; gap: 8px;
+      overflow-x: auto;
+      padding: 10px 2px;
+      scrollbar-width: none;
+      mask-image: linear-gradient(to right, transparent, black 18px, black calc(100% - 18px), transparent);
+      -webkit-mask-image: linear-gradient(to right, transparent, black 18px, black calc(100% - 18px), transparent);
+    }
+    .suggest-row::-webkit-scrollbar { display: none; }
+    .s-chip {
+      display: inline-flex; align-items: center; gap: 7px;
+      white-space: nowrap;
+      border: 1px solid var(--hairline-strong);
+      background: var(--surface);
+      border-radius: var(--r-pill);
+      padding: 7px 14px;
+      font-size: 12.5px;
+      font-weight: 500;
+      color: var(--ink-soft);
+      transition: border-color 0.15s, transform 0.12s, background 0.15s;
+    }
+    .s-chip:hover { border-color: var(--pink-border); background: var(--pink-soft); color: var(--pink-deep); transform: translateY(-1px); }
+
+    .composer-box {
+      display: flex; align-items: center; gap: 10px;
+      background: var(--surface);
+      border: 1px solid var(--hairline-strong);
+      border-radius: var(--r-lg);
+      padding: 8px 8px 8px 18px;
+      box-shadow: var(--shadow-card);
+      transition: border-color 0.15s, box-shadow 0.15s;
+    }
+    .composer-box:focus-within {
+      border-color: var(--pink-border);
+      box-shadow: 0 0 0 3px rgba(225, 58, 140, 0.09), var(--shadow-card);
+    }
+    .composer-input {
+      flex: 1;
+      border: none;
+      background: none;
+      font: inherit;
+      color: var(--ink);
+      min-width: 0;
+    }
+    .composer-input:focus { outline: none; }
+    .composer-input::placeholder { color: var(--muted); }
+    .run-btn {
+      display: inline-flex; align-items: center; gap: 7px;
+      background: var(--pink);
+      color: #fff;
+      font-weight: 600;
+      font-size: 14px;
+      border-radius: var(--r-md);
+      padding: 10px 18px;
+      flex-shrink: 0;
+      transition: background 0.15s, transform 0.12s;
+    }
+    .run-btn:hover { background: var(--pink-deep); transform: translateY(-1px); }
+    .run-btn:active { transform: translateY(1px); }
+    .run-btn:disabled { opacity: 0.55; cursor: default; transform: none; }
+    .composer-hint {
+      text-align: center;
+      font-size: 11.5px;
+      color: var(--muted);
+      padding-top: 8px;
+    }
+
+    /* ============ Pipeline view ============ */
+    .board {
+      flex: 1;
+      overflow: auto;
+      padding: 22px 20px 28px;
+    }
+    .board-inner {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(240px, 1fr));
+      gap: 14px;
+      max-width: 1200px;
+      margin: 0 auto;
+      min-width: 1000px;
+    }
+    .col-head {
+      display: flex; align-items: baseline; gap: 8px;
+      padding: 2px 4px 10px;
+    }
+    .col-name { font-weight: 600; font-size: 14px; }
+    .col-count {
+      font-family: var(--font-mono);
+      font-size: 11.5px;
+      color: var(--muted);
+    }
+    .col-quip { font-size: 11.5px; color: var(--muted); margin-left: auto; text-align: right; }
+    .col-cards { display: flex; flex-direction: column; gap: 10px; }
+    .p-card {
+      border: 1px solid var(--hairline);
+      background: var(--surface);
+      border-radius: var(--r-md);
+      padding: 13px 15px;
+      box-shadow: var(--shadow-card);
+    }
+    .p-card .p-role { font-size: 13.5px; font-weight: 600; }
+    .p-card .p-co { font-size: 12px; color: var(--muted); }
+    .p-card .p-note { font-size: 12px; color: var(--ink-soft); margin-top: 7px; }
+    .p-card.ghost-card { border-style: dashed; background: color-mix(in srgb, var(--surface) 55%, var(--bg)); }
+    .p-days {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--grape);
+      margin-top: 7px;
+      display: inline-block;
+    }
+    .col-empty {
+      border: 1px dashed var(--hairline-strong);
+      border-radius: var(--r-md);
+      padding: 20px 15px;
+      font-size: 12.5px;
+      color: var(--muted);
+      text-align: center;
+      line-height: 1.5;
+    }
+
+    /* ============ Toast ============ */
+    .toast {
+      position: fixed;
+      left: 50%; bottom: 26px;
+      transform: translate(-50%, 20px);
+      background: var(--dark);
+      color: var(--cream-on-dark);
+      border-radius: var(--r-pill);
+      padding: 11px 18px;
+      font-size: 13.5px;
+      display: flex; align-items: center; gap: 12px;
+      box-shadow: var(--shadow-float);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s, transform 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+      z-index: var(--z-toast);
+      max-width: min(92vw, 480px);
+    }
+    .toast.show { opacity: 1; transform: translate(-50%, 0); pointer-events: auto; }
+    .toast button {
+      font-weight: 700; font-size: 13px;
+      color: #F2A9CF;
+      flex-shrink: 0;
+    }
+
+    /* ============ Scrim / drawer (mobile) ============ */
+    .scrim {
+      display: none;
+      position: fixed; inset: 0;
+      background: rgba(23, 18, 9, 0.45);
+      z-index: var(--z-scrim);
+      opacity: 0;
+      transition: opacity 0.25s;
+    }
+
+    @media (max-width: 920px) {
+      .sidebar {
+        position: fixed;
+        inset: 0 auto 0 0;
+        z-index: var(--z-drawer);
+        transform: translateX(-100%);
+        transition: transform 0.28s cubic-bezier(0.22, 1, 0.36, 1);
+        width: min(300px, 84vw);
+        box-shadow: none;
+      }
+      .sidebar.open { transform: none; box-shadow: var(--shadow-float); }
+      .scrim.show { display: block; opacity: 1; }
+      .menu-btn { display: grid; }
+      .topbar { padding: 10px 14px; flex-wrap: wrap; row-gap: 8px; }
+      .hunt-title-wrap { flex: 1; min-width: 0; }
+      .topbar-right { flex-basis: 100%; justify-content: flex-start; margin-left: 46px; }
+      .run-btn { padding: 10px 13px; }
+      .run-btn .run-label { display: none; }
+      .filterbar { padding: 10px 14px; }
+      .feed { padding: 20px 14px; }
+      .composer { padding-left: 14px; padding-right: 14px; }
+      .hunt-status .status-detail { display: none; }
+      .desperation { display: none; }
+      .board { padding: 16px 14px; }
+      .board-inner { min-width: 900px; }
+      .hero-toast { position: static; width: auto; margin: 18px 18px 0 auto; }
+      .hero-panel { display: flex; flex-direction: column; }
+      .hero-caption { position: static; padding: 12px 18px 14px; margin-top: auto; }
+      .hero-sun { bottom: -120px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <!-- ================= Sidebar ================= -->
+    <aside class="sidebar" id="sidebar" aria-label="Hunts and pinned roles">
+      <div class="brand">
+        <span class="brand-name">Hired<em>-ish</em></span>
+        <span class="brand-tag">beta, like you</span>
+      </div>
+
+      <button class="new-hunt" id="newHuntBtn">
+        <span aria-hidden="true">+</span> New hunt
+      </button>
+
+      <p class="side-label">Hunts</p>
+      <ul class="hunt-list">
+        <li><button class="hunt-item" aria-current="true">
+          <span class="hunt-name">Frontend, remote, no rockstars</span>
+          <span class="hunt-meta">live · 6 roles found</span>
+        </button></li>
+        <li><button class="hunt-item">
+          <span class="hunt-name">Design engineer roles — attempt #2</span>
+          <span class="hunt-meta">paused · Tue</span>
+        </button></li>
+        <li><button class="hunt-item">
+          <span class="hunt-name">Anything but consulting</span>
+          <span class="hunt-meta">archived · we don't talk about it</span>
+        </button></li>
+        <li><button class="hunt-item">
+          <span class="hunt-name">Plan B: goat farming 🐐</span>
+          <span class="hunt-meta">draft · emergency use only</span>
+        </button></li>
+      </ul>
+
+      <p class="side-label">Pinned roles <span aria-hidden="true">📌</span></p>
+      <ul class="pin-list" id="pinList" aria-live="polite"></ul>
+      <p class="pin-empty" id="pinEmpty">Nothing pinned yet. Pin a role and it lives here, rent-free.</p>
+
+      <div class="side-spacer"></div>
+
+      <div class="me-card">
+        <div class="me-avatar" aria-hidden="true">RT</div>
+        <div>
+          <p class="me-name">Rachit Tiwari</p>
+          <p class="me-status">Open to work (aggressively)</p>
+        </div>
+      </div>
+    </aside>
+
+    <div class="scrim" id="scrim"></div>
+
+    <!-- ================= Main ================= -->
+    <main class="main">
+      <header class="topbar">
+        <button class="menu-btn" id="menuBtn" aria-label="Open menu" aria-expanded="false">
+          <svg width="16" height="12" viewBox="0 0 16 12" fill="none" aria-hidden="true">
+            <path d="M1 1h14M1 6h14M1 11h14" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+          </svg>
+        </button>
+        <div class="hunt-title-wrap">
+          <h1 class="hunt-title">Frontend, remote, no rockstars</h1>
+          <p class="hunt-status">
+            <span class="live-dot" aria-hidden="true"></span>
+            <span id="statusText">Watching 42 boards</span>
+            <span class="status-detail" id="statusDetail">· 39 of them are reposts of the other 3</span>
+          </p>
+        </div>
+        <div class="topbar-right">
+          <div class="view-tabs" role="tablist" aria-label="View">
+            <button class="view-tab" role="tab" id="tabChat" aria-selected="true" aria-controls="viewChat">Chat</button>
+            <button class="view-tab" role="tab" id="tabBoard" aria-selected="false" aria-controls="viewBoard">
+              Pipeline <span class="tab-badge" id="pipelineCount">8</span>
+            </button>
+          </div>
+          <label class="visually-hidden" for="desperation" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);">Desperation level</label>
+          <select class="desperation" id="desperation" title="Desperation level">
+            <option value="chill">Desperation: Chill</option>
+            <option value="motivated" selected>Desperation: Motivated</option>
+            <option value="rent">Desperation: Rent is due</option>
+          </select>
+        </div>
+      </header>
+
+      <!-- Filters -->
+      <div class="filterbar" role="group" aria-label="Filters" id="filterbar">
+        <span class="filterbar-label">Filters</span>
+        <button class="f-chip" data-filter="remote" aria-pressed="false">🏝 Remote only</button>
+        <button class="f-chip" data-filter="salary" aria-pressed="false">💰 Salary actually listed</button>
+        <button class="f-chip" data-filter="ghost" aria-pressed="true">👻 Hide ghost jobs</button>
+        <button class="f-chip" data-filter="rockstar" aria-pressed="false">🎸 No “rockstar/ninja” titles</button>
+        <button class="f-chip" data-filter="family" aria-pressed="false">🫠 “We’re a family” repellent</button>
+        <span class="f-count" id="fCount"></span>
+      </div>
+
+      <!-- ============ Chat view ============ -->
+      <section class="view" id="viewChat" role="tabpanel" aria-labelledby="tabChat">
+        <div class="feed" id="feed">
+          <div class="feed-inner" id="feedInner">
+
+            <!-- Hero / welcome -->
+            <div class="msg">
+              <div class="msg-avatar agent" aria-hidden="true">H</div>
+              <div class="msg-body">
+                <span class="hero-label">New hunt · scoped &amp; ready</span>
+                <h2 class="hero-headline">You shouldn’t have to <em>beg strangers</em> on LinkedIn.</h2>
+                <p class="hero-sub">I watch the boards, carbon-date the ghost jobs, translate the corporate euphemisms, and only wake you when something is worth your Sunday-evening anxiety. You handle being charming in interviews — that part’s on you.</p>
+                <div class="hero-panel" role="img" aria-label="Sunset gradient panel with a notification: Hired-ish found roles before you asked">
+                  <div class="hero-sun"></div>
+                  <div class="hero-hills"></div>
+                  <div class="hero-toast">
+                    <p class="hero-toast-title"><span aria-hidden="true">✦</span> Before you asked</p>
+                    <p class="hero-toast-body">Found 3 new roles overnight and drafted 2 follow-ups that don’t sound desperate. One recruiter viewed your profile — twice. Play it cool.</p>
+                    <div class="hero-toast-actions">
+                      <button class="t-btn" data-say="Pin the overnight finds">Pin them</button>
+                      <button class="t-btn ghost" data-say="Show me the follow-up drafts">Read drafts</button>
+                    </div>
+                  </div>
+                  <p class="hero-caption">It hunts while you sleep. Someone should.</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- User message -->
+            <div class="msg user-msg">
+              <div class="msg-avatar user" aria-hidden="true">RT</div>
+              <div class="msg-body">
+                <p class="msg-author">You</p>
+                <div class="msg-text">Find me a frontend job that pays real money and never uses the word “rockstar”.</div>
+              </div>
+            </div>
+
+            <!-- Agent run -->
+            <div class="msg">
+              <div class="msg-avatar agent" aria-hidden="true">H</div>
+              <div class="msg-body">
+                <p class="msg-author">Hired-ish</p>
+                <div class="msg-text"><p>On it. Running the hunt — this takes about as long as a recruiter takes to say “circling back”, except I actually come back.</p></div>
+                <div class="runlog done" id="runlog">
+                  <p class="runlog-head"><span class="spinner" aria-hidden="true"></span><span id="runlogTitle">Hunt complete</span></p>
+                  <ol id="runlogSteps" aria-live="polite"></ol>
+                  <p class="runlog-foot" id="runlogFoot">6 roles · 2 red flags · 1 fossil · 0 rockstars</p>
+                </div>
+                <div class="msg-text" id="resultsIntro"><p>Six survived the filters. The ghost job is hidden by default — you can unhide it if you enjoy disappointment.</p></div>
+                <div class="job-grid" id="jobGrid" aria-live="polite"></div>
+              </div>
+            </div>
+
+            <!-- Comparison table -->
+            <div class="msg">
+              <div class="msg-avatar agent" aria-hidden="true">H</div>
+              <div class="msg-body">
+                <p class="msg-author">Hired-ish</p>
+                <div class="msg-text"><p>You asked how this beats your current strategy. I made a table. It wasn’t close.</p></div>
+                <div class="compare-wrap">
+                  <table class="compare">
+                    <caption>Hired-ish <em>vs. your other options.</em></caption>
+                    <thead>
+                      <tr>
+                        <th scope="col">Method</th>
+                        <th scope="col" class="us">Hired-ish</th>
+                        <th scope="col">Cold DMs</th>
+                        <th scope="col">Uncle’s referral</th>
+                        <th scope="col">Manifesting</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <th scope="row">Finds real openings</th>
+                        <td class="us">42 boards, deduped</td>
+                        <td>If they ever reply</td>
+                        <td>One company, last hired 2019</td>
+                        <td>The universe is “circling back”</td>
+                      </tr>
+                      <tr>
+                        <th scope="row">Red-flag detection</th>
+                        <td class="us">Automatic, pre-interview</td>
+                        <td>You find out in month 2</td>
+                        <td>“It’s a great company, beta”</td>
+                        <td>Vibes only</td>
+                      </tr>
+                      <tr>
+                        <th scope="row">Ghost-job handling</th>
+                        <td class="us">Carbon-dated &amp; flagged</td>
+                        <td>Six weeks of hope</td>
+                        <td>n/a</td>
+                        <td>You applied anyway</td>
+                      </tr>
+                      <tr>
+                        <th scope="row">Emotional damage</th>
+                        <td class="us">Minimal, with jokes</td>
+                        <td>Severe</td>
+                        <td>Depends on family dinner</td>
+                        <td>Deferred, with interest</td>
+                      </tr>
+                      <tr>
+                        <th scope="row">Cost</th>
+                        <td class="us">Free</td>
+                        <td>Your dignity</td>
+                        <td>One awkward favour</td>
+                        <td>₹4,000 in crystals</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+
+            <!-- FAQ -->
+            <div class="msg">
+              <div class="msg-avatar agent" aria-hidden="true">H</div>
+              <div class="msg-body">
+                <p class="msg-author">Hired-ish</p>
+                <div class="faq">
+                  <h3 class="faq-title">Objections, <em>handled.</em></h3>
+                  <details>
+                    <summary>Will this actually get me hired?</summary>
+                    <p class="faq-a">I find them, filter them, flag them, and pin them. You still have to be likeable for 45 minutes on a video call. I can’t automate charm. Yet.</p>
+                  </details>
+                  <details>
+                    <summary>What exactly is a “ghost job”?</summary>
+                    <p class="faq-a">A posting that’s been “urgently hiring” for eight months. I carbon-date every listing and label the fossils, so you stop writing cover letters to the void.</p>
+                  </details>
+                  <details>
+                    <summary>Why is the reject button called “Yeet”?</summary>
+                    <p class="faq-a">Because “Archive” doesn’t capture the emotion of declining a role that wants 10 years of experience in a 6-year-old framework for an “entry-level” salary.</p>
+                  </details>
+                  <details>
+                    <summary>Can it write my follow-ups?</summary>
+                    <p class="faq-a">Yes — firm, polite, and containing 0 instances of “just circling back to touch base”. Your dignity stays intact. That’s the whole product, honestly.</p>
+                  </details>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Composer -->
+        <div class="composer">
+          <div class="composer-inner">
+            <div class="suggest-row" aria-label="Suggestions">
+              <button class="s-chip" data-say="Roast my resume">🔥 Roast my resume</button>
+              <button class="s-chip" data-say="Why was I ghosted?">👻 Why was I ghosted?</button>
+              <button class="s-chip" data-say="Draft a follow-up that isn't desperate">✍️ Draft a non-desperate follow-up</button>
+              <button class="s-chip" data-say="Translate this job posting into honesty">🪄 Translate a posting into honesty</button>
+              <button class="s-chip" data-say="Explain this rejection like I'm five">🧸 Explain my rejection gently</button>
+              <button class="s-chip" data-say="Show me the ghost job">👻 Show the fossil anyway</button>
+            </div>
+            <form class="composer-box" id="composerForm">
+              <input class="composer-input" id="composerInput" type="text"
+                     placeholder="Ask me to find, filter, pin, roast, or console…"
+                     autocomplete="off" aria-label="Message Hired-ish">
+              <button class="run-btn" id="runBtn" type="submit" aria-label="Run the hunt">
+                <span aria-hidden="true">⚡</span><span class="run-label" id="runBtnLabel">Run the hunt</span>
+              </button>
+            </form>
+            <p class="composer-hint">Hired-ish can make mistakes. So can recruiters — at least ours are funny.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ Pipeline view ============ -->
+      <section class="view" id="viewBoard" role="tabpanel" aria-labelledby="tabBoard" hidden>
+        <div class="board">
+          <div class="board-inner">
+
+            <div class="col">
+              <div class="col-head">
+                <span class="col-name">Applied</span><span class="col-count">3</span>
+                <span class="col-quip">hope: cautious</span>
+              </div>
+              <div class="col-cards">
+                <div class="p-card">
+                  <p class="p-role">Senior Frontend Engineer</p>
+                  <p class="p-co">Mintleaf</p>
+                  <p class="p-note">Tailored resume v14. This is the one. Probably.</p>
+                </div>
+                <div class="p-card">
+                  <p class="p-role">React Developer</p>
+                  <p class="p-co">Snackbar</p>
+                  <p class="p-note">Applied 9 minutes after posting. Try to look casual.</p>
+                </div>
+                <div class="p-card">
+                  <p class="p-role">Mystery role</p>
+                  <p class="p-co">Unknown startup</p>
+                  <p class="p-note">Applied at 2:47 AM. No memory of this. Godspeed.</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="col">
+              <div class="col-head">
+                <span class="col-name">Interviewing</span><span class="col-count">1</span>
+                <span class="col-quip">round 2 of ∞</span>
+              </div>
+              <div class="col-cards">
+                <div class="p-card">
+                  <p class="p-role">Design Engineer</p>
+                  <p class="p-co">Papercrane</p>
+                  <p class="p-note">Next: “culture fit” chat. Be yourself, but 20% less.</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="col">
+              <div class="col-head">
+                <span class="col-name">Offer</span><span class="col-count">0</span>
+                <span class="col-quip">manifesting responsibly</span>
+              </div>
+              <div class="col-cards">
+                <div class="col-empty">Empty for now.<br>This column believes in you.</div>
+              </div>
+            </div>
+
+            <div class="col">
+              <div class="col-head">
+                <span class="col-name">Ghosted</span><span class="col-count">4</span>
+                <span class="col-quip">their loss, statistically</span>
+              </div>
+              <div class="col-cards">
+                <div class="p-card ghost-card">
+                  <p class="p-role">Frontend Lead</p>
+                  <p class="p-co">TechCorp</p>
+                  <span class="p-days">👻 43 days of silence</span>
+                </div>
+                <div class="p-card ghost-card">
+                  <p class="p-role">UI Engineer</p>
+                  <p class="p-co">“Definitely moving forward” guy</p>
+                  <span class="p-days">👻 31 days · he was not</span>
+                </div>
+                <div class="p-card ghost-card">
+                  <p class="p-role">Web Developer</p>
+                  <p class="p-co">Fintech that shall not be named</p>
+                  <span class="p-days">👻 27 days · after 4 rounds</span>
+                </div>
+                <div class="p-card ghost-card">
+                  <p class="p-role">Product Engineer</p>
+                  <p class="p-co">The take-home that took 11 hours</p>
+                  <span class="p-days">👻 19 days · they shipped your code</span>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <div class="toast" id="toast" role="status"></div>
+
+  <script>
+    /* ================= Data ================= */
+    const JOBS = [
+      {
+        id: 'papercrane', featured: true, company: 'Papercrane', role: 'Design Engineer',
+        match: 96, salary: '₹52–68 LPA', where: 'Hybrid · Bengaluru',
+        logoBg: '#5B3AA6', tags: ['Design systems', 'React', 'Storybook', 'Actual designers on staff'],
+        note: 'The founder replies to email within a day. We tested this. Twice.',
+        noteKind: 'note', remote: false, salaryListed: true, rockstar: false, family: false, ghost: false
+      },
+      {
+        id: 'mintleaf', company: 'Mintleaf', role: 'Senior Frontend Engineer',
+        match: 92, salary: '₹45–60 LPA', where: 'Remote · India',
+        logoBg: '#2E7D4F', tags: ['React', 'TypeScript', 'Fintech'],
+        note: 'Zero mentions of “hustle” anywhere in the posting. Suspiciously healthy.',
+        noteKind: 'note', remote: true, salaryListed: true, rockstar: false, family: false, ghost: false
+      },
+      {
+        id: 'snackbar', company: 'Snackbar', role: 'React Developer',
+        match: 84, salary: '₹38–50 LPA', where: 'Remote · anywhere',
+        logoBg: '#B4540A', tags: ['Next.js', '4-day week', 'Series B'],
+        note: 'A real 4-day week — not the kind that only exists in LinkedIn thought-leadership posts.',
+        noteKind: 'note', remote: true, salaryListed: true, rockstar: false, family: false, ghost: false
+      },
+      {
+        id: 'bunker', company: 'Bunker Labs', role: 'Frontend Architect',
+        match: 81, salary: '₹55–75 LPA', where: 'Hybrid · Pune',
+        logoBg: '#1D1342', tags: ['Vue', 'Micro-frontends', 'Infra-adjacent'],
+        note: '🚩 Says “fast-paced environment” twice. But pays like it actually means it.',
+        noteKind: 'flag', remote: false, salaryListed: true, rockstar: false, family: false, ghost: false
+      },
+      {
+        id: 'glowfish', company: 'Glowfish', role: 'Staff UI Engineer',
+        match: 67, salary: '“Competitive”', where: 'On-site · Gurugram',
+        logoBg: '#C42875', tags: ['Angular', 'Free snacks (mentioned 4×)'],
+        note: '🚩🚩🚩 “We’re a family” appears three times. Bring a therapist to the interview.',
+        noteKind: 'flag', remote: false, salaryListed: false, rockstar: false, family: true, ghost: false
+      },
+      {
+        id: 'hexadecimal', company: 'Hexadecimal', role: 'Frontend Ninja',
+        match: 12, salary: 'Exposure, presumably', where: 'Posted 247 days ago',
+        logoBg: '#8A8072', tags: ['👻 Ghost job', '“Urgently hiring”'],
+        note: 'This role has been “urgently hiring” since last Diwali. It is not urgent. It is a fossil.',
+        noteKind: 'ghost-note', remote: true, salaryListed: false, rockstar: true, family: false, ghost: true
+      },
+    ];
+
+    const RUN_STEPS = [
+      'Scanning 42 job boards. 39 are reposting the other 3.',
+      'Translating “competitive salary” → “we’d rather not say.”',
+      'Rejecting roles that want 10 years of experience in a 6-year-old framework.',
+      'Carbon-dating every listing to catch ghost jobs… found one fossil. 👻',
+      'Cross-checking “we’re a family” against Glassdoor trauma reports.',
+      'Done. Six roles made it. You only have to be charming from here.'
+    ];
+
+    const REPLIES = [
+      { match: /roast.*resume|resume.*roast/i, text: 'Your resume says “detail-oriented” and has two different date formats in the same column. It lists Microsoft Word as a skill — in 2026 that’s not a skill, it’s a cry for help. The good news: your actual work is strong. Delete the objective statement, nobody has read one since 2011, and lead with the design system you shipped.' },
+      { match: /ghost/i, text: 'Why were you ghosted? Statistically: budget freeze (40%), they hired the CEO’s nephew (25%), the role never existed (20%), or your email is in a folder named “later” that no recruiter has ever reopened (15%). None of these are about you. Want me to send a follow-up with plausible deniability?' },
+      { match: /follow.?up|desperate/i, text: 'Draft: “Hi Priya — following up on the Design Engineer role. Still very interested, and happy to share the case study we discussed. If the timeline has shifted, no problem — a quick heads-up would be great.” Notice the total absence of “just circling back”. You’re welcome.' },
+      { match: /translate|honesty|posting/i, text: 'Translation service: “fast-paced environment” → understaffed. “Wear many hats” → three jobs, one salary. “Rockstar” → we will clap instead of paying you. “Like a family” → boundaries will be violated. “Competitive salary” → competitive for whom, they will not say.' },
+      { match: /rejection|explain.*five/i, text: 'Okay, gently: sometimes a company already picked an internal person, and they interviewed you because the rules said they had to. It’s like musical chairs where one chair was reserved the whole time. You danced great. It was never about the dancing.' },
+      { match: /pin/i, text: 'Pinned. They’re in the sidebar now, safe and judged-by-me. I’ll nudge you if any of them start interviewing other people.' },
+      { match: /draft/i, text: 'Two drafts ready: one for Papercrane (warm, specific, mentions their docs redesign) and one for Mintleaf (short, confident, zero exclamation marks). Say the word and I’ll queue them for a socially-acceptable send time — which is not 2:47 AM.' },
+    ];
+
+    const DESPERATION = {
+      chill:     { placeholder: 'Browse casually. Pretend you have options…', status: 'Watching 42 boards, no rush', hint: 'Chill mode: we only surface the good stuff.' },
+      motivated: { placeholder: 'Ask me to find, filter, pin, roast, or console…', status: 'Watching 42 boards', hint: 'Hired-ish can make mistakes. So can recruiters — at least ours are funny.' },
+      rent:      { placeholder: 'RENT IS DUE. Type anything. We apply to everything…', status: 'Watching 42 boards AND your landlord', hint: 'Rent mode: standards lowered by exactly 30%. Godspeed.' },
+    };
+
+    /* ================= Elements ================= */
+    const $ = (s, el = document) => el.querySelector(s);
+    const feedEl = $('#feed');
+    const feedInner = $('#feedInner');
+    const jobGrid = $('#jobGrid');
+    const pinList = $('#pinList');
+    const pinEmpty = $('#pinEmpty');
+    const toast = $('#toast');
+    const composerInput = $('#composerInput');
+    const runBtn = $('#runBtn');
+
+    const state = {
+      pinned: new Set(['papercrane']),
+      applied: new Set(),
+      yeeted: new Set(),
+      filters: { remote: false, salary: false, ghost: true, rockstar: false, family: false },
+      running: false,
+    };
+
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    /* ================= Job cards ================= */
+    function matchColor(m) {
+      if (m >= 90) return '#E13A8C';
+      if (m >= 75) return '#5B3AA6';
+      if (m >= 50) return '#B4540A';
+      return '#8A8072';
+    }
+
+    function jobCard(job) {
+      const card = document.createElement('article');
+      card.className = 'job-card' + (job.featured ? ' featured' : '') + (job.ghost ? ' ghosted-listing' : '');
+      card.dataset.id = job.id;
+      const C = 2 * Math.PI * 16;
+      const off = C * (1 - job.match / 100);
+      card.innerHTML = `
+        <div class="job-top">
+          <div class="job-logo" style="background:${job.logoBg}">${job.company[0]}</div>
+          <div class="job-id">
+            <h3 class="job-role">${job.role}</h3>
+            <p class="job-co">${job.company} · ${job.where}</p>
+          </div>
+          <div class="match" title="Match score: how much this role deserves you">
+            <svg viewBox="0 0 40 40" aria-hidden="true">
+              <circle class="track" cx="20" cy="20" r="16" fill="none" stroke-width="4"/>
+              <circle class="bar" cx="20" cy="20" r="16" fill="none" stroke-width="4"
+                stroke="${matchColor(job.match)}" stroke-dasharray="${C}" stroke-dashoffset="${off}"/>
+            </svg>
+            <span class="match-num">${job.match}</span>
+            <span class="match-label">match</span>
+          </div>
+        </div>
+        <div class="job-facts">
+          <span class="salary">${job.salary}</span>
+        </div>
+        <div class="job-tags">${job.tags.map(t => `<span class="job-tag">${t}</span>`).join('')}</div>
+        <p class="job-note ${job.noteKind}">${job.note}</p>
+        <div class="job-actions">
+          <button class="j-btn apply" data-act="apply">Apply</button>
+          <button class="j-btn pin" data-act="pin">📌 Pin</button>
+          <button class="j-btn yeet" data-act="yeet" aria-label="Yeet ${job.company} into the void">Yeet 🗑</button>
+        </div>`;
+      syncCardButtons(card, job);
+      return card;
+    }
+
+    function syncCardButtons(card, job) {
+      const pinBtn = $('[data-act="pin"]', card);
+      const applyBtn = $('[data-act="apply"]', card);
+      if (state.pinned.has(job.id)) { pinBtn.classList.add('pinned'); pinBtn.textContent = '📌 Pinned'; }
+      else { pinBtn.classList.remove('pinned'); pinBtn.textContent = '📌 Pin'; }
+      if (state.applied.has(job.id)) { applyBtn.classList.add('applied'); applyBtn.textContent = 'Applied ✓'; }
+    }
+
+    function renderJobs() {
+      jobGrid.innerHTML = '';
+      JOBS.filter(j => !state.yeeted.has(j.id)).forEach(j => jobGrid.appendChild(jobCard(j)));
+      applyFilters();
+    }
+
+    /* ================= Filters ================= */
+    function jobPassesFilters(job) {
+      const f = state.filters;
+      if (f.remote && !job.remote) return false;
+      if (f.salary && !job.salaryListed) return false;
+      if (f.ghost && job.ghost) return false;
+      if (f.rockstar && job.rockstar) return false;
+      if (f.family && job.family) return false;
+      return true;
+    }
+
+    function applyFilters() {
+      let shown = 0, total = 0;
+      JOBS.forEach(job => {
+        if (state.yeeted.has(job.id)) return;
+        total++;
+        const card = jobGrid.querySelector(`[data-id="${job.id}"]`);
+        if (!card) return;
+        const ok = jobPassesFilters(job);
+        card.classList.toggle('filtered-out', !ok);
+        if (ok) shown++;
+      });
+      const fCount = $('#fCount');
+      if (shown === total) fCount.textContent = `${total} roles`;
+      else fCount.textContent = `${shown} of ${total} roles survive`;
+    }
+
+    $('#filterbar').addEventListener('click', (e) => {
+      const chip = e.target.closest('.f-chip');
+      if (!chip) return;
+      const key = chip.dataset.filter;
+      state.filters[key] = !state.filters[key];
+      chip.setAttribute('aria-pressed', String(state.filters[key]));
+      applyFilters();
+      if (key === 'ghost' && !state.filters.ghost) {
+        showToast('Ghost job unhidden. Manage your expectations. 👻');
+      }
+    });
+
+    /* ================= Card actions ================= */
+    jobGrid.addEventListener('click', (e) => {
+      const btn = e.target.closest('.j-btn');
+      if (!btn) return;
+      const card = btn.closest('.job-card');
+      const job = JOBS.find(j => j.id === card.dataset.id);
+      const act = btn.dataset.act;
+
+      if (act === 'pin') togglePin(job, card);
+      if (act === 'apply') applyToJob(job, btn);
+      if (act === 'yeet') yeetJob(job, card);
+    });
+
+    function togglePin(job, card) {
+      if (state.pinned.has(job.id)) {
+        state.pinned.delete(job.id);
+        showToast(`Unpinned ${job.company}. It never saw it coming.`);
+      } else {
+        state.pinned.add(job.id);
+        showToast(`Pinned ${job.company}. It lives in the sidebar now. 📌`);
+      }
+      renderPins();
+      syncCardButtons(card, job);
+    }
+
+    function renderPins() {
+      pinList.innerHTML = '';
+      const pinnedJobs = JOBS.filter(j => state.pinned.has(j.id));
+      pinEmpty.style.display = pinnedJobs.length ? 'none' : 'block';
+      pinnedJobs.forEach(job => {
+        const li = document.createElement('li');
+        li.className = 'pin-item';
+        li.innerHTML = `<span class="pin-dot" style="background:${job.logoBg}">${job.company[0]}</span>
+          <span>${job.role} · ${job.company}</span>`;
+        pinList.appendChild(li);
+      });
+    }
+
+    function applyToJob(job, btn) {
+      if (state.applied.has(job.id)) return;
+      if (job.ghost) {
+        showToast('You applied to a fossil. Bold. Archaeologists will find your cover letter. 👻');
+        return;
+      }
+      state.applied.add(job.id);
+      btn.classList.add('applied');
+      btn.textContent = 'Applied ✓';
+      const badge = $('#pipelineCount');
+      badge.textContent = String(Number(badge.textContent) + 1);
+      showToast(`Applied to ${job.company}. Resume v14 deployed. 🫡`);
+    }
+
+    function yeetJob(job, card) {
+      state.yeeted.add(job.id);
+      const undo = () => {
+        state.yeeted.delete(job.id);
+        renderJobs();
+        renderPins();
+      };
+      if (reducedMotion) {
+        renderJobs();
+      } else {
+        card.classList.add('yeeting');
+        card.addEventListener('transitionend', () => renderJobs(), { once: true });
+      }
+      showToast(`Yeeted ${job.company} into the void. The void says thanks.`, 'Undo', undo);
+    }
+
+    /* ================= Run the hunt ================= */
+    const runlog = $('#runlog');
+    const runlogSteps = $('#runlogSteps');
+    const runlogTitle = $('#runlogTitle');
+    const runlogFoot = $('#runlogFoot');
+
+    function fillRunLogInstant() {
+      runlogSteps.innerHTML = RUN_STEPS.map(s => `<li><span class="tick">✓</span><span>${s}</span></li>`).join('');
+    }
+
+    async function runHunt() {
+      if (state.running) return;
+      state.running = true;
+      runBtn.disabled = true;
+      $('#runBtnLabel').textContent = 'Hunting…';
+      runlog.classList.remove('done');
+      runlogTitle.textContent = 'Hunt in progress';
+      runlogFoot.textContent = 'This beats refreshing LinkedIn 40 times. Barely.';
+      runlogSteps.innerHTML = '';
+      jobGrid.innerHTML = '';
+      $('#resultsIntro').style.display = 'none';
+      state.yeeted.clear();
+      runlog.scrollIntoView({ behavior: reducedMotion ? 'auto' : 'smooth', block: 'center' });
+
+      for (const step of RUN_STEPS) {
+        await wait(reducedMotion ? 30 : 650 + Math.random() * 450);
+        const li = document.createElement('li');
+        li.className = 'step-in';
+        li.innerHTML = `<span class="tick">✓</span><span>${step}</span>`;
+        runlogSteps.appendChild(li);
+      }
+
+      await wait(reducedMotion ? 30 : 500);
+      runlog.classList.add('done');
+      runlogTitle.textContent = 'Hunt complete';
+      runlogFoot.textContent = '6 roles · 2 red flags · 1 fossil · 0 rockstars';
+      $('#resultsIntro').style.display = '';
+      renderJobs();
+      if (!reducedMotion) {
+        [...jobGrid.children].forEach((c, i) => {
+          c.style.opacity = '0';
+          c.style.transform = 'translateY(14px)';
+          setTimeout(() => {
+            c.style.transition = 'opacity 0.4s cubic-bezier(0.22,1,0.36,1), transform 0.4s cubic-bezier(0.22,1,0.36,1)';
+            c.style.opacity = '';
+            c.style.transform = '';
+          }, 80 * i + 60);
+        });
+      }
+      state.running = false;
+      runBtn.disabled = false;
+      $('#runBtnLabel').textContent = 'Run the hunt';
+      showToast('Hunt complete. Six roles worth your Sunday anxiety. ✨');
+    }
+
+    const wait = (ms) => new Promise(r => setTimeout(r, ms));
+
+    /* ================= Chat ================= */
+    function addMsg(author, html) {
+      const div = document.createElement('div');
+      div.className = 'msg entering' + (author === 'you' ? ' user-msg' : '');
+      div.innerHTML = author === 'you'
+        ? `<div class="msg-avatar user" aria-hidden="true">RT</div>
+           <div class="msg-body"><p class="msg-author">You</p><div class="msg-text">${html}</div></div>`
+        : `<div class="msg-avatar agent" aria-hidden="true">H</div>
+           <div class="msg-body"><p class="msg-author">Hired-ish</p><div class="msg-text">${html}</div></div>`;
+      feedInner.appendChild(div);
+      feedEl.scrollTop = feedEl.scrollHeight;
+      return div;
+    }
+
+    function agentReplyFor(text) {
+      for (const r of REPLIES) if (r.match.test(text)) return r.text;
+      if (/run|hunt|find/i.test(text)) return null; // triggers a run
+      const generic = [
+        'Noted. Filed under “things we’ll act on before your next existential crisis.”',
+        'Good question. I asked the 42 job boards. Three of them crashed. Investigating.',
+        'I hear you. Meanwhile: Papercrane’s recruiter is online right now. Just saying.',
+      ];
+      return generic[Math.floor(Math.random() * generic.length)];
+    }
+
+    async function handleUserText(text) {
+      addMsg('you', escapeHtml(text));
+      if (/show.*(ghost|fossil)/i.test(text)) {
+        state.filters.ghost = false;
+        const chip = document.querySelector('[data-filter="ghost"]');
+        chip.setAttribute('aria-pressed', 'false');
+        applyFilters();
+        await wait(400);
+        addMsg('agent', '<p>Fine. The fossil is visible again. Hexadecimal has been “urgently hiring” a Frontend Ninja for 247 days. Apply if you want — I’ll alert the archaeologists.</p>');
+        return;
+      }
+      const reply = agentReplyFor(text);
+      if (reply === null) { runHunt(); return; }
+      await wait(reducedMotion ? 50 : 700);
+      addMsg('agent', `<p>${reply}</p>`);
+    }
+
+    function escapeHtml(s) {
+      return s.replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+    }
+
+    $('#composerForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const text = composerInput.value.trim();
+      composerInput.value = '';
+      if (!text) { runHunt(); return; }
+      handleUserText(text);
+    });
+
+    document.addEventListener('click', (e) => {
+      const chip = e.target.closest('[data-say]');
+      if (!chip) return;
+      handleUserText(chip.dataset.say);
+    });
+
+    /* ================= Desperation ================= */
+    $('#desperation').addEventListener('change', (e) => {
+      const d = DESPERATION[e.target.value];
+      composerInput.placeholder = d.placeholder;
+      $('#statusText').textContent = d.status;
+      $('.composer-hint').textContent = d.hint;
+      showToast(e.target.value === 'rent'
+        ? 'Rent mode engaged. Standards lowered by 30%. Applying harder. 🫡'
+        : e.target.value === 'chill'
+          ? 'Chill mode. We browse like we don’t need them. (We do.)'
+          : 'Motivated mode. A healthy amount of wanting it.');
+    });
+
+    /* ================= Tabs ================= */
+    const tabChat = $('#tabChat'), tabBoard = $('#tabBoard');
+    const viewChat = $('#viewChat'), viewBoard = $('#viewBoard');
+    function selectTab(which) {
+      const chat = which === 'chat';
+      tabChat.setAttribute('aria-selected', String(chat));
+      tabBoard.setAttribute('aria-selected', String(!chat));
+      viewChat.hidden = !chat;
+      viewBoard.hidden = chat;
+    }
+    tabChat.addEventListener('click', () => selectTab('chat'));
+    tabBoard.addEventListener('click', () => selectTab('board'));
+
+    /* ================= New hunt ================= */
+    $('#newHuntBtn').addEventListener('click', () => {
+      showToast('One hunt at a time. Finish grieving this one first. 🐐');
+    });
+
+    /* ================= Mobile drawer ================= */
+    const sidebar = $('#sidebar'), scrim = $('#scrim'), menuBtn = $('#menuBtn');
+    function setDrawer(open) {
+      sidebar.classList.toggle('open', open);
+      scrim.classList.toggle('show', open);
+      menuBtn.setAttribute('aria-expanded', String(open));
+    }
+    menuBtn.addEventListener('click', () => setDrawer(!sidebar.classList.contains('open')));
+    scrim.addEventListener('click', () => setDrawer(false));
+
+    /* ================= Toast ================= */
+    let toastTimer;
+    function showToast(text, actionLabel, action) {
+      clearTimeout(toastTimer);
+      toast.innerHTML = `<span>${text}</span>` + (actionLabel ? `<button>${actionLabel}</button>` : '');
+      if (actionLabel) {
+        toast.querySelector('button').addEventListener('click', () => {
+          action?.();
+          toast.classList.remove('show');
+        });
+      }
+      toast.classList.add('show');
+      toastTimer = setTimeout(() => toast.classList.remove('show'), 4200);
+    }
+
+    /* ================= Init ================= */
+    fillRunLogInstant();
+    renderJobs();
+    renderPins();
+
+    console.log('%cYou checked the console. That is exactly the energy that gets people hired.', 'font-size:13px; color:#E13A8C; font-weight:bold;');
+    console.log('PS: the ghost job filter is doing more work than most recruiters.');
+  </script>
+</body>
+</html>
