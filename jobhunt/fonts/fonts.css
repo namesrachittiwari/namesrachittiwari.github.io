@@ -1,28 +1,42 @@
 @font-face {
-  font-family: 'Instrument Serif';
+  font-family: 'Fraunces';
   font-style: italic;
-  font-weight: 400;
+  font-weight: 400 700;
   font-display: swap;
-  src: url('fonts/instrument-serif-italic-400.woff2') format('woff2');
+  src: url('fraunces-italic-400-700.woff2') format('woff2');
 }
 @font-face {
-  font-family: 'Instrument Serif';
-  font-style: normal;
-  font-weight: 400;
-  font-display: swap;
-  src: url('fonts/instrument-serif-normal-400.woff2') format('woff2');
-}
-@font-face {
-  font-family: 'Inter';
+  font-family: 'Fraunces';
   font-style: normal;
   font-weight: 400 700;
   font-display: swap;
-  src: url('fonts/inter-normal-400-700.woff2') format('woff2');
+  src: url('fraunces-normal-400-700.woff2') format('woff2');
 }
 @font-face {
-  font-family: 'JetBrains Mono';
-  font-style: normal;
-  font-weight: 400 600;
+  font-family: 'Poppins';
+  font-style: italic;
+  font-weight: 400;
   font-display: swap;
-  src: url('fonts/jetbrains-mono-normal-400-600.woff2') format('woff2');
+  src: url('poppins-italic-400.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Poppins';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('poppins-normal-400.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Poppins';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url('poppins-normal-500.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Poppins';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url('poppins-normal-600.woff2') format('woff2');
 }
