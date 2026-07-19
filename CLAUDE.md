@@ -18,7 +18,8 @@ Each page is self-contained; shared assets live in `jobhunt/fonts/` and
 | `jobhunt/index.html` | Landing page (hero scene, how-it-works carousel, feature rows, comparison, FAQ, dark footer). GSAP/Lenis motion layer at the bottom of the file. |
 | `jobhunt/app.html` | ChatGPT-style app: sidebar, chat, composer, model picker, and the **Canvas** panel (job listings). Chat messages apply filters to the canvas. Logic in `app.js`. |
 | `jobhunt/research.html` | Same shell as `app.html` with `<body data-autostart="deep">` — auto-runs the Deep Hunt (deep-research UI). **Generated**: never edit directly; regenerate with the sed command below after editing `app.html`. |
-| `jobhunt/app.js` | All app logic: job data, chat intent parsing → filters, canvas rendering (cards/table), deep-hunt sequence (activity + sources tabs), toasts. |
+| `jobhunt/app.js` | All app logic: job data, chat intent parsing → filters, canvas rendering (cards/table), deep-hunt sequence (activity + sources tabs), toasts. Reads `?q=` and `?deep=1` URL params to auto-run a prompt. |
+| `jobhunt/create.html` | "Pilot AI" prompt launcher (Framer-AI-concept style: light neutral UI, SVG robot mascot, prompt card, category chips, suggestions). Launches `app.html?q=…`. Self-contained, system font — not the Yoinky palette. |
 
 Regenerate research.html after changing app.html:
 

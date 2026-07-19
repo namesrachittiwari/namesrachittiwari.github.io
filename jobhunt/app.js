@@ -624,7 +624,10 @@ function setDrawer(open) {
 }
 hamb.addEventListener('click', () => setDrawer(!side.classList.contains('open')));
 $('#sideClose').addEventListener('click', () => setDrawer(false));
-$('#newHunt').addEventListener('click', () => showToast(pick(NEW_HUNT)));
+$('#newHunt').addEventListener('click', () => {
+  showToast(pick(NEW_HUNT) + ' …fine, follow me.');
+  setTimeout(() => { location.href = 'create.html'; }, 1400);
+});
 
 let toastTimer;
 function showToast(text, actionLabel, action) {
@@ -647,9 +650,15 @@ if (zh) zh.textContent = pick(GREETINGS);
 rotateChrome();
 renderFilters();
 renderJobs();
+const params = new URLSearchParams(location.search);
 if (document.body.dataset.autostart === 'deep') {
   setDeep(true);
   setTimeout(() => handle('Run a deep hunt on senior frontend roles'), 600);
+} else if (params.get('deep') === '1') {
+  setDeep(true);
+  setTimeout(() => handle(params.get('q') || 'Run a deep hunt'), 700);
+} else if (params.get('q')) {
+  setTimeout(() => handle(params.get('q')), 700);
 }
 console.log('%c◆ Job Pilot — you checked the console. That is exactly the energy that gets people hired.', 'font-weight:600;font-size:12px');
 console.log('Tip: the ghost job filter is doing more work than most recruiters.');
