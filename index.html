@@ -21,6 +21,7 @@
   body { margin: 0; background: #070707; color: #fff; font-family: 'Poppins', system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
   a { color: #EB6BA8; text-decoration: none; }
   a:hover { color: #fff; }
+  #work, #numbers { scroll-margin-top: 90px; }
   @keyframes om-word { from { opacity: 0; transform: translateY(90%); } to { opacity: 1; transform: none; } }
   @keyframes om-rise { from { opacity: 0; transform: translateY(28px); } to { opacity: 1; transform: none; } }
   @keyframes om-bob { 0%,100% { transform: translateY(0); } 50% { transform: translateY(6px); } }
@@ -400,6 +401,9 @@
   var capsList = $('caps-list');
   CAPS.forEach(function (c, i) {
     var row = document.createElement('div');
+    row.setAttribute('role', 'button');
+    row.setAttribute('tabindex', '0');
+    row.setAttribute('aria-expanded', 'false');
     row.setAttribute('data-cap-row', '');
     row.setAttribute('data-fill', FILLS[i]);
     row.setAttribute('data-mob', 'padding:20px 22px; border-radius:24px');
@@ -428,9 +432,13 @@
     head.appendChild(aside);
     head.appendChild(plus);
     row.appendChild(head);
-    row.addEventListener('click', function () {
+    var toggle = function () {
       openCap = openCap === i ? -1 : i;
       paintCaps();
+    };
+    row.addEventListener('click', toggle);
+    row.addEventListener('keydown', function (ev) {
+      if (ev.key === 'Enter' || ev.key === ' ') { ev.preventDefault(); toggle(); }
     });
     capsList.appendChild(row);
     capRows.push({ row: row, n: n, plus: plus, items: null, cap: c, fill: FILLS[i] });
@@ -440,6 +448,7 @@
     capRows.forEach(function (r, i) {
       var open = openCap === i;
       r.row.setAttribute('data-open', open ? 'true' : 'false');
+      r.row.setAttribute('aria-expanded', open ? 'true' : 'false');
       r.row.style.background = open ? r.fill : '#0B0B0B';
       r.row.style.color = open ? '#070707' : '#FFFFFF';
       r.row.style.borderColor = open ? r.fill : 'rgba(255,255,255,.1)';
@@ -472,6 +481,7 @@
   Array.prototype.forEach.call(sc.querySelectorAll('[data-flip]'), function (el) {
     var label = el.textContent.trim();
     if (!label) return;
+    el.setAttribute('aria-label', label);
     el.textContent = '';
     var clip = document.createElement('span');
     clip.style.cssText = 'display:block; overflow:hidden; height:1.25em; line-height:1.25';
