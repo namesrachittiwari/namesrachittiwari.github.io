@@ -1,1013 +1,680 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Rachit Tiwari</title>
-  <meta name="description" content="You really shouldn't be here.">
-  <link rel="icon" type="image/png" href="https://github.com/namesrachittiwari.png">
-  <link rel="apple-touch-icon" href="https://github.com/namesrachittiwari.png">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
-  <style>
-    *, *::before, *::after {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    html {
-      scroll-behavior: smooth;
-    }
-
-    body {
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-      background: #000;
-      color: #e8e8e8;
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      -webkit-font-smoothing: antialiased;
-      overflow-x: hidden;
-    }
-
-    .container {
-      max-width: 600px;
-      padding: 48px 24px 120px;
-    }
-
-    /* ================================================================
-       WORLD-CLASS ANIMATIONS
-       Blur-deblur entrance + vertical slide + stagger
-       ================================================================ */
-
-    .anim {
-      opacity: 0;
-      transform: translateY(28px);
-      filter: blur(6px);
-      will-change: opacity, transform, filter;
-    }
-
-    .anim.show {
-      animation: reveal 0.9s cubic-bezier(0.22, 1, 0.36, 1) forwards;
-    }
-
-    @keyframes reveal {
-      0% {
-        opacity: 0;
-        transform: translateY(28px);
-        filter: blur(6px);
-      }
-      60% {
-        filter: blur(0px);
-      }
-      100% {
-        opacity: 1;
-        transform: translateY(0);
-        filter: blur(0px);
-      }
-    }
-
-    /* ---- Greeting: split word animation ---- */
-    .greeting {
-      font-size: 1.75rem;
-      font-weight: 700;
-      margin-bottom: 48px;
-      line-height: 1.3;
-      letter-spacing: -0.03em;
-      color: #fff;
-      overflow: hidden;
-    }
-
-    .greeting .word {
-      display: inline-block;
-      opacity: 0;
-      transform: translateY(100%);
-      filter: blur(4px);
-      animation: wordUp 0.7s cubic-bezier(0.22, 1, 0.36, 1) forwards;
-    }
-
-    @keyframes wordUp {
-      0% {
-        opacity: 0;
-        transform: translateY(100%);
-        filter: blur(4px);
-      }
-      60% {
-        filter: blur(0px);
-      }
-      100% {
-        opacity: 1;
-        transform: translateY(0);
-        filter: blur(0px);
-      }
-    }
-
-    .cursor {
-      display: inline-block;
-      width: 2px;
-      height: 0.85em;
-      background: #fff;
-      margin-left: 4px;
-      vertical-align: text-bottom;
-      opacity: 0;
-      animation: cursorAppear 0.01s forwards, blink 1s step-end infinite;
-    }
-
-    @keyframes cursorAppear {
-      to { opacity: 1; }
-    }
-
-    @keyframes blink {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0; }
-    }
-
-    /* ---- Body text ---- */
-    .line {
-      margin-bottom: 28px;
-      font-size: 1.05rem;
-      line-height: 1.8;
-      color: #ccc;
-    }
-
-    .line.bold {
-      color: #fff;
-      font-weight: 600;
-      font-size: 1.15rem;
-    }
-
-    .line.dimmed {
-      color: #666;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.85rem;
-    }
-
-    /* ---- Terminal ---- */
-    .terminal {
-      margin: 40px 0;
-      border: 1px solid #222;
-      border-radius: 10px;
-      overflow: hidden;
-      background: #0a0a0a;
-      box-shadow: 0 0 0 0 rgba(239,68,68,0);
-      transition: box-shadow 1s ease;
-    }
-
-    .terminal.glow {
-      box-shadow: 0 0 30px -10px rgba(239,68,68,0.15);
-    }
-
-    .terminal-header {
-      display: flex;
-      align-items: center;
-      gap: 7px;
-      padding: 12px 16px;
-      background: #151515;
-      border-bottom: 1px solid #222;
-    }
-
-    .terminal-dot {
-      width: 11px;
-      height: 11px;
-      border-radius: 50%;
-    }
-
-    .terminal-dot.red    { background: #ff5f57; }
-    .terminal-dot.yellow { background: #febc2e; }
-    .terminal-dot.green  { background: #28c840; }
-
-    .terminal-title {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.7rem;
-      color: #555;
-      margin-left: 8px;
-    }
-
-    .terminal-body {
-      padding: 20px;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.82rem;
-      line-height: 2;
-      color: #888;
-    }
-
-    /* Terminal lines: type-in one by one */
-    .term-line {
-      opacity: 0;
-      transform: translateX(-12px);
-      filter: blur(3px);
-      transition: all 0.5s cubic-bezier(0.22, 1, 0.36, 1);
-    }
-
-    .term-line.typed {
-      opacity: 1;
-      transform: translateX(0);
-      filter: blur(0);
-    }
-
-    .status-line {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .status-dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      background: #ef4444;
-      box-shadow: 0 0 8px rgba(239,68,68,0.4), 0 0 20px rgba(239,68,68,0.2);
-      animation: pulse 2s ease-in-out infinite;
-      flex-shrink: 0;
-    }
-
-    @keyframes pulse {
-      0%, 100% { opacity: 1; box-shadow: 0 0 8px rgba(239,68,68,0.4), 0 0 20px rgba(239,68,68,0.2); }
-      50% { opacity: 0.4; box-shadow: 0 0 4px rgba(239,68,68,0.2); }
-    }
-
-    .indent {
-      padding-left: 18px;
-      color: #666;
-    }
-
-    .prefix {
-      color: #555;
-      user-select: none;
-    }
-
-    .status-value {
-      color: #ef4444;
-      font-weight: 700;
-    }
-
-    /* ---- Leave button ---- */
-    .leave-wrapper {
-      margin: 36px 0;
-      min-height: 100px;
-      position: relative;
-    }
-
-    .leave-btn {
-      font-family: 'Inter', sans-serif;
-      font-size: 0.85rem;
-      font-weight: 600;
-      color: #000;
-      background: #fff;
-      border: none;
-      padding: 12px 28px;
-      border-radius: 8px;
-      cursor: pointer;
-      position: relative;
-      white-space: nowrap;
-      user-select: none;
-      z-index: 5;
-      box-shadow: 0 2px 12px rgba(255,255,255,0.08);
-      transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1),
-                  box-shadow 0.3s ease;
-      display: inline-block;
-      -webkit-tap-highlight-color: transparent;
-      touch-action: manipulation;
-    }
-
-    .leave-btn:hover {
-      box-shadow: 0 4px 20px rgba(255,255,255,0.15);
-    }
-
-    .leave-btn.shrink {
-      animation: btnShrink 0.15s ease forwards;
-    }
-
-    @keyframes btnShrink {
-      to { transform: scale(0.92); }
-    }
-
-    .gave-up-text {
-      font-size: 0.82rem;
-      color: #444;
-      margin-top: 12px;
-      font-style: italic;
-      opacity: 0;
-      transform: translateY(6px);
-      transition: opacity 0.35s ease, transform 0.35s ease;
-    }
-
-    .gave-up-text.visible {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    /* ---- Timer ---- */
-    .timer {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.78rem;
-      color: #333;
-      margin-bottom: 28px;
-      transition: color 1s ease;
-    }
-
-    /* ---- Closer ---- */
-    .closer {
-      margin-top: 44px;
-      font-size: 1.4rem;
-      font-weight: 700;
-      color: #fff;
-      letter-spacing: -0.03em;
-    }
-
-    .subtext {
-      margin-top: 8px;
-      font-size: 0.82rem;
-      color: #444;
-      font-style: italic;
-    }
-
-    /* ---- Footer ---- */
-    .footer {
-      margin-top: 60px;
-      padding-top: 20px;
-      border-top: 1px solid #1a1a1a;
-      font-size: 0.75rem;
-      color: #333;
-    }
-
-    .footer-links {
-      margin-top: 6px;
-    }
-
-    .footer a {
-      color: #555;
-      text-decoration: none;
-      position: relative;
-      transition: color 0.3s ease;
-    }
-
-    .footer a::after {
-      content: '';
-      position: absolute;
-      bottom: -2px;
-      left: 0;
-      width: 0;
-      height: 1px;
-      background: #fff;
-      transition: width 0.3s ease;
-    }
-
-    .footer a:hover {
-      color: #fff;
-    }
-
-    .footer a:hover::after {
-      width: 100%;
-    }
-
-    /* ---- Cookie banner ---- */
-    .cookie-banner {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      background: #111;
-      border-top: 1px solid #222;
-      padding: 14px 24px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 16px;
-      z-index: 50;
-      transform: translateY(100%);
-      opacity: 0;
-    }
-
-    .cookie-banner.show {
-      animation: bannerSlide 0.6s cubic-bezier(0.22, 1, 0.36, 1) forwards;
-    }
-
-    @keyframes bannerSlide {
-      from {
-        transform: translateY(100%);
-        opacity: 0;
-      }
-      to {
-        transform: translateY(0);
-        opacity: 1;
-      }
-    }
-
-    .cookie-text {
-      font-size: 0.8rem;
-      color: #888;
-      line-height: 1.5;
-    }
-
-    .cookie-btn {
-      font-family: 'Inter', sans-serif;
-      font-size: 0.75rem;
-      font-weight: 600;
-      color: #000;
-      background: #fff;
-      border: none;
-      padding: 8px 18px;
-      border-radius: 6px;
-      cursor: pointer;
-      white-space: nowrap;
-      flex-shrink: 0;
-      transition: opacity 0.2s, transform 0.15s;
-    }
-
-    .cookie-btn:hover {
-      opacity: 0.85;
-      transform: scale(1.02);
-    }
-
-    .cookie-btn:active {
-      transform: scale(0.97);
-    }
-
-    /* ---- Responsive ---- */
-    @media (max-width: 640px) {
-      .container {
-        padding: 28px 18px 120px;
-        max-width: 100%;
-      }
-
-      .greeting {
-        font-size: 1.35rem;
-        margin-bottom: 28px;
-        word-break: break-word;
-      }
-
-      .line {
-        font-size: 0.92rem;
-        margin-bottom: 16px;
-        line-height: 1.7;
-      }
-
-      .line.bold {
-        font-size: 1rem;
-      }
-
-      .line.dimmed {
-        font-size: 0.72rem;
-        word-break: break-all;
-      }
-
-      .terminal {
-        margin: 24px -18px;
-        border-radius: 0;
-        border-left: none;
-        border-right: none;
-      }
-
-      .terminal-body {
-        padding: 14px;
-        font-size: 0.7rem;
-        line-height: 1.85;
-        overflow-x: auto;
-      }
-
-      .terminal-header {
-        padding: 10px 14px;
-      }
-
-      .terminal-title {
-        font-size: 0.6rem;
-      }
-
-      .indent {
-        padding-left: 12px;
-      }
-
-      .closer {
-        font-size: 1.1rem;
-        margin-top: 28px;
-      }
-
-      .subtext {
-        font-size: 0.75rem;
-      }
-
-      .leave-wrapper {
-        min-height: 160px;
-        margin: 20px 0;
-      }
-
-      .leave-btn {
-        font-size: 0.78rem;
-        padding: 10px 22px;
-      }
-
-      .gave-up-text {
-        font-size: 0.72rem;
-      }
-
-      .timer {
-        font-size: 0.68rem;
-        margin-bottom: 20px;
-      }
-
-      .cookie-banner {
-        flex-direction: column;
-        text-align: center;
-        padding: 14px 18px;
-        gap: 10px;
-      }
-
-      .cookie-text {
-        font-size: 0.72rem;
-      }
-
-      .cookie-btn {
-        width: 100%;
-        padding: 10px 18px;
-      }
-
-      .footer {
-        margin-top: 36px;
-        font-size: 0.68rem;
-      }
-
-      .footer-links {
-        margin-top: 6px;
-      }
-    }
-
-    @media (max-width: 360px) {
-      .greeting {
-        font-size: 1rem;
-      }
-
-      .line {
-        font-size: 0.85rem;
-      }
-
-      .terminal-body {
-        font-size: 0.62rem;
-      }
-
-    }
-
-    /* ---- Prefers reduced motion ---- */
-    @media (prefers-reduced-motion: reduce) {
-      *, *::before, *::after {
-        animation-duration: 0.01ms !important;
-        transition-duration: 0.01ms !important;
-      }
-      .anim { opacity: 1; transform: none; filter: none; }
-      .greeting .word { opacity: 1; transform: none; filter: none; }
-      .term-line { opacity: 1; transform: none; filter: none; }
-    }
-  </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Rachit Tiwari — Senior Product Manager</title>
+<meta name="description" content="Senior product manager building AI and SaaS products that ship. Seven years across AI, enterprise SaaS and consumer. Bangalore, India.">
+<link rel="canonical" href="https://www.rachittiwari.com/">
+<meta name="theme-color" content="#070707">
+<meta property="og:title" content="Rachit Tiwari — Senior Product Manager">
+<meta property="og:description" content="I build AI and SaaS products that ship. Seven years across AI, enterprise SaaS and consumer.">
+<meta property="og:url" content="https://www.rachittiwari.com/">
+<meta property="og:type" content="website">
+<link rel="icon" type="image/png" href="https://github.com/namesrachittiwari.png">
+<link rel="apple-touch-icon" href="https://github.com/namesrachittiwari.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  html { scroll-behavior: smooth; }
+  body { margin: 0; background: #070707; color: #fff; font-family: 'Poppins', system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+  a { color: #EB6BA8; text-decoration: none; }
+  a:hover { color: #fff; }
+  @keyframes om-word { from { opacity: 0; transform: translateY(90%); } to { opacity: 1; transform: none; } }
+  @keyframes om-rise { from { opacity: 0; transform: translateY(28px); } to { opacity: 1; transform: none; } }
+  @keyframes om-bob { 0%,100% { transform: translateY(0); } 50% { transform: translateY(6px); } }
+  @keyframes om-pulse { 0%,100% { opacity:.4; } 50% { opacity:1; } }
+  .om-w { display: inline-block; animation: om-word .8s cubic-bezier(.16,1,.3,1) both; }
+  .om-load-1 { animation: om-rise .7s .05s cubic-bezier(.16,1,.3,1) both; }
+  .om-load-3 { animation: om-rise .7s .6s cubic-bezier(.16,1,.3,1) both; }
+  .om-load-4 { animation: om-rise .7s .75s cubic-bezier(.16,1,.3,1) both; }
+  .hv-nav:hover { background: #212121 !important; }
+  .hv-nav.on { background: #EB6BA8 !important; color: #070707 !important; }
+  .hv-invert:hover { filter: brightness(.88); }
+  .hv-tool:hover { background: #141414 !important; border-color: rgba(255,255,255,.28) !important; }
+  .hv-bright:hover { filter: brightness(1.08); }
+  .hv-ghost:hover { background: rgba(255,255,255,.1) !important; }
+  .hv-card-yellow:hover { background: #141414 !important; border-color: #ECE42E !important; }
+  .hv-card-green:hover { background: #141414 !important; border-color: #1CE15F !important; }
+  .hv-wide:hover { background: #141414 !important; }
+  .hv-glow:hover { filter: brightness(1.35); }
+  .hv-dim:hover { filter: brightness(.9); }
+</style>
+<noscript><style>#loader { display: none !important; }</style></noscript>
 </head>
 <body>
 
-  <main class="container">
-
-    <h1 class="greeting anim" id="greeting">Yo, thanks for visiting!<span class="cursor" id="cursor"></span></h1>
-
-    <p class="line bold anim">
-      But quite frankly... what are you doing here?
-    </p>
-
-    <p class="line anim">
-      You could be doom-scrolling reels right now. Letting
-      AI write your breakup texts. Finally trying that morning
-      routine you saved six months ago. But no... you're here.
-    </p>
-
-    <!-- Interactive section — moved up for impact -->
-    <p class="line bold anim">
-      Anyway, here's a button. You should probably click it.
-    </p>
-
-    <div class="leave-wrapper anim">
-      <button class="leave-btn" id="leaveBtn">Leave this website</button>
-      <p class="gave-up-text" id="gaveUpText"></p>
+<div id="scroll" style="position:relative; background:#070707; height:100vh; height:100dvh; overflow-y:auto; overflow-x:hidden; scroll-behavior:smooth">
+  <div id="loader" data-mob="padding:28px 20px" style="position:fixed; inset:0; z-index:200; background:#070707; display:flex; flex-direction:column; justify-content:space-between; padding:44px; transition:transform .9s cubic-bezier(.76,0,.24,1)">
+    <div style="display:flex; align-items:baseline; justify-content:space-between; gap:16px">
+      <span style="font-size:20px; font-weight:600; color:#fff">rachit tiwari</span>
+      <span data-mob="display:none" style="font-size:14px; color:#9A9A9A">senior product manager</span>
     </div>
-
-    <p class="timer anim" id="timer"></p>
-
-    <div class="terminal anim" id="terminal">
-      <div class="terminal-header">
-        <span class="terminal-dot red"></span>
-        <span class="terminal-dot yellow"></span>
-        <span class="terminal-dot green"></span>
-        <span class="terminal-title">status &mdash; rachittiwari.com</span>
+    <div style="display:flex; align-items:flex-end; justify-content:space-between; gap:24px; flex-wrap:wrap">
+      <div data-mob="font-size:56px" style="display:flex; align-items:baseline; gap:6px; color:#fff; font-size:clamp(64px,11vw,150px); font-weight:600; letter-spacing:-4px; line-height:.9">
+        <span id="load-num">0</span><span style="color:#EB6BA8">%</span>
       </div>
-      <div class="terminal-body" id="terminalBody">
-        <div class="term-line status-line">
-          <span class="status-dot"></span>
-          <span>SITE STATUS: <span class="status-value">Did not pass UAT</span></span>
-        </div>
-        <div class="term-line indent"><span class="prefix">&rsaquo;</span> Tester is on leave.</div>
-        <div class="term-line indent"><span class="prefix">&rsaquo;</span> His manager is also on leave.</div>
-        <div class="term-line indent"><span class="prefix">&rsaquo;</span> The manager's manager doesn't know what UAT means.</div>
-      </div>
+      <span data-mob="font-size:14px" style="font-size:16px; color:#9A9A9A; padding-bottom:12px">AI and SaaS product work, loading</span>
     </div>
-
-    <p class="line anim">
-      Come back by Monday. Or Tuesday. Actually, let's say "next sprint"
-      and quietly move the ticket to the backlog.
-    </p>
-
-    <p class="line dimmed anim">
-      Current build: 0.0.1-alpha-pre-beta-almost-there-not-really
-    </p>
-
-    <!-- V2 closer — preserved exactly -->
-    <p class="closer anim">Also, go get a life, man.</p>
-    <p class="subtext anim">
-      (says the guy who bought a domain instead of going to therapy)
-    </p>
-
-    <footer class="footer anim">
-      <p>&copy; 2026 Rachit Tiwari &middot; Built with mass delusion and a domain he didn't need</p>
-      <p class="footer-links">
-        <a href="mailto:rachittiwari10@gmail.com">email</a> &middot;
-        <a href="https://github.com/namesrachittiwari" target="_blank" rel="noopener">github</a>
-      </p>
-    </footer>
-
-  </main>
-
-  <!-- Cookie banner -->
-  <div class="cookie-banner" id="cookieBanner">
-    <span class="cookie-text">
-      This site uses <strong>0</strong> cookies. There's literally nothing here worth remembering.
-    </span>
-    <button class="cookie-btn" id="cookieBtn">I understand the emptiness</button>
+    <div style="height:4px; background:rgba(255,255,255,.12); border-radius:999px; overflow:hidden">
+      <div id="load-bar" style="height:100%; width:0%; background:#1CE15F; border-radius:999px"></div>
+    </div>
   </div>
 
-  <script>
-    // Force scroll to top on page load/reload
-    window.scrollTo(0, 0);
-    if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+  <div id="progress" style="position:fixed; top:0; left:0; right:0; height:3px; background:#EB6BA8; transform-origin:left center; transform:scaleX(0); z-index:60"></div>
 
-    // ================================================================
-    //  1. SPLIT-WORD GREETING ANIMATION
-    //     Each word slides up individually with staggered delay
-    // ================================================================
-    const greetingEl = document.getElementById('greeting');
-    const cursorEl = document.getElementById('cursor');
-    const originalText = 'Yo, thanks for visiting!';
+  <div id="bar" style="position:sticky; top:0; z-index:50; transition:background .3s ease">
+    <div data-mob="padding:14px 20px" style="max-width:1360px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; gap:12px; padding:18px 44px">
+      <div style="display:flex; align-items:baseline; gap:12px">
+        <span style="font-size:20px; font-weight:600">rachit tiwari</span>
+        <span data-mob="display:none" style="font-size:14px; color:#9A9A9A">senior product manager</span>
+      </div>
+      <div id="nav" style="display:flex; align-items:center; gap:4px">
+        <a href="#work" data-nav="work" data-flip class="hv-nav" data-mob="display:none" style="font-size:16px; font-weight:500; padding:12px 24px; border-radius:999px; color:#fff; transition:background .2s ease, color .2s ease">Work</a>
+        <a href="#numbers" data-nav="numbers" data-flip class="hv-nav" data-mob="display:none" style="font-size:16px; font-weight:500; padding:12px 24px; border-radius:999px; color:#fff; transition:background .2s ease, color .2s ease">Numbers</a>
+        <a href="#caps" data-nav="caps" data-flip class="hv-nav" data-mob="display:none" style="font-size:16px; font-weight:500; padding:12px 24px; border-radius:999px; color:#fff; transition:background .2s ease, color .2s ease">Capabilities</a>
+        <a href="#talk" data-flip class="hv-invert" data-mob="padding:11px 20px; font-size:15px; margin-left:0" style="background:#fff; color:#070707; font-size:16px; font-weight:600; padding:12px 26px; border-radius:999px; margin-left:8px">Get in touch</a>
+      </div>
+    </div>
+  </div>
 
-    // Remove text, keep cursor
-    greetingEl.textContent = '';
+  <div data-mob="min-height:620px" style="position:relative; height:100vh; height:100dvh; min-height:760px; margin-top:-78px; overflow:hidden; background:#070707">
 
-    // Split into words and create spans
-    const words = originalText.split(' ');
-    words.forEach((word, i) => {
-      const span = document.createElement('span');
-      span.className = 'word';
-      span.textContent = word;
-      span.style.animationDelay = `${0.2 + i * 0.12}s`;
-      greetingEl.appendChild(span);
+    <div id="hero" data-mob="padding:80px 16px 48px" style="position:relative; height:100%; display:flex; align-items:center; justify-content:center; padding:40px 44px 120px; max-width:1440px; margin:0 auto">
+      <div data-mob="padding:34px 24px; border-radius:30px" style="width:100%; max-width:1240px; background:#0D0D0D; border:1px solid rgba(255,255,255,.1); color:#fff; border-radius:44px; padding:70px 60px; display:flex; flex-direction:column; align-items:flex-start; gap:26px">
+        <div class="om-load-1" style="display:flex; gap:10px; align-items:center; flex-wrap:wrap">
+          <span style="position:relative; background:#1CE15F; color:#070707; font-size:14px; font-weight:600; padding:9px 20px 9px 34px; border-radius:999px">
+            <span style="position:absolute; left:18px; top:50%; margin-top:-4px; width:8px; height:8px; border-radius:50%; background:#070707; animation:om-pulse 2s ease-in-out infinite"></span>Open to senior PM roles
+          </span>
+          <span style="border:1px solid rgba(255,255,255,.22); color:#fff; font-size:14px; font-weight:500; padding:9px 20px; border-radius:999px">Bangalore, India</span>
+        </div>
 
-      // Add space between words
-      if (i < words.length - 1) {
-        const space = document.createTextNode('\u00A0');
-        greetingEl.appendChild(space);
+        <h1 data-mob="font-size:38px; letter-spacing:-1px" style="margin:0; max-width:1000px; font-size:clamp(38px,5.4vw,84px); font-weight:600; line-height:1.03; letter-spacing:-2.5px; color:#fff; overflow:hidden">
+          <span class="om-w" style="animation-delay:.12s">I</span> <span class="om-w" style="animation-delay:.17s">build</span> <span class="om-w" style="animation-delay:.22s; color:#EB6BA8">AI</span> <span class="om-w" style="animation-delay:.27s; color:#EB6BA8">and</span> <span class="om-w" style="animation-delay:.32s; color:#EB6BA8">SaaS</span> <span class="om-w" style="animation-delay:.37s">products</span> <span class="om-w" style="animation-delay:.42s">that</span> <span class="om-w" style="animation-delay:.47s">ship.</span>
+        </h1>
+
+        <p class="om-load-3" style="margin:0; font-size:clamp(16px,1.4vw,20px); font-weight:400; color:#9A9A9A; max-width:600px; text-wrap:pretty">Seven years across AI, enterprise SaaS and consumer, close to the data and through to launch.</p>
+
+        <div class="om-load-4" data-mob="flex-direction:column; width:100%" style="display:flex; gap:12px; margin-top:6px">
+          <a href="#work" data-flip class="hv-bright" data-mob="padding:16px 28px; text-align:center" style="background:#EB6BA8; color:#070707; font-size:16px; font-weight:600; padding:18px 36px; border-radius:999px; transition:filter .2s ease">See selected work</a>
+          <a href="#talk" data-flip class="hv-ghost" data-mob="padding:16px 28px; text-align:center" style="border:1px solid rgba(255,255,255,.28); color:#fff; font-size:16px; font-weight:500; padding:18px 36px; border-radius:999px; transition:background .2s ease">Download résumé</a>
+        </div>
+      </div>
+    </div>
+
+    <div data-mob="display:none" style="position:absolute; left:50%; bottom:28px; transform:translateX(-50%); display:flex; flex-direction:column; align-items:center; gap:8px; font-size:12px; letter-spacing:2px; text-transform:uppercase; color:rgba(255,255,255,.7); animation:om-bob 2.6s ease-in-out infinite">
+      <span>scroll</span><span style="font-size:16px">↓</span>
+    </div>
+  </div>
+
+  <div id="rail-wrap" data-mob="padding:44px 0" style="position:relative; border-top:1px solid rgba(255,255,255,.08); border-bottom:1px solid rgba(255,255,255,.08); background:#070707; overflow:hidden; padding:62px 0">
+    <div data-mob="padding:0 20px 22px" style="display:flex; align-items:baseline; justify-content:space-between; gap:16px; padding:0 44px 30px; max-width:1360px; margin:0 auto">
+      <span style="font-size:14px; color:#9A9A9A">Tools and agents I work in</span>
+      <span data-mob="display:none" style="font-size:14px; color:#9A9A9A">scroll to move the rail</span>
+    </div>
+
+    <div style="display:flex; flex-direction:column; gap:16px">
+      <div id="rail-a" style="display:flex; gap:16px; width:max-content; will-change:transform"></div>
+      <div id="rail-b" style="display:flex; gap:16px; width:max-content; will-change:transform"></div>
+    </div>
+
+    <div style="position:absolute; top:0; bottom:0; left:0; width:120px; background:linear-gradient(90deg,#070707 0%,rgba(7,7,7,0) 100%); pointer-events:none"></div>
+    <div style="position:absolute; top:0; bottom:0; right:0; width:120px; background:linear-gradient(270deg,#070707 0%,rgba(7,7,7,0) 100%); pointer-events:none"></div>
+  </div>
+
+  <div data-mob="padding:0 20px" style="max-width:1360px; margin:0 auto; padding:0 44px">
+
+    <div data-mob="grid-template-columns:1fr; gap:14px; padding:80px 0 70px" style="padding:140px 0 120px; display:grid; grid-template-columns:200px 1fr; gap:40px">
+      <div data-reveal style="font-size:14px; color:#9A9A9A; padding-top:16px">001 / How I work</div>
+      <div data-reveal style="font-size:clamp(24px,3.3vw,46px); font-weight:500; line-height:1.22; max-width:940px; text-wrap:pretty">Most roadmaps stop making sense the moment real users touch the product. I write the version that <span style="color:#1CE15F">still holds up</span> in week six, when the data disagrees and the room already has an opinion.</div>
+    </div>
+
+    <div id="work" style="padding:20px 0 0">
+      <div data-mob="flex-direction:column; align-items:flex-start; gap:10px" style="display:flex; align-items:baseline; justify-content:space-between; margin-bottom:38px">
+        <div data-reveal style="display:flex; flex-direction:column; gap:8px">
+          <span style="font-size:14px; color:#9A9A9A">002 / Work</span>
+          <h2 style="margin:0; font-size:clamp(32px,4.4vw,60px); font-weight:600; line-height:1.1">Selected work.</h2>
+        </div>
+        <span data-reveal style="font-size:16px; color:#9A9A9A">Four products that shipped.</span>
+      </div>
+
+      <div data-mob="padding-bottom:80px" style="display:flex; flex-direction:column; gap:26px; padding-bottom:140px">
+        <div data-mob="top:90px" style="position:sticky; top:110px">
+          <div data-stack data-mob="padding:26px 22px; border-radius:28px; min-height:0" style="background:#1CE15F; color:#070707; border-radius:44px; padding:44px 52px; min-height:340px; display:flex; flex-direction:column; justify-content:space-between; gap:24px">
+            <div style="display:flex; justify-content:space-between; gap:16px; font-size:15px; font-weight:600"><span>InnerAlly</span><span>2025 to now, 0 to 1</span></div>
+            <div style="display:flex; flex-direction:column; gap:22px">
+              <div data-mob="font-size:23px" style="font-size:clamp(28px,3.2vw,44px); font-weight:600; line-height:1.12; max-width:900px">Therapy booked in under ninety seconds, with no account and no waiting room.</div>
+              <hr style="border:0; border-top:1px solid rgba(7,7,7,.2); margin:0">
+              <div data-mob="gap:8px 18px; font-size:16px" style="display:flex; flex-wrap:wrap; gap:56px; font-size:20px; font-weight:500"><span>300+ sessions a month</span><span>62% return rate</span><span>No sign up required</span></div>
+            </div>
+          </div>
+        </div>
+        <div data-mob="top:100px" style="position:sticky; top:130px">
+          <div data-stack data-mob="padding:26px 22px; border-radius:28px; min-height:0" style="background:#4791FF; color:#070707; border-radius:44px; padding:44px 52px; min-height:340px; display:flex; flex-direction:column; justify-content:space-between; gap:24px">
+            <div style="display:flex; justify-content:space-between; gap:16px; font-size:15px; font-weight:600"><span>AuthBridge</span><span>Enterprise SaaS</span></div>
+            <div style="display:flex; flex-direction:column; gap:22px">
+              <div data-mob="font-size:23px" style="font-size:clamp(28px,3.2vw,44px); font-weight:600; line-height:1.12; max-width:900px">Four products moved onto one pricing model that sales and legal both signed off on.</div>
+              <hr style="border:0; border-top:1px solid rgba(7,7,7,.2); margin:0">
+              <div data-mob="gap:8px 18px; font-size:16px" style="display:flex; flex-wrap:wrap; gap:56px; font-size:20px; font-weight:500"><span>₹50Cr ARR</span><span>4 products merged</span><span>18% renewal uplift</span></div>
+            </div>
+          </div>
+        </div>
+        <div data-mob="top:110px" style="position:sticky; top:150px">
+          <div data-stack data-mob="padding:26px 22px; border-radius:28px; min-height:0" style="background:#ECE42E; color:#070707; border-radius:44px; padding:44px 52px; min-height:340px; display:flex; flex-direction:column; justify-content:space-between; gap:24px">
+            <div style="display:flex; justify-content:space-between; gap:16px; font-size:15px; font-weight:600"><span>VLCC</span><span>AI skin analyzer</span></div>
+            <div style="display:flex; flex-direction:column; gap:22px">
+              <div data-mob="font-size:23px" style="font-size:clamp(28px,3.2vw,44px); font-weight:600; line-height:1.12; max-width:900px">An in-store camera and model that tells a counsellor exactly what to recommend.</div>
+              <hr style="border:0; border-top:1px solid rgba(7,7,7,.2); margin:0">
+              <div data-mob="gap:8px 18px; font-size:16px" style="display:flex; flex-wrap:wrap; gap:56px; font-size:20px; font-weight:500"><span>+25% per-store sales</span><span>₹100Cr CRM portfolio</span><span>240 stores</span></div>
+            </div>
+          </div>
+        </div>
+        <div data-mob="top:120px" style="position:sticky; top:170px">
+          <div data-stack data-mob="padding:26px 22px; border-radius:28px; min-height:0" style="background:#EB6BA8; color:#070707; border-radius:44px; padding:44px 52px; min-height:340px; display:flex; flex-direction:column; justify-content:space-between; gap:24px">
+            <div style="display:flex; justify-content:space-between; gap:16px; font-size:15px; font-weight:600"><span>Amazon</span><span>Ops tooling at scale</span></div>
+            <div style="display:flex; flex-direction:column; gap:22px">
+              <div data-mob="font-size:23px" style="font-size:clamp(28px,3.2vw,44px); font-weight:600; line-height:1.12; max-width:900px">Exception handling tooling for the hours when a network stops going to plan.</div>
+              <hr style="border:0; border-top:1px solid rgba(7,7,7,.2); margin:0">
+              <div data-mob="gap:8px 18px; font-size:16px" style="display:flex; flex-wrap:wrap; gap:56px; font-size:20px; font-weight:500"><span>100K daily shipments</span><span>3 regions</span><span>11 min saved per exception</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="numbers" data-mob="padding:20px 0 0" style="padding:40px 0 0">
+      <div data-reveal style="display:flex; flex-direction:column; gap:8px; margin-bottom:38px">
+        <span style="font-size:14px; color:#9A9A9A">003 / Impact</span>
+        <h2 style="margin:0; font-size:clamp(32px,4.4vw,60px); font-weight:600; line-height:1.1">The numbers.</h2>
+      </div>
+      <div data-mob="grid-template-columns:1fr; grid-auto-rows:auto; gap:14px" style="display:grid; grid-template-columns:repeat(12,1fr); grid-auto-rows:minmax(180px,auto); gap:18px">
+
+        <div data-reveal data-mob="grid-column:auto; grid-row:auto; padding:26px 22px; border-radius:28px" style="grid-column:span 5; grid-row:span 2; background:#1CE15F; color:#070707; border-radius:32px; padding:34px; display:flex; flex-direction:column; gap:26px">
+          <div style="display:flex; align-items:flex-start; justify-content:space-between; gap:16px">
+            <div style="display:flex; flex-direction:column; gap:4px">
+              <div style="font-size:26px; font-weight:600; line-height:1.15">CRM portfolio</div>
+              <div style="font-size:16px; font-weight:500; opacity:.7">VLCC, 240 stores</div>
+            </div>
+            <span style="font-size:26px; line-height:1">✦</span>
+          </div>
+          <div data-count="100" data-prefix="₹" data-suffix="Cr" data-mob="font-size:64px" style="font-size:clamp(56px,6.4vw,100px); font-weight:600; line-height:.9; letter-spacing:-3px; white-space:nowrap">₹100Cr</div>
+          <div style="display:flex; flex-direction:column; gap:10px; margin-top:auto">
+            <div style="display:flex; align-items:center; justify-content:space-between; font-size:14px; font-weight:600; opacity:.75"><span>Loyalty</span><span>Offers</span><span>Skin analyzer</span></div>
+            <div style="height:44px; background:#070707; border-radius:999px; display:flex; align-items:center; padding:0 8px; gap:8px">
+              <span style="width:26px; height:26px; border-radius:50%; background:#1CE15F"></span>
+              <span style="flex:1; height:6px; border-radius:999px; background:rgba(255,255,255,.16)"></span>
+              <span style="width:26px; height:26px; border-radius:50%; background:#fff"></span>
+              <span style="flex:1; height:6px; border-radius:999px; background:rgba(255,255,255,.16)"></span>
+              <span style="width:26px; height:26px; border-radius:50%; background:#fff"></span>
+            </div>
+            <div style="font-size:15px; font-weight:500; opacity:.75; text-wrap:pretty">Three teams and three dashboards folded into one revenue surface.</div>
+          </div>
+        </div>
+
+        <div data-reveal data-mob="grid-column:auto; padding:24px 22px; border-radius:28px" style="grid-column:span 4; background:#4791FF; color:#070707; border-radius:32px; padding:30px; display:flex; flex-direction:column; justify-content:space-between; gap:18px">
+          <div style="display:flex; align-items:flex-start; justify-content:space-between; gap:12px">
+            <div style="font-size:22px; font-weight:600; line-height:1.2">Shipments daily<br><span style="font-size:15px; font-weight:500; opacity:.7">Amazon, three regions</span></div>
+            <span style="font-size:22px">✦</span>
+          </div>
+          <div style="display:flex; align-items:flex-end; justify-content:space-between; gap:14px">
+            <div data-count="100" data-suffix="K" style="font-size:clamp(44px,4.6vw,66px); font-weight:600; line-height:1; letter-spacing:-2px; white-space:nowrap">100K</div>
+            <svg data-spark viewBox="0 0 120 44" preserveAspectRatio="none" style="width:100%; max-width:120px; min-width:0; height:44px; flex:1 1 60px">
+              <polyline points="0,36 20,30 40,33 60,18 80,22 100,9 120,4" fill="none" stroke="#070707" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"></polyline>
+            </svg>
+          </div>
+        </div>
+
+        <div data-reveal class="hv-card-yellow" data-mob="grid-column:auto; padding:24px 22px; border-radius:28px" style="grid-column:span 3; background:#0B0B0B; border:1px solid rgba(255,255,255,.1); border-radius:32px; padding:30px; display:flex; flex-direction:column; justify-content:space-between; gap:18px; transition:border-color .25s ease, background .25s ease">
+          <div style="display:flex; align-items:center; gap:10px; font-size:14px; color:#9A9A9A">
+            <span style="width:8px; height:8px; border-radius:50%; background:#ECE42E"></span>AuthBridge
+          </div>
+          <div style="display:flex; flex-direction:column; gap:6px">
+            <div data-count="50" data-prefix="₹" data-suffix="Cr" style="font-size:clamp(40px,4.2vw,60px); font-weight:600; line-height:1; letter-spacing:-2px; white-space:nowrap; color:#ECE42E">₹50Cr</div>
+            <div style="font-size:18px; color:#fff; line-height:1.3">ARR across four products</div>
+            <div style="font-size:15px; color:#9A9A9A">on one pricing model</div>
+          </div>
+        </div>
+
+        <div data-reveal data-mob="grid-column:auto; padding:24px 22px; border-radius:28px" style="grid-column:span 4; background:#EB6BA8; color:#070707; border-radius:32px; padding:30px; display:flex; flex-direction:column; justify-content:space-between; gap:18px">
+          <div style="display:flex; align-items:flex-start; justify-content:space-between; gap:12px">
+            <div style="font-size:22px; font-weight:600; line-height:1.2">Per-store sales lift<br><span style="font-size:15px; font-weight:500; opacity:.7">AI skin analyzer, in store</span></div>
+            <span style="font-size:22px">✦</span>
+          </div>
+          <div style="display:flex; align-items:flex-end; gap:18px">
+            <div data-count="25" data-prefix="+" data-suffix="%" style="font-size:clamp(48px,5vw,74px); font-weight:600; line-height:.95; letter-spacing:-2.5px; white-space:nowrap">+25%</div>
+            <div style="flex:1; display:flex; align-items:flex-end; gap:6px; height:52px">
+              <span data-bar="34" style="flex:1; height:34%; background:rgba(7,7,7,.35); border-radius:6px"></span>
+              <span data-bar="52" style="flex:1; height:52%; background:rgba(7,7,7,.45); border-radius:6px"></span>
+              <span data-bar="46" style="flex:1; height:46%; background:rgba(7,7,7,.35); border-radius:6px"></span>
+              <span data-bar="74" style="flex:1; height:74%; background:rgba(7,7,7,.6); border-radius:6px"></span>
+              <span data-bar="100" style="flex:1; height:100%; background:#070707; border-radius:6px"></span>
+            </div>
+          </div>
+        </div>
+
+        <div data-reveal class="hv-card-green" data-mob="grid-column:auto; padding:24px 22px; border-radius:28px" style="grid-column:span 3; background:#0B0B0B; border:1px solid rgba(255,255,255,.1); border-radius:32px; padding:30px; display:flex; flex-direction:column; justify-content:space-between; gap:18px; transition:border-color .25s ease, background .25s ease">
+          <div style="display:flex; align-items:center; gap:10px; font-size:14px; color:#9A9A9A">
+            <span style="width:8px; height:8px; border-radius:50%; background:#1CE15F"></span>InnerAlly
+          </div>
+          <div style="display:flex; flex-direction:column; gap:6px">
+            <div data-count="300" data-suffix="+" style="font-size:clamp(40px,4.2vw,60px); font-weight:600; line-height:1; letter-spacing:-2px; white-space:nowrap; color:#1CE15F">300+</div>
+            <div style="font-size:18px; color:#fff; line-height:1.3">Sessions a month</div>
+            <div style="font-size:15px; color:#9A9A9A">with no sign ups</div>
+          </div>
+        </div>
+
+        <div data-reveal class="hv-wide" data-mob="grid-column:auto; flex-direction:column; align-items:flex-start; gap:16px; padding:24px 22px; border-radius:28px" style="grid-column:span 12; background:#0B0B0B; border:1px solid rgba(255,255,255,.1); border-radius:999px; padding:22px 34px; display:flex; align-items:center; justify-content:space-between; gap:32px; min-height:0; transition:background .25s ease">
+          <div style="display:flex; align-items:baseline; gap:20px; flex-wrap:wrap">
+            <div data-count="4" data-suffix="K+" style="font-size:clamp(32px,3.4vw,48px); font-weight:600; line-height:1; letter-spacing:-1.5px; white-space:nowrap">4K+</div>
+            <div style="font-size:17px; color:#fff">meals delivered at <span style="color:#9A9A9A">Massoi, a food side project I founded and later sold</span></div>
+          </div>
+          <div style="display:flex; gap:10px">
+            <span style="border:1px solid rgba(255,255,255,.18); color:#9A9A9A; font-size:14px; padding:9px 20px; border-radius:999px">Founded 2021</span>
+            <span style="border:1px solid rgba(255,255,255,.18); color:#9A9A9A; font-size:14px; padding:9px 20px; border-radius:999px">Sold 2023</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="caps" data-mob="padding:80px 0 0" style="padding:140px 0 0">
+      <div data-mob="flex-direction:column; align-items:flex-start; gap:10px" style="display:flex; align-items:baseline; justify-content:space-between; margin-bottom:38px">
+        <div data-reveal style="display:flex; flex-direction:column; gap:8px">
+          <span style="font-size:14px; color:#9A9A9A">004 / Skills</span>
+          <h2 style="margin:0; font-size:clamp(32px,4.4vw,60px); font-weight:600; line-height:1.1">Capabilities.</h2>
+        </div>
+        <span data-reveal style="font-size:16px; color:#9A9A9A">Open a row for detail.</span>
+      </div>
+      <div data-reveal id="caps-list" style="display:flex; flex-direction:column; gap:10px"></div>
+    </div>
+
+    <div id="talk" data-reveal data-mob="padding:80px 0 34px" style="padding:140px 0 44px">
+      <div data-mob="padding:36px 24px; border-radius:30px" style="position:relative; background:#EB6BA8; color:#070707; border-radius:44px; padding:80px 60px; overflow:hidden">
+        <div style="position:relative; display:flex; align-items:flex-end; justify-content:space-between; gap:40px; flex-wrap:wrap">
+          <div style="display:flex; flex-direction:column; gap:16px">
+            <span style="font-size:14px; font-weight:600">005 / Contact</span>
+            <div data-mob="font-size:34px" style="font-size:clamp(38px,5.6vw,72px); font-weight:600; line-height:1.05">Hiring for a<br>senior PM role?<br>Let's talk.</div>
+            <div data-mob="font-size:16px" style="font-size:20px; font-weight:500">rachittiwari10@gmail.com &nbsp;·&nbsp; +91 95897 62453</div>
+          </div>
+          <div data-mob="width:100%" style="display:flex; gap:12px; flex-wrap:wrap">
+            <a href="mailto:rachittiwari10@gmail.com" data-flip class="hv-glow" data-mob="flex:1; text-align:center; padding:16px 24px" style="background:#070707; color:#fff; font-size:16px; font-weight:600; padding:18px 36px; border-radius:999px; transition:filter .2s ease">Email me</a>
+            <a href="https://www.linkedin.com/in/namesrachit/" data-flip class="hv-dim" data-mob="flex:1; text-align:center; padding:16px 24px" style="background:#fff; color:#070707; font-size:16px; font-weight:500; padding:18px 36px; border-radius:999px; transition:filter .2s ease">LinkedIn</a>
+          </div>
+        </div>
+      </div>
+      <div data-mob="flex-direction:column; gap:6px; padding:22px 4px 0" style="display:flex; justify-content:space-between; font-size:14px; color:#9A9A9A; padding:30px 10px 0">
+        <span>© 2026 Rachit Tiwari</span><span>Bangalore, India</span><span>Open to new roles</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+(function () {
+  'use strict';
+  var EASE = 'cubic-bezier(.16,1,.3,1)';
+  var MOB = 820;
+  var MOTION = 1;
+  var clamp = function (v, a, b) { return Math.max(a, Math.min(b, v)); };
+  var $ = function (id) { return document.getElementById(id); };
+
+  var sc = $('scroll'), loader = $('loader'), loadNum = $('load-num'), loadBar = $('load-bar'),
+      progress = $('progress'), bar = $('bar'), nav = $('nav'), hero = $('hero'),
+      railWrap = $('rail-wrap'), railA = $('rail-a'), railB = $('rail-b');
+
+  if (!location.hash) sc.scrollTop = 0;
+
+  var NEON = ['#1CE15F', '#4791FF', '#ECE42E', '#EB6BA8'];
+  var si = function (slug) { return 'https://cdn.simpleicons.org/' + slug + '/070707'; };
+  var TOOLS_A = [
+    { name: 'Claude Code', icon: si('claude') },
+    { name: 'Hermes', mono: 'H' },
+    { name: 'OpenClaw', mono: 'OC' },
+    { name: 'Cursor', mono: 'C' },
+    { name: 'OpenAI', mono: 'AI' },
+    { name: 'Figma', icon: si('figma') },
+    { name: 'Notion', icon: si('notion') },
+    { name: 'Linear', icon: si('linear') },
+    { name: 'Miro', icon: si('miro') },
+    { name: 'Slack', mono: 'S' }
+  ];
+  var TOOLS_B = [
+    { name: 'Jira', icon: si('jira') },
+    { name: 'Amplitude', mono: 'A' },
+    { name: 'Mixpanel', icon: si('mixpanel') },
+    { name: 'Looker', icon: si('looker') },
+    { name: 'SQL', icon: si('postgresql') },
+    { name: 'Postman', icon: si('postman') },
+    { name: 'GitHub', icon: si('github') },
+    { name: 'Confluence', icon: si('confluence') },
+    { name: 'Google Analytics', icon: si('googleanalytics') },
+    { name: 'LangSmith', mono: 'LS' }
+  ];
+  var CAPS = [
+    { n: '01', label: 'Product strategy', aside: 'positioning to roadmap', items: ['Positioning and narrative', 'Roadmap planning', 'Pricing and packaging'] },
+    { n: '02', label: 'AI and ML product', aside: 'discovery, evals, guardrails', items: ['Discovery and JTBD', 'Eval design', 'Human in the loop flows'] },
+    { n: '03', label: '0 to 1 and GTM', aside: 'launch to first revenue', items: ['Launch management', 'Channel tests', 'First hundred customers'] },
+    { n: '04', label: 'Enterprise SaaS', aside: 'pricing, security, admin', items: ['Multi product pricing', 'Security reviews', 'Admin and permissions'] },
+    { n: '05', label: 'Growth and retention', aside: 'activation and experiments', items: ['Activation loops', 'Experimentation', 'Cohort analysis'] },
+    { n: '06', label: 'Data and decisioning', aside: 'instrumentation and SQL', items: ['Instrumentation', 'Analytics and SQL', 'Decision memos'] }
+  ];
+  var FILLS = ['#1CE15F', '#4791FF', '#ECE42E', '#EB6BA8', '#1CE15F', '#4791FF'];
+
+  var isMob = function () { return (window.innerWidth || sc.clientWidth) < MOB; };
+
+  // ---- tool rails: list rendered twice so the drift can wrap seamlessly ----
+  function buildRail(el, list, offset) {
+    for (var r = 0; r < 2; r++) list.forEach(function (t, i) {
+      var pill = document.createElement('div');
+      pill.className = 'hv-tool';
+      pill.style.cssText = 'display:flex; align-items:center; gap:14px; flex:none; background:#0B0B0B; border:1px solid rgba(255,255,255,.1); border-radius:999px; padding:14px 26px 14px 14px; transition:background .25s ease, border-color .25s ease';
+      var chip = document.createElement('span');
+      chip.style.cssText = 'width:44px; height:44px; flex:none; border-radius:50%; background:' + NEON[(i + offset) % NEON.length] + '; color:#070707; display:flex; align-items:center; justify-content:center; font-size:16px; font-weight:600; overflow:hidden';
+      if (t.icon) {
+        var ic = document.createElement('span');
+        ic.setAttribute('role', 'img');
+        ic.setAttribute('aria-label', t.name);
+        ic.style.cssText = 'width:22px; height:22px; display:block; background-repeat:no-repeat; background-position:center; background-size:contain; background-image:url("' + t.icon + '")';
+        chip.appendChild(ic);
+      } else if (t.mono) {
+        var m = document.createElement('span');
+        m.textContent = t.mono;
+        chip.appendChild(m);
+      }
+      var name = document.createElement('span');
+      name.style.cssText = 'font-size:19px; font-weight:500; color:#fff; white-space:nowrap';
+      name.textContent = t.name;
+      pill.appendChild(chip);
+      pill.appendChild(name);
+      el.appendChild(pill);
+    });
+  }
+  buildRail(railA, TOOLS_A, 0);
+  buildRail(railB, TOOLS_B, 2);
+
+  // ---- capability rows: filled colour block when open, one open at a time ----
+  var openCap = 0;
+  var capRows = [];
+  var capsList = $('caps-list');
+  CAPS.forEach(function (c, i) {
+    var row = document.createElement('div');
+    row.setAttribute('data-mob', 'padding:20px 22px; border-radius:24px');
+    row.style.cssText = 'background:#0B0B0B; border:1px solid rgba(255,255,255,.1); border-radius:28px; padding:24px 30px; cursor:pointer; transition:background .4s ' + EASE + ', color .3s ease, border-color .3s ease';
+    var head = document.createElement('div');
+    head.style.cssText = 'display:flex; align-items:center; gap:22px';
+    var n = document.createElement('span');
+    n.textContent = c.n;
+    n.style.cssText = 'font-size:14px; opacity:.55; width:26px';
+    var label = document.createElement('span');
+    label.textContent = c.label;
+    label.style.cssText = 'font-size:clamp(19px,2.1vw,27px); font-weight:600; flex:1; line-height:1.2';
+    var aside = document.createElement('span');
+    aside.textContent = c.aside;
+    aside.setAttribute('data-mob', 'display:none');
+    aside.style.cssText = 'font-size:15px; opacity:.6';
+    var plus = document.createElement('span');
+    plus.textContent = '+';
+    plus.style.cssText = 'font-size:24px; width:26px; flex:none; text-align:center; transition:transform .4s ' + EASE + '; transform:rotate(0deg)';
+    head.appendChild(n);
+    head.appendChild(label);
+    head.appendChild(aside);
+    head.appendChild(plus);
+    row.appendChild(head);
+    row.addEventListener('click', function () {
+      openCap = openCap === i ? -1 : i;
+      paintCaps();
+    });
+    capsList.appendChild(row);
+    capRows.push({ row: row, n: n, plus: plus, items: null, cap: c, fill: FILLS[i] });
+  });
+
+  function paintCaps() {
+    capRows.forEach(function (r, i) {
+      var open = openCap === i;
+      r.row.style.background = open ? r.fill : '#0B0B0B';
+      r.row.style.color = open ? '#070707' : '#FFFFFF';
+      r.row.style.borderColor = open ? r.fill : 'rgba(255,255,255,.1)';
+      r.n.style.opacity = open ? '.7' : '.55';
+      r.plus.style.transform = open ? 'rotate(135deg)' : 'rotate(0deg)';
+      if (open && !r.items) {
+        var base = 'display:flex; gap:10px; flex-wrap:wrap; padding:20px 0 4px 48px; animation:om-rise .45s ' + EASE + ' both';
+        var mob = 'padding:16px 0 4px 0';
+        var box = document.createElement('div');
+        box.setAttribute('data-mob', mob);
+        box.setAttribute('style', isMob() ? base + ';' + mob : base);
+        box.dataset.mobBase = base;
+        r.cap.items.forEach(function (t) {
+          var chip = document.createElement('span');
+          chip.textContent = t;
+          chip.style.cssText = 'background:#070707; color:#fff; font-size:15px; font-weight:500; padding:11px 22px; border-radius:999px';
+          box.appendChild(chip);
+        });
+        r.row.appendChild(box);
+        r.items = box;
+      }
+      if (!open && r.items) {
+        r.items.parentNode.removeChild(r.items);
+        r.items = null;
       }
     });
+  }
 
-    // Re-append cursor after last word
-    cursorEl.style.animationDelay = `${0.2 + words.length * 0.12}s`;
-    greetingEl.appendChild(cursorEl);
-
-    // Mark greeting as already animated (skip the generic .anim reveal)
-    greetingEl.classList.remove('anim');
-    greetingEl.style.opacity = '1';
-    greetingEl.style.transform = 'none';
-    greetingEl.style.filter = 'none';
-
-    // ================================================================
-    //  2. INTERSECTION OBSERVER — blur-deblur staggered reveal
-    // ================================================================
-    const elements = document.querySelectorAll('.anim');
-    let globalDelay = 0.5; // start after greeting finishes
-
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          const el = entry.target;
-          el.style.animationDelay = `${globalDelay}s`;
-          el.classList.add('show');
-          globalDelay += 0.15;
-          observer.unobserve(el);
-        }
-      });
-    }, { threshold: 0.1, rootMargin: '0px 0px -30px 0px' });
-
-    elements.forEach(el => observer.observe(el));
-
-    // ================================================================
-    //  3. TERMINAL LINE-BY-LINE TYPING
-    // ================================================================
-    const terminalEl = document.getElementById('terminal');
-    const termLines = document.querySelectorAll('.term-line');
-
-    const termObserver = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          // Add glow to terminal
-          setTimeout(() => terminalEl.classList.add('glow'), 600);
-
-          // Type each line with stagger
-          termLines.forEach((line, i) => {
-            setTimeout(() => line.classList.add('typed'), 700 + i * 280);
-          });
-          termObserver.unobserve(entry.target);
-        }
-      });
-    }, { threshold: 0.4 });
-
-    termObserver.observe(document.getElementById('terminalBody'));
-
-    // ================================================================
-    //  4. COOKIE BANNER — smooth entrance after 3s
-    // ================================================================
-    setTimeout(() => {
-      document.getElementById('cookieBanner').classList.add('show');
-    }, 3000);
-
-    // ================================================================
-    //  5. TAB TITLE CHANGES
-    // ================================================================
-    const titles = [
-      { time: 15000, text: "...you're still here?" },
-      { time: 30000, text: "okay, fine. stay." },
-      { time: 60000, text: "it's been a minute. literally." },
-      { time: 120000, text: "bro." },
-      { time: 180000, text: "i'm running out of titles." },
-      { time: 300000, text: "you win. i give up." },
-    ];
-
-    titles.forEach(({ time, text }) => {
-      setTimeout(() => { document.title = text; }, time);
+  // ---- hover flip: label rolls up, an identical copy rolls in from below ----
+  Array.prototype.forEach.call(sc.querySelectorAll('[data-flip]'), function (el) {
+    var label = el.textContent.trim();
+    if (!label) return;
+    el.textContent = '';
+    var clip = document.createElement('span');
+    clip.style.cssText = 'display:block; overflow:hidden; height:1.25em; line-height:1.25';
+    var roll = document.createElement('span');
+    roll.style.cssText = 'display:block; transition:transform .45s ' + EASE;
+    [label, label].forEach(function (t) {
+      var line = document.createElement('span');
+      line.textContent = t;
+      line.style.cssText = 'display:block; white-space:nowrap';
+      roll.appendChild(line);
     });
+    clip.appendChild(roll);
+    el.appendChild(clip);
+    el.addEventListener('mouseenter', function () { roll.style.transform = 'translateY(-50%)'; });
+    el.addEventListener('mouseleave', function () { roll.style.transform = 'translateY(0)'; });
+  });
 
-    document.addEventListener('visibilitychange', () => {
-      if (document.hidden) document.title = "come back :(";
+  // ---- responsive: swap in data-mob overrides below MOB px ----
+  var _mob = null;
+  function applyMob() {
+    var mob = isMob();
+    if (mob === _mob) return;
+    _mob = mob;
+    Array.prototype.forEach.call(sc.querySelectorAll('[data-mob]'), function (el) {
+      if (el.dataset.mobBase == null) el.dataset.mobBase = el.getAttribute('style') || '';
+      el.setAttribute('style', mob ? el.dataset.mobBase + ';' + el.dataset.mob : el.dataset.mobBase);
     });
+  }
+  applyMob();
+  paintCaps();
 
-    // ================================================================
-    //  6. TIME WASTED COUNTER
-    // ================================================================
-    const startTime = Date.now();
-    const timerEl = document.getElementById('timer');
-    const timerMessages = [
-      { at: 0,   text: (s) => `You've been here for ${s} seconds. The developer spent fewer building this.` },
-      { at: 30,  text: (s) => `${s} seconds. That's ${s} seconds of your life you're not getting back.` },
-      { at: 60,  text: (s) => `${s} seconds now. Your screen time report is going to be embarrassing.` },
-      { at: 120, text: (s) => `${Math.floor(s/60)} minutes. At this point you could've learned a chord on guitar.` },
-      { at: 300, text: (s) => `${Math.floor(s/60)} minutes. I'm genuinely concerned about you.` },
-    ];
+  // ---- loader: count to 100, then the whole panel slides away ----
+  (function runLoader() {
+    var t0 = performance.now();
+    var dur = 1500;
+    var tick = function (now) {
+      var p = clamp((now - t0) / dur, 0, 1);
+      var e = 1 - Math.pow(1 - p, 3);
+      if (loadNum) loadNum.textContent = String(Math.round(e * 100));
+      if (loadBar) loadBar.style.width = (e * 100) + '%';
+      if (p < 1) return requestAnimationFrame(tick);
+      setTimeout(function () {
+        if (loader) {
+          loader.style.transform = 'translateY(-100%)';
+          setTimeout(function () {
+            if (loader && loader.parentNode) loader.parentNode.removeChild(loader);
+            loader = null;
+          }, 950);
+        }
+      }, 200);
+    };
+    requestAnimationFrame(tick);
+  })();
 
-    setInterval(() => {
-      const seconds = Math.floor((Date.now() - startTime) / 1000);
-      if (seconds < 5) return;
-      const msg = [...timerMessages].reverse().find(m => seconds >= m.at);
-      if (msg) timerEl.textContent = msg.text(seconds);
-    }, 1000);
+  var reveals = Array.prototype.slice.call(sc.querySelectorAll('[data-reveal]'));
+  reveals.forEach(function (el) {
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(32px)';
+    el.style.transition = 'opacity .6s ' + EASE + ', transform .7s ' + EASE;
+  });
 
-    // ================================================================
-    //  7. LEAVE BUTTON — dodges with personality & spring physics
-    //     Desktop: 1D horizontal dodge on hover
-    //     Mobile: 2D whack-a-mole dodge on tap (anywhere in wrapper)
-    // ================================================================
-    const btn = document.getElementById('leaveBtn');
-    const wrapper = btn.parentElement;
-    const gaveUp = document.getElementById('gaveUpText');
-    let dodgeCount = 0;
-    let surrendered = false;
-    let currentX = 0;
-    let currentY = 0;
-    let dodgeLock = false;
-    const isMobile = ('ontouchstart' in window) || navigator.maxTouchPoints > 0;
+  var counters = Array.prototype.slice.call(sc.querySelectorAll('[data-count]'));
+  var bars = Array.prototype.slice.call(sc.querySelectorAll('[data-bar]'));
+  bars.forEach(function (b) {
+    b.style.height = '4px';
+    b.style.transition = 'height .9s ' + EASE;
+  });
+  var sparks = Array.prototype.slice.call(sc.querySelectorAll('[data-spark] polyline'));
+  sparks.forEach(function (p) {
+    var len = p.getTotalLength ? p.getTotalLength() : 300;
+    p.style.strokeDasharray = len;
+    p.style.strokeDashoffset = len;
+    p.style.transition = 'stroke-dashoffset 1.2s ' + EASE;
+  });
 
-    const dodgeMessages = [
-      "Nope.",
-      "Not that easy.",
-      "Nice try though.",
-      "You really thought?",
-      "I can do this all day.",
-      "This button has trust issues.",
-      "Have you tried closing the tab instead?",
-      "Your hand-eye coordination is... brave.",
-      "Almost! Just kidding. Not even close.",
-      "Okay, I respect the grind.",
-    ];
+  var stacks = Array.prototype.slice.call(sc.querySelectorAll('[data-stack]'));
+  stacks.forEach(function (el) {
+    el.style.transition = 'transform .45s ' + EASE + ', filter .45s ease, opacity .45s ease';
+    el.style.willChange = 'transform';
+  });
+  var links = nav ? Array.prototype.slice.call(nav.querySelectorAll('[data-nav]')) : [];
+  var sections = ['work', 'numbers', 'caps'].map(function (id) { return sc.querySelector('#' + id); }).filter(Boolean);
 
-    const surrenderRoasts = [
-      "Took you long enough.",
-      "My grandma would've caught that faster. She's 87.",
-      "I'd slow-clap but I don't have hands.",
-    ];
+  // ---- odometer: each digit column rolls up to its final value ----
+  function buildOdometer(el) {
+    var target = parseFloat(el.dataset.count);
+    var text = (el.dataset.prefix || '') + target + (el.dataset.suffix || '');
+    el.textContent = '';
+    el.style.display = 'inline-flex';
+    el.style.alignItems = 'flex-start';
+    el.style.fontVariantNumeric = 'tabular-nums';
+    el.style.fontFeatureSettings = "'tnum' 1";
+    var rolls = [];
+    Array.prototype.forEach.call(text, function (ch, i) {
+      if (!/[0-9]/.test(ch)) {
+        var s = document.createElement('span');
+        s.textContent = ch;
+        s.style.cssText = 'display:inline-block; opacity:0; transform:translateY(.18em); transition:opacity .4s ease ' + (0.12 + i * 0.04) + 's, transform .5s ' + EASE + ' ' + (0.12 + i * 0.04) + 's';
+        el.appendChild(s);
+        rolls.push(function () { s.style.opacity = '1'; s.style.transform = 'none'; });
+        return;
+      }
+      var clip = document.createElement('span');
+      clip.style.cssText = 'display:inline-block; overflow:hidden; height:1em; line-height:1; width:.58em; text-align:center';
+      var col = document.createElement('span');
+      col.style.cssText = 'display:block; transform:translateY(0); transition:transform 1.15s ' + EASE + ' ' + (i * 0.07) + 's';
+      var spins = 2;
+      for (var sp = 0; sp < spins; sp++) for (var d = 0; d < 10; d++) {
+        var g = document.createElement('span');
+        g.textContent = String(d);
+        g.style.cssText = 'display:block; line-height:1';
+        col.appendChild(g);
+      }
+      var last = document.createElement('span');
+      last.textContent = ch;
+      last.style.cssText = 'display:block; line-height:1';
+      col.appendChild(last);
+      clip.appendChild(col);
+      el.appendChild(clip);
+      rolls.push(function () { col.style.transform = 'translateY(-' + (spins * 10) + 'em)'; });
+    });
+    requestAnimationFrame(function () { requestAnimationFrame(function () { rolls.forEach(function (r) { r(); }); }); });
+  }
 
-    function getMaxX() {
-      return Math.max(0, wrapper.offsetWidth - btn.offsetWidth);
+  // ---- tool rails: drift on their own, nudged by scroll, smoothed with a lerp ----
+  var driftA = 0, driftB = 0, scrollA = 0, scrollB = 0, easedA = 0, easedB = 0, lastT = performance.now();
+  var wrap = function (x, w) { while (x <= -w) x += w; while (x > 0) x -= w; return x; };
+  var frame = function (now) {
+    var dt = Math.min(64, now - lastT) / 1000;
+    lastT = now;
+    driftA -= 26 * dt * MOTION;
+    driftB += 26 * dt * MOTION;
+    easedA += (scrollA - easedA) * 0.075;
+    easedB += (scrollB - easedB) * 0.075;
+    if (railA) {
+      var wA = railA.scrollWidth / 2 || 1;
+      driftA = wrap(driftA, wA);
+      railA.style.transform = 'translate3d(' + (driftA + easedA) + 'px,0,0)';
+    }
+    if (railB) {
+      var wB = railB.scrollWidth / 2 || 1;
+      driftB = wrap(driftB, wB);
+      railB.style.transform = 'translate3d(' + (driftB + easedB) + 'px,0,0)';
+    }
+    requestAnimationFrame(frame);
+  };
+  var setRails = function (p) { scrollA = -p * 320; scrollB = p * 320; };
+  requestAnimationFrame(frame);
+
+  function onScroll() {
+    var vh = sc.clientHeight;
+    var top = sc.scrollTop;
+    var max = sc.scrollHeight - vh;
+
+    if (progress) progress.style.transform = 'scaleX(' + (max > 0 ? top / max : 0) + ')';
+
+    if (bar) {
+      var solid = top > vh * 0.7;
+      bar.style.background = solid ? 'rgba(7,7,7,.82)' : 'transparent';
+      bar.style.backdropFilter = solid ? 'blur(12px)' : 'none';
     }
 
-    function getMaxY() {
-      return Math.max(0, wrapper.offsetHeight - btn.offsetHeight - 30);
+    var p = clamp(top / Math.max(1, vh), 0, 1);
+    if (hero) hero.style.opacity = String(clamp(1 - p * 1.6, 0, 1));
+
+    if (railWrap) {
+      var r = railWrap.getBoundingClientRect();
+      setRails(clamp((vh - r.top) / (vh + r.height), 0, 1) * 2 - 1);
     }
 
-    function dodge(fromX, fromY) {
-      if (surrendered || dodgeLock) return;
-      dodgeLock = true;
-      setTimeout(() => { dodgeLock = false; }, isMobile ? 180 : 250);
-
-      const maxX = getMaxX();
-      if (maxX <= 10) return;
-
-      dodgeCount++;
-
-      // ---- Pick new X away from touch/cursor ----
-      const rect = wrapper.getBoundingClientRect();
-      const relX = (typeof fromX === 'number') ? fromX - rect.left : currentX;
-      const midX = maxX / 2;
-      let newX;
-
-      if (relX < midX) {
-        newX = midX + Math.random() * (maxX - midX);
-      } else {
-        newX = Math.random() * midX;
-      }
-      if (Math.abs(newX - currentX) < maxX * 0.25) {
-        newX = currentX < midX ? maxX : 0;
-      }
-      newX = Math.max(0, Math.min(newX, maxX));
-
-      // ---- Mobile: also pick new Y for 2D dodge ----
-      let newY = 0;
-      if (isMobile) {
-        const maxY = getMaxY();
-        if (maxY > 15) {
-          const relY = (typeof fromY === 'number') ? fromY - rect.top : currentY;
-          const midY = maxY / 2;
-          if (relY < midY) {
-            newY = midY + Math.random() * (maxY - midY);
-          } else {
-            newY = Math.random() * midY;
-          }
-          if (Math.abs(newY - currentY) < maxY * 0.2) {
-            newY = currentY < midY ? maxY : 0;
-          }
-          newY = Math.max(0, Math.min(newY, maxY));
-        }
-      }
-
-      // ---- Dodge animation style varies ----
-      const style = dodgeCount % 5;
-      const t = (x, y) => isMobile ? `translate(${x}px, ${y}px)` : `translateX(${x}px)`;
-
-      if (style === 0 && dodgeCount > 3) {
-        // TELEPORT: shrink → vanish → reappear
-        btn.style.transition = 'transform 0.12s ease, opacity 0.12s ease';
-        btn.style.transform = t(currentX, currentY) + ' scale(0.3)';
-        btn.style.opacity = '0';
-        setTimeout(() => {
-          btn.style.transition = 'none';
-          currentX = newX; currentY = newY;
-          btn.style.transform = t(newX, newY) + ' scale(0.3)';
-          requestAnimationFrame(() => {
-            requestAnimationFrame(() => {
-              btn.style.transition = 'transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.15s ease';
-              btn.style.transform = t(newX, newY) + ' scale(1)';
-              btn.style.opacity = '1';
-            });
-          });
-        }, 140);
-      } else if (style === 3 && dodgeCount > 2) {
-        // TILT: slide with rotation
-        const tilt = (newX > currentX) ? 6 : -6;
-        btn.style.transition = 'transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)';
-        currentX = newX; currentY = newY;
-        btn.style.transform = t(newX, newY) + ` rotate(${tilt}deg)`;
-        setTimeout(() => {
-          btn.style.transition = 'transform 0.3s ease';
-          btn.style.transform = t(newX, newY) + ' rotate(0deg)';
-        }, 350);
-      } else {
-        // SPRING SLIDE
-        btn.style.transition = 'transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)';
-        currentX = newX; currentY = newY;
-        btn.style.transform = t(newX, newY);
-      }
-
-      // ---- Button text evolves ----
-      if (dodgeCount === 4) btn.textContent = "Leave (please?)";
-      if (dodgeCount === 7) btn.textContent = "LEAVE.";
-      if (dodgeCount === 9) btn.textContent = "ok wait stop";
-
-      // ---- Show dodge message ----
-      if (dodgeCount <= dodgeMessages.length) {
-        gaveUp.textContent = dodgeMessages[dodgeCount - 1];
-        gaveUp.classList.add('visible');
-      }
-
-      // ---- Surrender after 10 ----
-      if (dodgeCount >= 10) {
-        surrendered = true;
-        setTimeout(() => {
-          btn.style.transition = 'all 0.6s cubic-bezier(0.22, 1, 0.36, 1)';
-          btn.style.transform = 'translate(0, 0) scale(1) rotate(0deg)';
-          btn.style.opacity = '1';
-          btn.textContent = "Fine, you win";
-          btn.style.background = '#333';
-          btn.style.color = '#888';
-          btn.style.boxShadow = 'none';
-          btn.style.cursor = 'default';
-          gaveUp.textContent = surrenderRoasts[Math.floor(Math.random() * surrenderRoasts.length)];
-        }, 450);
-      }
-    }
-
-    // ---- Desktop: hover on button ----
-    btn.addEventListener('mouseenter', (e) => {
-      if (!surrendered) dodge(e.clientX, e.clientY);
+    // stacked work cards: each card settles back and dims as the next slides over it
+    stacks.forEach(function (el, i) {
+      var rc = el.getBoundingClientRect();
+      var over = clamp((vh - rc.bottom) / (vh * 0.75), 0, 1);
+      var e = over * over * (3 - 2 * over);
+      el.style.transform = 'perspective(1400px) translateY(' + (-e * 26) + 'px) scale(' + (1 - e * 0.085) + ')';
+      el.style.filter = 'brightness(' + (1 - e * 0.3) + ')';
+      el.style.opacity = String(1 - e * 0.12);
+      el.style.zIndex = String(i);
     });
 
-    // ---- Mobile: tap ANYWHERE in the wrapper (whack-a-mole) ----
-    if (isMobile) {
-      wrapper.addEventListener('touchstart', (e) => {
-        if (!surrendered) {
-          e.preventDefault();
-          const t = e.touches[0];
-          dodge(t.clientX, t.clientY);
-        }
-      }, { passive: false });
-    }
-
-    // ---- Click: post-surrender comedy sequence ----
-    let postClickStage = 0;
-    btn.addEventListener('click', () => {
-      if (surrendered && dodgeCount >= 10) {
-        postClickStage++;
-        if (postClickStage === 1) {
-          btn.textContent = "...just kidding";
-        } else if (postClickStage === 2) {
-          btn.textContent = "There's nowhere to go";
-        } else if (postClickStage === 3) {
-          btn.textContent = "This is it. This is the whole site.";
-          btn.style.color = '#555';
-        } else if (postClickStage === 4) {
-          btn.textContent = "Stop clicking me.";
-        } else if (postClickStage >= 5) {
-          btn.textContent = "...";
-          btn.style.transition = 'opacity 2s ease';
-          btn.style.opacity = '0.3';
-          gaveUp.textContent = "You broke it. Happy now?";
-        }
-      } else if (!surrendered) {
-        btn.textContent = "Wait, how did you\u2014";
-        btn.style.background = '#333';
-        btn.style.color = '#888';
-        btn.style.boxShadow = 'none';
-        surrendered = true;
-        setTimeout(() => { btn.textContent = "Doesn't matter. There's no exit."; }, 2000);
+    reveals.forEach(function (el) {
+      if (el.dataset.shown) return;
+      if (el.getBoundingClientRect().top < vh * 0.88) {
+        el.dataset.shown = '1';
+        el.style.opacity = '1';
+        el.style.transform = 'none';
       }
     });
 
-    // ================================================================
-    //  8. COOKIE BANNER INTERACTION
-    // ================================================================
-    const cookieBtn = document.getElementById('cookieBtn');
-    const bannerEl = document.getElementById('cookieBanner');
-    let cookieClicks = 0;
-
-    cookieBtn.addEventListener('click', () => {
-      cookieClicks++;
-      if (cookieClicks === 1) {
-        bannerEl.querySelector('.cookie-text').innerHTML =
-          "Great. Your acknowledgment of the emptiness has been noted. You may now continue staring at nothing.";
-        cookieBtn.textContent = "I'm okay with this";
-      } else if (cookieClicks === 2) {
-        bannerEl.style.transform = 'translateY(100%)';
-        bannerEl.style.opacity = '0';
-        bannerEl.style.transition = 'transform 0.5s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.4s ease';
-      }
+    counters.forEach(function (el) {
+      if (el.dataset.done) return;
+      if (el.getBoundingClientRect().top < vh * 0.9) { el.dataset.done = '1'; buildOdometer(el); }
+    });
+    bars.forEach(function (el) {
+      if (el.dataset.done) return;
+      if (el.getBoundingClientRect().top < vh * 0.9) { el.dataset.done = '1'; el.style.height = el.dataset.bar + '%'; }
+    });
+    sparks.forEach(function (el) {
+      if (el.dataset.done) return;
+      if (el.getBoundingClientRect().top < vh * 0.9) { el.dataset.done = '1'; el.style.strokeDashoffset = '0'; }
     });
 
-    // ================================================================
-    //  9. CONSOLE EASTER EGGS
-    // ================================================================
-    console.log(
-      '%c Hey, you opened DevTools! ',
-      'background: #fff; color: #000; font-size: 14px; font-weight: bold; padding: 8px 12px; border-radius: 4px;'
-    );
-    console.log(
-      '%c Looking for bugs? There are no bugs. Only "undocumented features." ',
-      'color: #888; font-size: 11px;'
-    );
-    console.log(
-      '%c PS: The entire site is one HTML file. Yes, that\'s the tech stack. Fight me. ',
-      'color: #555; font-size: 11px;'
-    );
-  </script>
+    var active = null;
+    sections.forEach(function (s) { if (s.getBoundingClientRect().top <= vh * 0.42) active = s.id; });
+    links.forEach(function (l) { l.classList.toggle('on', l.dataset.nav === active); });
+  }
 
+  sc.addEventListener('scroll', onScroll, { passive: true });
+  window.addEventListener('resize', function () { applyMob(); paintCaps(); onScroll(); });
+  requestAnimationFrame(onScroll);
+})();
+</script>
 </body>
 </html>
