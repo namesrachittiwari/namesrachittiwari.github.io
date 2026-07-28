@@ -65,3 +65,15 @@ disappear over HTTP; they are noise. Check `document.scrollingElement.scrollWidt
 
 Work happens on `claude/job-hunt-frontend-*` branches, pushed with
 `git push -u origin <branch>`. Never commit to `master` directly.
+
+## Pokie (`/pokie/`)
+
+Autonomous job-finding agent UI built from the "Pokie — Design Handoff" spec.
+Dark theme: `#070707` bg, `#0B0B0B` panels, Poppins (own copy in
+`pokie/fonts/`). Semantic colours: pink `#EB6BA8` (Pokie/destructive), green
+`#1CE15F` (matched/auto), blue `#4791FF` (running), yellow `#ECE42E` (needs
+you). `index.html` = shell + all CSS; `pokie.js` = data (verbatim from the
+handoff view model), hash router (`#welcome ... #history`), screen renderers,
+run simulation, interactions. Cold screens (welcome/onboard) render without
+the rail. Below 900px the rail collapses to the 5-tab mobile bar and jobs
+becomes list→detail push; `#brief` is the mobile morning-brief screen.
