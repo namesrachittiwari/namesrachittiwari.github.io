@@ -19,6 +19,8 @@
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
   html { scroll-behavior: smooth; color-scheme: dark; }
+  @media (prefers-color-scheme: dark) { html { color-scheme: dark; background: #070707; } }
+  @media (prefers-color-scheme: light) { html { color-scheme: dark; background: #070707; } }
   body { margin: 0; background: #070707; color: #fff; font-family: 'Poppins', system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
   a { color: #EB6BA8; text-decoration: none; }
   a:hover { color: #fff; }
@@ -81,6 +83,21 @@
     .btn { width:100%; text-align:center }
     .hero__h1 { font-size:38px; letter-spacing:-1px }
   }
+  /* desktop-site-mode on a phone: same mobile rules, keyed off the class */
+  html.is-compact .hero { height:auto; min-height:100vh; min-height:100dvh }
+  html.is-compact .hero__inner { height:auto; min-height:100vh; min-height:100dvh; align-items:flex-start; padding:88px 16px 192px }
+  html.is-compact .hero__content { gap:16px }
+  html.is-compact .hero__sub { font-size:15.5px }
+  html.is-compact .btn--primary { padding:13px 26px }
+  html.is-compact .btn--ghost { padding:12px 25px }
+  html.is-compact .hero__pills { top:auto; bottom:0; height:176px }
+  html.is-compact .pill { font-size:12.5px; padding:8px 15px }
+  html.is-compact .hero__content { padding:0 }
+  html.is-compact .hero__ctas { flex-direction:column; width:100% }
+  html.is-compact .glow-ring { width:100% }
+  html.is-compact .btn { width:100%; text-align:center }
+  html.is-compact .hero__h1 { font-size:38px; letter-spacing:-1px }
+
   @media (prefers-reduced-motion:reduce) {
     .glow-ring::before, .glow-ring::after { animation:none }
   }
@@ -459,7 +476,7 @@
         </div>
       </div>
       <div data-mob="flex-direction:column; gap:6px; padding:22px 4px 0" style="display:flex; justify-content:space-between; font-size:14px; color:#9A9A9A; padding:30px 10px 0">
-        <span>© 2026 Rachit Tiwari <span style="opacity:.45; font-size:12px">· b9</span></span><span>Bangalore, India</span><span>Open to new roles</span>
+        <span>© 2026 Rachit Tiwari <span style="opacity:.45; font-size:12px">· b10</span></span><span>Bangalore, India</span><span>Open to new roles</span>
       </div>
     </div>
   </div>
@@ -518,7 +535,11 @@
   ];
   var FILLS = ['#1CE15F', '#4791FF', '#ECE42E', '#EB6BA8', '#1CE15F', '#4791FF'];
 
-  var isMob = function () { return (window.innerWidth || sc.clientWidth) < MOB; };
+  var deviceW = function () {
+    return Math.min(window.innerWidth || sc.clientWidth || 9999, (window.screen && screen.width) || 9999);
+  };
+  var isMob = function () { return deviceW() < MOB; };
+  if (deviceW() < MOB) document.documentElement.classList.add('is-compact');
 
   // ---- tool rails: list rendered twice so the drift can wrap seamlessly ----
   function buildRail(el, list, offset) {
