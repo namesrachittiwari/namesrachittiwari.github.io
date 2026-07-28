@@ -46,27 +46,35 @@ const NAV = [
 
 const JOBS = [
   { id: 'sarvam', initials: 'SA', color: GREEN, role: 'Senior PM, Agents', company: 'Sarvam AI', meta: 'Series B · Bangalore', comp: '₹82–98L', score: '92',
+    salMin: 82, postedDays: 2, domain: 'ai', warm: true, blrRemote: true,
     note: 'warm path', noteFg: YELLOW, noteBg: 'rgba(236,226,46,.14)', opacity: 1, full: true,
     read: 'You would own the eval loop end to end — offline harness, annotation, release gate. Two PMs report in. The posting buries this under four paragraphs of boilerplate.' },
   { id: 'zepto', initials: 'ZP', color: GREEN, role: 'Group PM, Growth', company: 'Zepto', meta: 'Series F · Bangalore', comp: '₹90L–1.1Cr', score: '89',
+    salMin: 90, postedDays: 1, domain: 'consumer', blrRemote: true,
     note: 'applied', noteFg: GREEN, noteBg: 'rgba(28,225,95,.14)', opacity: 1,
     read: 'Growth pod with real levers — pricing, supply density, retention. Pokie applied 6 hours after posting with your marketplace variant.' },
   { id: 'cred', initials: 'CR', color: BLUE, role: 'Group PM, Money', company: 'Cred', meta: 'Series F · Bangalore', comp: 'band unclear', score: '78',
+    salMin: null, postedDays: 3, domain: 'fintech', blrRemote: true,
     note: 'scoring', noteFg: BLUE, noteBg: 'rgba(71,145,255,.14)', opacity: 1,
     read: 'Looks like a fit on scope but the JD reads two levels down on comp. Pokie is checking Levels for their band before finishing the score.' },
   { id: 'razorpay', initials: 'RZ', color: BLUE, role: 'Principal PM, Payments', company: 'Razorpay', meta: 'Series F · Bangalore', comp: '₹85L+', score: '76',
+    salMin: 85, postedDays: 9, domain: 'fintech', blrRemote: true,
     note: '', opacity: 1,
     read: 'Deep payments infra scope. Solid, not thrilling — nothing here touches an eval loop, which is why it scores below the Sarvam role.' },
   { id: 'postman', initials: 'PS', color: YELLOW, role: 'Senior PM, Seller', company: 'Postman', meta: 'Series D · Remote', comp: '₹78L', score: '71',
+    salMin: 78, postedDays: 12, domain: 'devtools', blrRemote: true,
     note: '', opacity: 1,
     read: 'Fully remote and stable, but ₹78L sits under your hard bar. It survives only because the recruiter hinted the band flexes for the right person.' },
   { id: 'meesho', initials: 'MS', color: YELLOW, role: 'Senior PM, Discovery', company: 'Meesho', meta: 'Series F · Bangalore', comp: '₹80L', score: '64',
+    salMin: 80, postedDays: 14, domain: 'consumer', blrRemote: true,
     note: 'you skipped', noteFg: PINK, noteBg: 'rgba(235,107,168,.14)', opacity: 1,
     read: 'You skipped this one on 14 Jul. Pokie keeps it visible so the decision stays inspectable — say the word and it disappears for good.' },
   { id: 'freshworks', initials: 'FW', color: '#9A9A9A', role: 'Director PM, Platform', company: 'Freshworks', meta: 'Public · Chennai', comp: '₹68L', score: '52',
+    salMin: 68, postedDays: 21, domain: 'devtools', blrRemote: false,
     note: 'under your bar', noteFg: '#9A9A9A', noteBg: '#1a1a1a', opacity: .55, dropped: true,
     read: '₹68L against your ₹80L hard bar. Kept visible so you can see what the bar is costing you.' },
   { id: 'coindcx', initials: 'CD', color: '#9A9A9A', role: 'Principal PM', company: 'CoinDCX', meta: 'Series C · Remote', comp: '₹95L', score: '—',
+    salMin: 95, postedDays: 247, domain: 'crypto', blrRemote: true,
     note: 'dealbreaker: crypto', noteFg: '#9A9A9A', noteBg: '#1a1a1a', opacity: .45, dropped: true,
     read: 'Crypto — your dealbreaker. Never scored. Pokie hides 31 roles a week for this rule.' },
 ];
@@ -79,6 +87,27 @@ const EVERYTHING = [
   { state: 'Watching', stateBg: '#212121', stateFg: '#9A9A9A' },
   { state: 'You skipped', stateBg: 'rgba(235,107,168,.14)', stateFg: PINK },
 ];
+
+/* Filters and sorts are real: they run against job fields, not just chip styling. */
+const FILTER_FNS = [
+  j => j.warm === true,                                  // Has a warm path
+  j => j.salMin !== null && j.salMin >= 80,              // ₹80L+
+  j => j.blrRemote,                                      // Bangalore or remote
+  j => !/Seed|Series A(?![–-])/.test(j.meta),            // Series B+
+  j => j.postedDays <= 7,                                // Posted this week
+  j => j.domain === 'ai',                                // AI / agents
+];
+const SORTS = [
+  { label: 'Newest first', fn: (a, b) => a.postedDays - b.postedDays },
+  { label: 'Best fit', fn: (a, b) => (parseInt(b.score) || 0) - (parseInt(a.score) || 0) },
+  { label: 'Comp first', fn: (a, b) => (b.salMin || 0) - (a.salMin || 0) },
+];
+function filteredJobs() {
+  let list = [...JOBS];
+  Object.keys(state.jobFilter).forEach(k => { if (state.jobFilter[k] && FILTER_FNS[k]) list = list.filter(FILTER_FNS[k]); });
+  list.sort(SORTS[state.sort || 0].fn);
+  return list;
+}
 
 const SCORE_BARS = [
   { label: 'Domain fit', value: '96', color: GREEN, width: '96%' },
@@ -432,7 +461,8 @@ const SCREENS = {
 
   jobs: () => {
     const everything = state.jobMode === 1;
-    const sel = JOBS.find(j => j.id === state.selectedJob) || JOBS[0];
+    const list = filteredJobs();
+    const sel = list.find(j => j.id === state.selectedJob) || JOBS.find(j => j.id === state.selectedJob) || list[0] || JOBS[0];
     const filters = ['Has a warm path', '₹80L+', 'Bangalore or remote', 'Series B+', 'Posted this week', 'AI / agents'];
     return `
     <div class="jobs rise ${state.mobileDetail ? 'show-detail' : ''}">
@@ -444,7 +474,7 @@ const SCREENS = {
           </div>
           <div class="jobs-note">
             <span class="n">${everything ? 'Everything that passed your dealbreakers.' : 'Fit-sorted. Pokie read every one in full.'}</span>
-            <button class="sort-pill" data-toast="Sort: newest · best fit · comp · warm paths first.">Newest first ⌄</button>
+            <button class="sort-pill" data-sort>${SORTS[state.sort || 0].label} ⌄</button>
           </div>
         </div>
         <div class="filter-row">
@@ -459,9 +489,14 @@ const SCREENS = {
       </div>
       <div class="jobs-body">
         <div class="job-list">
-          ${JOBS.map((j, i) => {
-            const on = j.id === state.selectedJob;
-            const st = everything && EVERYTHING[i] ? EVERYTHING[i] : null;
+          ${!list.length ? `<div style="padding:40px 22px;text-align:center;display:flex;flex-direction:column;gap:6px">
+              <span style="font-size:16px;font-weight:600;color:#9A9A9A">Nothing matches those filters.</span>
+              <span style="font-size:13px;color:#5c5c5c">Your bar is intact — Pokie just has nothing worthy today. Drop a chip.</span>
+            </div>` : ''}
+          ${list.map(j => {
+            const on = j.id === sel.id;
+            const idx = JOBS.indexOf(j);
+            const st = everything && EVERYTHING[idx] ? EVERYTHING[idx] : null;
             const note = st ? st.state : j.note;
             const noteFg = st ? st.stateFg : j.noteFg;
             const noteBg = st ? st.stateBg : j.noteBg;
@@ -795,7 +830,20 @@ function go(screen) {
   render();
 }
 
+/* State survives refresh — teach rules, forgotten memories, undone actions, filters. */
+const PERSIST = ['jobMode', 'jobFilter', 'selectedJob', 'teach', 'cv', 'histTab', 'undone', 'forgotten', 'sort'];
+function saveState() {
+  try { localStorage.setItem('pokie-state', JSON.stringify(Object.fromEntries(PERSIST.map(k => [k, state[k]])))); } catch (e) {}
+}
+function loadState() {
+  try {
+    const raw = JSON.parse(localStorage.getItem('pokie-state') || '{}');
+    PERSIST.forEach(k => { if (raw[k] !== undefined) state[k] = raw[k]; });
+  } catch (e) {}
+}
+
 function render() {
+  saveState();
   const cold = COLD.includes(state.screen);
   app.classList.toggle('cold', cold);
   rail.innerHTML = cold ? '' : railHTML();
@@ -831,6 +879,8 @@ document.addEventListener('click', e => {
   }
   const mode = e.target.closest('[data-mode]');
   if (mode && e.target.closest('.mode-seg')) { state.jobMode = +mode.dataset.mode; render(); return; }
+  const srt = e.target.closest('[data-sort]');
+  if (srt) { state.sort = ((state.sort || 0) + 1) % SORTS.length; render(); return; }
   const filt = e.target.closest('[data-filter]');
   if (filt) { state.jobFilter[filt.dataset.filter] = !state.jobFilter[filt.dataset.filter]; render(); return; }
   const teach = e.target.closest('[data-teach]');
@@ -953,6 +1003,7 @@ function toast(text, actionLabel, action) {
 }
 
 /* ================= Boot ================= */
+loadState();
 const initial = location.hash.replace('#', '');
 if (SCREENS[initial]) state.screen = initial;
 window.addEventListener('hashchange', () => {
