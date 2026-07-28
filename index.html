@@ -560,6 +560,68 @@
       .greeting .word { opacity: 1; transform: none; filter: none; }
       .term-line { opacity: 1; transform: none; filter: none; }
     }
+
+    /* Pokie card — the one link on this page that goes somewhere useful */
+    .pokie-card {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin: 4px 0 44px;
+      padding: 18px 20px;
+      background: #0a0a0a;
+      border: 1px solid #1c1c1c;
+      border-radius: 10px;
+      text-decoration: none;
+      transition: border-color .25s ease, transform .25s ease;
+    }
+    .pokie-card:hover {
+      border-color: rgba(235, 107, 168, .55);
+      transform: translateY(-2px);
+    }
+    .pokie-mark {
+      width: 44px;
+      height: 44px;
+      flex-shrink: 0;
+      transition: transform .3s cubic-bezier(.34, 1.56, .64, 1);
+    }
+    .pokie-card:hover .pokie-mark { transform: rotate(-8deg) scale(1.08); }
+    .pokie-eye {
+      transform-origin: center;
+      transform-box: fill-box;
+      animation: pokie-blink 3.8s infinite;
+    }
+    .pokie-eye.delay { animation-delay: .08s; }
+    @keyframes pokie-blink {
+      0%, 91%, 100% { transform: scaleY(1); }
+      94% { transform: scaleY(.1); }
+    }
+    .pokie-copy { flex: 1; min-width: 0; }
+    .pokie-name {
+      display: block;
+      color: #fff;
+      font-weight: 700;
+      font-size: .95rem;
+    }
+    .pokie-desc {
+      display: block;
+      color: #888;
+      font-size: .85rem;
+      line-height: 1.5;
+      margin-top: 2px;
+    }
+    .pokie-go {
+      color: #EB6BA8;
+      font-size: .85rem;
+      font-weight: 600;
+      flex-shrink: 0;
+      opacity: .8;
+      transition: opacity .2s ease, transform .2s ease;
+    }
+    .pokie-card:hover .pokie-go { opacity: 1; transform: translateX(3px); }
+    @media (prefers-reduced-motion: reduce) {
+      .pokie-eye { animation: none; }
+      .pokie-card, .pokie-mark, .pokie-go { transition: none; }
+    }
   </style>
 </head>
 <body>
@@ -622,6 +684,26 @@
     <p class="subtext anim">
       (says the guy who bought a domain instead of going to therapy)
     </p>
+
+    <!-- Pokie -->
+    <p class="line anim">
+      In my defence, the domain wasn't a total waste. I built a robot
+      that hunts jobs while I sleep. It blinks. Click it.
+    </p>
+
+    <a class="pokie-card anim" href="https://pokie.rachittiwari.com" target="_blank" rel="noopener"
+       aria-label="Open Pokie — a fully autonomous job-finding agent">
+      <svg class="pokie-mark" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <g transform="rotate(45 12 12)"><rect x="3.6" y="3.6" width="16.8" height="16.8" rx="5.4" fill="#EB6BA8"/></g>
+        <ellipse class="pokie-eye" cx="9.1" cy="12" rx="1.35" ry="2.6" fill="#fff"/>
+        <ellipse class="pokie-eye delay" cx="14.9" cy="12" rx="1.35" ry="2.6" fill="#fff"/>
+      </svg>
+      <span class="pokie-copy">
+        <span class="pokie-name">Pokie</span>
+        <span class="pokie-desc">A fully autonomous job-finding agent. It hunts, you only decide. Currently more employable than its creator.</span>
+      </span>
+      <span class="pokie-go">visit &rarr;</span>
+    </a>
 
     <footer class="footer anim">
       <p>&copy; 2026 Rachit Tiwari &middot; Built with mass delusion and a domain he didn't need</p>
