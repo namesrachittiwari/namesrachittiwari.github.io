@@ -1,15 +1,115 @@
 # namesrachittiwari.github.io
 
-Personal GitHub Pages site for Rachit Tiwari. Root `index.html` is the personal
-landing page (dark, Inter/JetBrains Mono) — do not restyle it when working on
-other projects.
+Personal GitHub Pages site for Rachit Tiwari (rachittiwari.com). Pure static
+HTML/CSS/JS — **no build step, no framework**. Each page is self-contained.
 
-## Job Pilot (`/jobhunt/`)
+| Path | What it is | System |
+|---|---|---|
+| `/` (`index.html`) | Personal landing page | **Shared dark system** (below) |
+| `/tees` | Pokie Tees store — **not built yet**, currently 404s | Shared dark system |
+| `/jobhunt/` | Job Pilot — satirical AI job-hunt product | **Exception**: own cream system |
+| `/pokie/` | Pokie job agent (staging copy) | Shared dark system |
+
+The live Pokie is a **separate repo** — `namesrachittiwari/pokie`, `gh-pages`
+branch, serving pokie.rachittiwari.com. The `/pokie/` folder here is a second
+copy; changing one does not change the other.
+
+---
+
+## Design system — the default for this repo
+
+**Use this unless you are working inside `/jobhunt/`.** The root landing page
+and Pokie share this token set exactly; anything new (including Pokie Tees)
+inherits it.
+
+### Colour
+
+| Token | Value | Role |
+|---|---|---|
+| `--black` | `#070707` | Page background |
+| `--panel` | `#0B0B0B` | Cards, panels |
+| `--panel-hov` | `#141414` | Panel hover |
+| `--elev` | `#212121` | Raised surface |
+| `--text` | `#ffffff` | Primary text |
+| `--t2` | `#9A9A9A` | Secondary text |
+| `--t3` | `#5c5c5c` | Tertiary / disabled |
+| `--t4` | `#3a3a3a` | Faintest |
+| `--pink` | `#EB6BA8` | Pokie brand + primary accent |
+| `--green` | `#1CE15F` | Matched / auto / success |
+| `--blue` | `#4791FF` | Running / in-progress |
+| `--yellow` | `#ECE42E` | Needs-you / attention |
+| `--hair` | `rgba(255,255,255,.07)` | Hairline dividers |
+| `--border` | `rgba(255,255,255,.09)` | Default border |
+| `--bstrong` | `rgba(255,255,255,.14)` | Emphasised border |
+| `--bstronger` | `rgba(255,255,255,.22)` | Strongest border |
+
+Pink/green/blue/yellow carry **status meaning** in Pokie. Don't reuse them
+decoratively — it reads as status noise. Stay on pink + neutrals unless the
+semantics apply.
+
+### Type
+
+**Poppins, weights 400/500/600 only.** No other family anywhere in this system.
+Stack: `'Poppins', system-ui, sans-serif`. The root page loads it from Google
+Fonts; Pokie self-hosts woff2 in `pokie/fonts/`. Prefer self-hosting for new
+pages — the proxy blocks CDNs.
+
+### Shape
+
+Pills and circles are the signature — everything interactive is fully rounded,
+nothing is square. Radii in use: `999px`/`99px` (buttons, chips, tags), `50%`
+(avatars, icon chips), `9–10px` (cards, inputs), `2–6px` (bars, indicators).
+
+### Motion
+
+- Signature easing: **`cubic-bezier(.16,1,.3,1)`** (Pokie's `--ease`). Use it for
+  essentially everything.
+- Durations: `.2s` hover/colour, `.22s` label reveal, `.3s` background,
+  `.9s` loader panel.
+- Idle-animation tempo is a **4s master loop** with sub-animations phase-locked
+  to it (see the Tees launcher).
+- **Motion must always degrade**: no-JS and `prefers-reduced-motion` leave the
+  page fully readable and usable. Respected everywhere in this repo.
+
+### Breakpoint
+
+**820px** across the root page (`MOB = 820` in JS, matching media queries).
+Pokie uses 900px internally.
+
+---
+
+## Root landing page (`/`)
+
+Dark, Poppins, sticky top nav. Do not restyle it when working on other projects.
+
+Nav order: Work · Ventures · Numbers · Capabilities · Pokie mark · Tees · Get in
+touch. `data-mob="…"` attributes on elements are inline-style overrides swapped
+in below 820px by `applyMob()`; class-styled components don't need them.
+
+### Pokie Tees launcher
+
+The animated tee chip in the nav (CSS ~line 56, markup ~line 279) links to
+`/tees`. It is the only Pokie Tees asset that exists.
+
+- Brand facts it fixes: name **Pokie Tees**, tagline **"one sentence, one tee"**
+  (`aria-label`), nav label "Tees".
+- Four animations phase-locked at `4s` with the shared easing — changing one
+  duration breaks the lock.
+- `transform-origin: 50% 14%` makes the tee hang from the collar.
+- The chip is a `::before`, which paints above static children, hence the
+  explicit z-index ladder: chip 0 → tee 1 → sheen 2 → label 3.
+- Chip size is duplicated in three places (`::before`, `.tee-sheen`, the 820px
+  query) that must stay in sync.
+- The 44px `<a>` is the tap target; the visible chip is 28px to match the Pokie
+  mark beside it.
+
+---
+
+## Job Pilot (`/jobhunt/`) — design-system exception
 
 A satirical AI job-hunt product: a Yoinky-inspired marketing site wrapped around
-a ChatGPT-style app. Pure static HTML/CSS/JS — **no build step, no framework**.
-Each page is self-contained; shared assets live in `jobhunt/fonts/` and
-`jobhunt/vendor/`.
+a ChatGPT-style app. **This is the one area that does not use the dark system
+above.** Shared assets live in `jobhunt/fonts/` and `jobhunt/vendor/`.
 
 ### Pages
 
@@ -27,7 +127,7 @@ Regenerate research.html after changing app.html:
 cd jobhunt && sed 's|<title>Job Pilot — app</title>|<title>Job Pilot — deep hunt</title>|; s|<body>|<body data-autostart="deep">|' app.html > research.html
 ```
 
-### Design tokens (extracted from the Yoinky reference)
+### Job Pilot design tokens (extracted from the Yoinky reference)
 
 | Token | Value | Role |
 |---|---|---|
@@ -49,31 +149,41 @@ cd jobhunt && sed 's|<title>Job Pilot — app</title>|<title>Job Pilot — deep 
   scene (`<symbol id="landscape">` + CSS gradient sky), outline chips that turn
   pink when selected, dark chip marquee in the footer.
 - **Vendor** (`jobhunt/vendor/`): gsap.min.js, ScrollTrigger.min.js,
-  lenis.min.js + lenis.css — self-hosted because the proxy blocks CDNs. Motion
-  must always degrade: no-JS/reduced-motion leaves the page fully readable.
+  lenis.min.js + lenis.css — self-hosted because the proxy blocks CDNs.
 
-### Verifying changes
-
-Headless Chromium is at `/opt/pw-browsers/chromium`; Playwright is installed
-globally (`NODE_PATH=$(npm root -g)`). Gotcha: raw `chromium --headless
---window-size=390,...` clamps to a 500px-wide window — use Playwright viewport
-emulation for mobile checks. `file://` font preloads log CORS errors that
-disappear over HTTP; they are noise. Check `document.scrollingElement.scrollWidth`
-=== viewport width to catch horizontal overflow.
-
-### Git
-
-Work happens on `claude/job-hunt-frontend-*` branches, pushed with
-`git push -u origin <branch>`. Never commit to `master` directly.
+---
 
 ## Pokie (`/pokie/`)
 
 Autonomous job-finding agent UI built from the "Pokie — Design Handoff" spec.
-Dark theme: `#070707` bg, `#0B0B0B` panels, Poppins (own copy in
-`pokie/fonts/`). Semantic colours: pink `#EB6BA8` (Pokie/destructive), green
-`#1CE15F` (matched/auto), blue `#4791FF` (running), yellow `#ECE42E` (needs
-you). `index.html` = shell + all CSS; `pokie.js` = data (verbatim from the
-handoff view model), hash router (`#welcome ... #history`), screen renderers,
-run simulation, interactions. Cold screens (welcome/onboard) render without
-the rail. Below 900px the rail collapses to the 5-tab mobile bar and jobs
-becomes list→detail push; `#brief` is the mobile morning-brief screen.
+Uses the shared dark system above. `index.html` = shell + all CSS; `pokie.js` =
+data (verbatim from the handoff view model), hash router, screen renderers, run
+simulation, interactions. Backend contract in `pokie/API.md` (REST + SSE); no
+backend exists yet — all data is hardcoded and the live run is a timer.
+
+Routing: the app lands directly on `#chat`; there is no welcome screen. `onboard`
+is the one cold screen (renders without the rail) and is reachable at `#onboard`.
+Unknown hashes fall back to chat. Below 900px the rail collapses to a 5-tab
+mobile bar, jobs becomes list→detail push, and `#brief` is the mobile
+morning-brief screen.
+
+---
+
+## Verifying changes
+
+Headless Chromium is at `/opt/pw-browsers/chromium`; Playwright is installed
+globally (`NODE_PATH=$(npm root -g)`). Gotchas:
+
+- Raw `chromium --headless --window-size=390,...` clamps to a 500px-wide window
+  — use Playwright viewport emulation for mobile checks.
+- `file://` font preloads log CORS errors that disappear over HTTP; noise.
+- Check `document.scrollingElement.scrollWidth === window.innerWidth` to catch
+  horizontal overflow.
+- Playwright's actionability check waits for elements to be *stable*. Infinitely
+  animated elements (the Tees chip) never settle — use `.hover({force: true})`,
+  or inject `* { animation-play-state: paused !important }` before measuring.
+
+## Git
+
+Never commit to `master` directly. Work on a `claude/*` branch and push with
+`git push -u origin <branch>`.
