@@ -31,6 +31,12 @@
   .pokie-eye { transform-origin: center; transform-box: fill-box; animation: pokie-blink 3.8s infinite; }
   .pokie-eye.delay { animation-delay: .08s; }
   .pokie-spin { animation: pokie-flip 7s ease-in-out infinite; }
+  /* The nav Pokie mark and the tee chip beside it are one visual pair, so they
+     share a size at every breakpoint. This lives here rather than inline on the
+     SVG because the tee chip steps down at 820px and an inline width cannot
+     follow it — which is exactly how they drifted apart (26 vs 28) before. */
+  .pokie-mark { width: 28px; height: 28px; display: block; }
+  @media (max-width: 820px) { .pokie-mark { width: 26px; height: 26px; } }
   @media (prefers-reduced-motion: reduce) { .pokie-eye, .pokie-spin { animation: none !important; } }
   @keyframes om-word { from { opacity: 0; transform: translateY(90%); } to { opacity: 1; transform: none; } }
   @keyframes om-rise { from { opacity: 0; transform: translateY(28px); } to { opacity: 1; transform: none; } }
@@ -270,7 +276,7 @@
         <a href="#numbers" data-nav="numbers" data-flip class="hv-nav" data-mob="display:none" style="font-size:16px; font-weight:500; padding:12px 18px; border-radius:999px; color:#fff; transition:background .2s ease, color .2s ease">Numbers</a>
         <a href="#caps" data-nav="caps" data-flip class="hv-nav" data-mob="display:none" style="font-size:16px; font-weight:500; padding:12px 18px; border-radius:999px; color:#fff; transition:background .2s ease, color .2s ease">Capabilities</a>
         <a href="https://pokie.rachittiwari.com" target="_blank" rel="noopener" class="hv-nav" aria-label="Pokie — an autonomous job-finding agent" style="display:flex; align-items:center; padding:8px 12px; border-radius:999px; transition:background .2s ease">
-          <svg viewBox="0 0 24 24" fill="none" class="pokie-spin" style="width:26px; height:26px; display:block">
+          <svg viewBox="0 0 24 24" fill="none" class="pokie-spin pokie-mark">
             <g transform="rotate(45 12 12)"><rect x="3.6" y="3.6" width="16.8" height="16.8" rx="5.4" fill="#EB6BA8"></rect></g>
             <ellipse class="pokie-eye" cx="9.1" cy="12" rx="1.35" ry="2.6" fill="#fff"></ellipse>
             <ellipse class="pokie-eye delay" cx="14.9" cy="12" rx="1.35" ry="2.6" fill="#fff"></ellipse>
