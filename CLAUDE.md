@@ -88,20 +88,34 @@ in below 820px by `applyMob()`; class-styled components don't need them.
 
 ### Pokie Tees launcher
 
-The animated tee chip in the nav (CSS ~line 56, markup ~line 279) links to
-`/tees`. It is the only Pokie Tees asset that exists.
+The animated tee glyph in the nav links to `/tees`. It is the only Pokie Tees
+asset that exists.
 
 - Brand facts it fixes: name **Pokie Tees**, tagline **"one sentence, one tee"**
   (`aria-label`), nav label "Tees".
-- Four animations phase-locked at `4s` with the shared easing — changing one
+- **The two nav marks are a matched pair and must stay one visual language:**
+  both are bare pink glyphs on the page with white details — Pokie is a rotated
+  square with white eyes, the tee a filled silhouette with a white chest print.
+  Neither sits on a chip or disc. Earlier revisions put the tee on a filled pink
+  circle, which made it black-on-pink beside Pokie's pink-on-black — an
+  inversion of its neighbour rather than a sibling. Don't reintroduce a
+  container for one without the other.
+- **Never draw either mark with hairline strokes.** At nav size an authored
+  stroke resolves to a fractional device-pixel width on a fractional-width
+  element and antialiases to grey. Both marks are fills; the tee body carries a
+  same-colour round-join stroke *only* to round its corners.
+- Three animations phase-locked at `4s` with the shared easing — changing one
   duration breaks the lock.
 - `transform-origin: 50% 14%` makes the tee hang from the collar.
-- The chip is a `::before`, which paints above static children, hence the
-  explicit z-index ladder: chip 0 → tee 1 → sheen 2 → label 3.
-- Chip size is duplicated in three places (`::before`, `.tee-sheen`, the 820px
-  query) that must stay in sync.
-- The 44px `<a>` is the tap target; the visible chip is 28px to match the Pokie
-  mark beside it.
+- Print bars need `transform-box: fill-box`, or `transform-origin` resolves
+  against the SVG viewport instead of each bar.
+- The 44px `<a>` is the tap target; the glyph inside is smaller. The `margin` on
+  `.tee-btn` is load-bearing: the nav runs on ~30–40px optical gaps and without
+  it the marks collapse to 19px from each other and 15px from the CTA.
+- Sizes are ink-matched by eye, not by box — a rotated square and a t-shirt
+  fill their boxes very differently. Pixel-counting to compare them is
+  unreliable here because the hero's floating pills bleed into any clip region
+  over the nav.
 
 ---
 
