@@ -88,34 +88,28 @@ in below 820px by `applyMob()`; class-styled components don't need them.
 
 ### Pokie Tees launcher
 
-The animated tee glyph in the nav links to `/tees`. It is the only Pokie Tees
-asset that exists.
+Tees is a **nav link, not a second brand mark** (`.tee-link`, in the text-link
+group before the Pokie mark): a small solid pink tee glyph inline with a "Tees"
+label, styled identically to Work/Ventures/etc. Below 820px the label hides and
+the glyph stands alone at 25px. It is the only Pokie Tees asset that exists.
 
 - Brand facts it fixes: name **Pokie Tees**, tagline **"one sentence, one tee"**
   (`aria-label`), nav label "Tees".
-- **The two nav marks are a matched pair and must stay one visual language:**
-  both are bare pink glyphs on the page with white details — Pokie is a rotated
-  square with white eyes, the tee a filled silhouette with a white chest print.
-  Neither sits on a chip or disc. Earlier revisions put the tee on a filled pink
-  circle, which made it black-on-pink beside Pokie's pink-on-black — an
-  inversion of its neighbour rather than a sibling. Don't reintroduce a
-  container for one without the other.
-- **Never draw either mark with hairline strokes.** At nav size an authored
-  stroke resolves to a fractional device-pixel width on a fractional-width
-  element and antialiases to grey. Both marks are fills; the tee body carries a
-  same-colour round-join stroke *only* to round its corners.
-- Three animations phase-locked at `4s` with the shared easing — changing one
-  duration breaks the lock.
-- `transform-origin: 50% 14%` makes the tee hang from the collar.
-- Print bars need `transform-box: fill-box`, or `transform-origin` resolves
-  against the SVG viewport instead of each bar.
-- The 44px `<a>` is the tap target; the glyph inside is smaller. The `margin` on
-  `.tee-btn` is load-bearing: the nav runs on ~30–40px optical gaps and without
-  it the marks collapse to 19px from each other and 15px from the CTA.
-- Sizes are ink-matched by eye, not by box — a rotated square and a t-shirt
-  fill their boxes very differently. Pixel-counting to compare them is
-  unreliable here because the hero's floating pills bleed into any clip region
-  over the nav.
+- **Keep the hierarchy: quiet text links → ONE standalone accent mark (Pokie's
+  diamond) → one white CTA.** Every failed revision of this element made the
+  tee a second standalone glyph next to Pokie's — as a filled chip, then as a
+  bare mark — and two adjacent pink glyphs compete no matter how well their
+  construction matches. Don't promote the tee back into a standalone mark, and
+  don't put a chip/disc behind it.
+- The single chest bar is deliberate — one sentence, one tee. It types on once
+  per 4s loop (the site's idle tempo, shared easing) and freezes on hover.
+- **Never draw the glyph with hairline strokes.** At 20px an authored stroke
+  resolves to fractional device pixels and antialiases to grey. It is a fill;
+  the body's same-colour round-join stroke exists only to round corners. The
+  bar is 2.4 viewBox units tall for the same reason — thinner merges to mush.
+- The bar needs `transform-box: fill-box`, or `transform-origin` resolves
+  against the SVG viewport instead of the bar.
+- The mobile padding override needs `!important` to beat the inline style.
 
 ---
 
