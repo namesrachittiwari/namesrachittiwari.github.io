@@ -446,9 +446,12 @@ function renderDetail() {
     return '<button type="button" class="size-btn' + (dead ? ' dead' : S.size === z ? ' sel' : '') + '"' +
       (dead ? '' : ' data-size="' + z + '"') + '>' + z + '</button>';
   }).join('');
+  var count = S.cart.reduce(function (a, c) { return a + c.qty; }, 0);
   var h =
     '<div class="detail">' +
     '<button type="button" class="d-close" data-act="close-detail" aria-label="Close">✕</button>' +
+    '<button type="button" class="cart-btn d-cart" data-act="open-cart" aria-label="Open cart">' +
+    '<span>Cart</span><span class="cart-count">' + count + '</span></button>' +
     '<div class="d-grid">' +
     '<div class="d-stage"><div class="d-float">' + teeVisual(t.sentence, { flip: true, image: t.image }) + '</div></div>' +
     '<div class="d-info">' +
@@ -643,6 +646,9 @@ function wireScreen() {
 function wireDetail() {
   el.detail.querySelectorAll('[data-act="close-detail"]').forEach(function (b) {
     b.addEventListener('click', function () { set({ detail: -1 }); });
+  });
+  el.detail.querySelectorAll('[data-act="open-cart"]').forEach(function (b) {
+    b.addEventListener('click', function () { set({ cartOpen: true }); });   // drawer stacks above the detail overlay
   });
   el.detail.querySelectorAll('.size-btn[data-size]').forEach(function (b) {
     b.addEventListener('click', function () { set({ size: b.getAttribute('data-size') }); });

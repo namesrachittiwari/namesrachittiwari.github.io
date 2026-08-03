@@ -102,6 +102,7 @@ button { -webkit-tap-highlight-color: transparent; }
 .detail { position: fixed; inset: 0; z-index: 60; background: #000000; overflow: auto; animation: fadeIn .25s ease both; }
 .d-close { position: fixed; top: 24px; right: clamp(18px, 3vw, 44px); z-index: 5; width: 40px; height: 40px; display: grid; place-items: center; font-size: 16px; color: #ffffff; background: transparent; border: none; cursor: pointer; transition: color .2s ease; }
 .d-close:hover { color: #EB6BA8; }
+.d-cart { position: fixed; top: 25px; right: calc(clamp(18px, 3vw, 44px) + 52px); z-index: 5; }
 .d-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(380px, 560px); min-height: 100vh; }
 .d-stage { position: relative; display: grid; place-items: center; padding: 90px 30px 60px; border-right: 1px solid rgba(255,255,255,.12); }
 .d-float { position: relative; width: min(88%, 640px); aspect-ratio: 1 / 1; animation: levitate 6.5s ease-in-out infinite; }
