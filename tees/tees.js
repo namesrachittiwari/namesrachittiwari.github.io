@@ -28,30 +28,30 @@ var CONFIG = {
 
 var PRICE = 1490;
 var SIZES = ['XS', 'S', 'M', 'L', 'XL', '2XL'];
-var SOLD_OUT_IDX = 8;                     // "Still Hunting" — the joke, kept
+var SOLD_OUT_IDX = 5;                     // "Attendance 74.9%." — the joke, kept
 var FREE_SHIP_AT = 2500;
 var SHIP_FEE = 79;
 var MONTHS = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
 
 var TEES = [
-  { id: 'agent-01',  name: 'It Hunts',              sentence: 'It hunts. I decide.',                          collection: 'The agent',      origin: 'The whole product in four words. Printed the day Pokie made its first overnight run.' },
-  { id: 'agent-02',  name: 'While You Slept',       sentence: 'Applied while you were sleeping.',             collection: 'The agent',      origin: 'What the morning summary actually says, most days.' },
-  { id: 'agent-03',  name: 'Just Decided',          sentence: 'My agent applied. I just decided.',            collection: 'The agent',      origin: 'For the part of the process that should have been the only part.' },
-  { id: 'agent-04',  name: 'Night Shift',           sentence: 'Nights are for hunting.',                      collection: 'The agent',      origin: 'Pokie works while the postings are fresh and nobody else is awake.' },
-  { id: 'reject-01', name: 'On File',               sentence: 'We’ll keep your CV on file.',             collection: 'The rejections', origin: 'Nobody in recorded history has been contacted from the file.' },
-  { id: 'reject-02', name: 'Strong Profile',        sentence: 'Strong profile. Moving forward with others.',  collection: 'The rejections', origin: 'Verbatim. That full stop is doing an enormous amount of work.' },
-  { id: 'reject-03', name: 'Senior And Junior',     sentence: 'Too senior. Also too junior.',                 collection: 'The rejections', origin: 'Two rejections from the same company, eleven days apart.' },
-  { id: 'reject-04', name: 'Algorithm',             sentence: 'Rejected by an algorithm. Hired by a human.',  collection: 'The rejections', origin: 'Both halves are true, which is exactly the problem.' },
-  { id: 'hunt-01',   name: 'Still Hunting',         sentence: 'Still hunting.',                               collection: 'The hunt',       origin: 'The shortest line in the catalogue and the one people ask for most.' },
-  { id: 'hunt-02',   name: 'No Nonsense',           sentence: 'Open to work. Not open to nonsense.',          collection: 'The hunt',       origin: 'A banner with a boundary.' },
-  { id: 'hunt-03',   name: 'All Of It',             sentence: 'I read the JD. All of it.',                    collection: 'The hunt',       origin: 'Including the bit about being a rockstar who thrives in ambiguity.' },
-  { id: 'hunt-04',   name: 'Between Opportunities', sentence: 'Between opportunities to be underpaid.',       collection: 'The hunt',       origin: 'Written at 2am, kept exactly as it was typed.' },
+  { id: 'del-01',   name: 'Main Character',   sentence: 'Main character. No plot.',                    collection: 'The Delusion', origin: 'Wore it to one lecture. Three people said “fair.”' },
+  { id: 'del-02',   name: 'Assembled Wrong',  sentence: 'Built different. Assembled wrong.',           collection: 'The Delusion', origin: 'The quality-control tee. There was no quality control.' },
+  { id: 'del-03',   name: 'Full Confidence',  sentence: 'Zero idea. Full confidence.',                 collection: 'The Delusion', origin: 'Printed the night before a viva. Worked, somehow.' },
+  { id: 'del-04',   name: 'Group Chat',       sentence: 'I peaked in the group chat.',                 collection: 'The Delusion', origin: 'Four hundred messages a day, all bangers, zero witnesses.' },
+  { id: 'grind-01', name: 'Mess Food',        sentence: 'Running on mess food and spite.',             collection: 'The Grind',    origin: 'Nutrition information unavailable, like the nutrition.' },
+  { id: 'grind-02', name: 'Attendance',       sentence: 'Attendance 74.9%.',                           collection: 'The Grind',    origin: 'One condonation form away from freedom. Out of stock, like the attendance.' },
+  { id: 'grind-03', name: 'Legends Sleep',    sentence: 'Legends sleep at 4.',                         collection: 'The Grind',    origin: 'AM. Obviously. Written at the exact hour it describes.' },
+  { id: 'grind-04', name: 'Last Minute',      sentence: 'Professional last-minute.',                   collection: 'The Grind',    origin: 'Deadline energy, available in six sizes.' },
+  { id: 'aud-01',   name: 'Said It',          sentence: 'I said what I said.',                         collection: 'The Audacity', origin: 'No follow-up. No clarification. No regrets.' },
+  { id: 'aud-02',   name: 'Energy Efficient', sentence: 'Not lazy. Energy efficient.',                 collection: 'The Audacity', origin: 'A sustainability statement, technically.' },
+  { id: 'aud-03',   name: 'Unavailable',      sentence: 'Emotionally unavailable. Physically also.',   collection: 'The Audacity', origin: 'Do not knock. The tee already answered.' },
+  { id: 'aud-04',   name: 'Out Of Office',    sentence: 'Out of office. Never had one.',               collection: 'The Audacity', origin: 'The permanent auto-reply, in cotton.' },
 ];
 
 var SIDE_FILTERS = [
-  { label: 'Classics',  key: 'The hunt' },
-  { label: 'Overnight', key: 'The agent' },
-  { label: 'Rejected',  key: 'The rejections' },
+  { label: 'Delusion', key: 'The Delusion' },
+  { label: 'Grind',    key: 'The Grind' },
+  { label: 'Audacity', key: 'The Audacity' },
 ];
 
 var MAT_COPY = '240 GSM cotton, black until proven otherwise. White ink, one colour. Wash inside out, cold — the print will outlive most employment. Do not iron the joke.';
@@ -371,7 +371,6 @@ function payHTML() {
     '<div class="pay-amt">' + fmt(total) + '</div>' +
     '<img src="assets/upi-qr.png" alt="UPI QR code" width="200" height="200">' +
     (link ? '<a class="upi-btn" href="' + link + '">Pay in UPI app</a>' : '') +
-    '<div class="pay-hint">Scan the QR, or tap the button on your phone. Put <b>' + esc(S.orderId) + '</b> in the payment note if you can.</div>' +
     '</div>' +
     '<div class="co-form">' +
     '<label class="field"><span class="lab">After paying: UPI reference (12-digit UTR, or last 4 digits)</span>' +

@@ -51,10 +51,10 @@ Execute as: **Me** · Who has access: **Anyone** → Deploy → copy the
 curl -sL '<EXEC_URL>'
 
 # test order (expect {"ok":true,"orderId":"PT-TEST-01","total":2980,...}; a row
-# appears in Orders, stock for agent-01/M drops by 2, and you get the email)
+# appears in Orders, stock for del-01/M drops by 2, and you get the email)
 curl -sL -X POST '<EXEC_URL>' -H 'Content-Type: text/plain' --data '{
   "type":"order","secret":"<SECRET>","orderId":"PT-TEST-01",
-  "items":[{"designId":"agent-01","size":"M","qty":2}],
+  "items":[{"designId":"del-01","size":"M","qty":2}],
   "deliveryMode":"hostel","payMode":"upi","amountShown":2980,
   "buyer":{"name":"Smoke Test","room":"H0-000","phone":"9999999999"},
   "note":"delete me","self":true,"hp":"","t":9999}'
@@ -70,7 +70,7 @@ e.g. `9198…`) → `CONFIG.WHATSAPP`. Also export your UPI QR from
 GPay/PhonePe/Paytm (Receive → save QR) and replace `tees/assets/upi-qr.png`.
 Note: committing the QR publishes your VPA — inherent to selling with a public
 QR. Then fill real `price` + size counts (XS–2XL) in the `Stock` tab and go
-live. Two seeded rows to know about: **`hunt-01` ("Still Hunting") at 0 stock
+live. Two seeded rows to know about: **`grind-02` ("Attendance 74.9%.") at 0 stock
 is the storefront's running joke** — leave it at 0 to keep the "Out of stock
 (relatable)" gag, or stock it to sell it; and **`custom-line`** prices the
 Studio "write your own" tees (its size cells stay blank — customs aren't
