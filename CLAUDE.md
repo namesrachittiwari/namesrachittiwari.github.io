@@ -133,6 +133,14 @@ network layer.
   availability drives sold-out everywhere; offline, only the joke shows out.
   Catalogue copy is the owner's v8 set (Delusion/Grind/Audacity collections,
   ids `del-*`/`grind-*`/`aud-*`) — it supersedes the handoff's job-hunt lines.
+- **Image designs**: a tee with an `image` field (e.g. `aud-05` Stop Staring)
+  renders that artwork statically — no flip, no print overlay. Owner-pasted
+  designs are recreated as square 1400px PNGs in `tees/assets/designs/` via
+  the render-HTML-then-screenshot pipeline (chat-pasted images never land as
+  files). Adding one = drop the PNG + one `TEES` line + one Stock seed row.
+- **Archive shows one shared visual for every tee** — `ARCHIVE_IMG`
+  ("This design is not available · ERR_JUST_LIKE_THAT"), per the owner; the
+  per-tee name/caption/origin still render in the retro popup.
 - **Backend is NOT in this repo's deploy**: a Google Apps Script web app +
   Sheet in the owner's account. Source and click-by-click setup live in
   `tees/backend/Code.gs` + `tees/backend/SETUP.md`. POSTs are text/plain JSON
