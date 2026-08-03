@@ -433,7 +433,6 @@ function setupSheet() {
       ['grind-03', 'Legends Sleep'], ['grind-04', 'Last Minute'],
       ['aud-01', 'Said It'], ['aud-02', 'Energy Efficient'],
       ['aud-03', 'Unavailable'], ['aud-04', 'Out Of Office'],
-      ['aud-05', 'Stop Staring'],
     ].map(function (r) { return [r[0], r[1], 1490, 0, 0, 0, 0, 0, 0, '', '', '', '', '', '']; });
     seed.push([CUSTOM_ID, 'Your line (Studio)', 1490, '', '', '', '', '', '', '', '', '', '', '', '']);
     st.getRange(2, 1, seed.length, 15).setValues(seed);

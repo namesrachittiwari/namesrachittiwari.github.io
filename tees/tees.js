@@ -31,7 +31,6 @@ var SIZES = ['XS', 'S', 'M', 'L', 'XL', '2XL'];
 var SOLD_OUT_IDX = 5;                     // "Attendance 74.9%." — the joke, kept
 var FREE_SHIP_AT = 2500;
 var SHIP_FEE = 79;
-var ARCHIVE_IMG = 'assets/designs/not-available.png';   // every archived design "is not available"
 var MONTHS = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
 
 var TEES = [
@@ -47,7 +46,6 @@ var TEES = [
   { id: 'aud-02',   name: 'Energy Efficient', sentence: 'Not lazy. Energy efficient.',                 collection: 'The Audacity', origin: 'A sustainability statement, technically.' },
   { id: 'aud-03',   name: 'Unavailable',      sentence: 'Emotionally unavailable. Physically also.',   collection: 'The Audacity', origin: 'Do not knock. The tee already answered.' },
   { id: 'aud-04',   name: 'Out Of Office',    sentence: 'Out of office. Never had one.',               collection: 'The Audacity', origin: 'The permanent auto-reply, in cotton.' },
-  { id: 'aud-05',   name: 'Stop Staring',     sentence: 'If you can read this clearly, stop staring.', collection: 'The Audacity', origin: 'An eye test everyone fails on purpose.', image: 'assets/designs/stop-staring.png' },
 ];
 
 var SIDE_FILTERS = [
@@ -249,8 +247,9 @@ function shopHTML() {
 
 function archiveHTML() {
   var tiles = TEES.map(function (t, i) {
+    var delay = (-((i * 2.11 + (i % 4) * 0.47) % 3.6)).toFixed(2) + 's';
     return '<button type="button" class="arch-tile" data-arch="' + i + '">' +
-      teeVisual(t.sentence, { image: ARCHIVE_IMG }) +
+      teeVisual(t.sentence, { flip: true, delay: delay, image: t.image }) +
       '</button>';
   }).join('');
   return '<div class="screen arch">' +
@@ -482,7 +481,7 @@ function renderPopup() {
     '<div class="pop-bar"><span class="pop-title">' + esc(t.name) + '</span>' +
     '<button type="button" class="pop-x" data-act="close-arch">✕</button></div>' +
     '<div class="pop-body">' +
-    '<div class="pop-screen">' + teeVisual(t.sentence, { image: ARCHIVE_IMG }) + '</div>' +
+    '<div class="pop-screen">' + teeVisual(t.sentence, { flip: true, contain: true, image: t.image }) + '</div>' +
     '<p class="pop-cap">RELEASED ' + MONTHS[S.arch % 12] + ' 2026 [ARCHIVED]</p>' +
     '<p class="pop-origin">' + esc(t.origin) + '</p>' +
     '</div></div></div>';
