@@ -31,6 +31,7 @@ var SIZES = ['XS', 'S', 'M', 'L', 'XL', '2XL'];
 var SOLD_OUT_IDX = 5;                     // "Attendance 74.9%." — the joke, kept
 var FREE_SHIP_AT = 2500;
 var SHIP_FEE = 79;
+var ARCHIVE_IMG = 'assets/designs/not-available.png';   // every archived design "is not available"
 var MONTHS = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
 
 var TEES = [
@@ -46,6 +47,7 @@ var TEES = [
   { id: 'aud-02',   name: 'Energy Efficient', sentence: 'Not lazy. Energy efficient.',                 collection: 'The Audacity', origin: 'A sustainability statement, technically.' },
   { id: 'aud-03',   name: 'Unavailable',      sentence: 'Emotionally unavailable. Physically also.',   collection: 'The Audacity', origin: 'Do not knock. The tee already answered.' },
   { id: 'aud-04',   name: 'Out Of Office',    sentence: 'Out of office. Never had one.',               collection: 'The Audacity', origin: 'The permanent auto-reply, in cotton.' },
+  { id: 'aud-05',   name: 'Stop Staring',     sentence: 'If you can read this clearly, stop staring.', collection: 'The Audacity', origin: 'An eye test everyone fails on purpose.', image: 'assets/designs/stop-staring.png' },
 ];
 
 var SIDE_FILTERS = [
@@ -141,6 +143,11 @@ function customPrice() { var s = stockFor('custom-line'); return s && s.price > 
 
 function teeVisual(sentence, opts) {
   opts = opts || {};
+  if (opts.image) {                    // owner-supplied artwork: one static image, no flip/overlay
+    return '<div class="tee-visual img-design">' +
+      '<img class="front" src="' + opts.image + '" alt="" draggable="false">' +
+      '</div>';
+  }
   var cls = 'tee-visual' + (opts.flip ? ' flip' : '') + (opts.contain ? ' contain' : '');
   var fd = opts.delay ? ' style="--fd:' + opts.delay + '"' : '';
   return '<div class="' + cls + '"' + fd + '>' +
@@ -224,7 +231,7 @@ function shopHTML() {
       var delay = (-((i * 1.37 + (i % 5) * 0.61) % 3.6)).toFixed(2) + 's';
       var sold = isSold(t, i);
       return '<button type="button" class="tile" data-open="' + i + '">' +
-        teeVisual(t.sentence, { flip: true, delay: delay }) +
+        teeVisual(t.sentence, { flip: true, delay: delay, image: t.image }) +
         '<span class="tile-name">' + esc(t.name) + '</span>' +
         '<span class="tile-price">' + (sold ? 'Out of stock' : fmt(priceFor(t))) + '</span>' +
         '</button>';
@@ -242,9 +249,8 @@ function shopHTML() {
 
 function archiveHTML() {
   var tiles = TEES.map(function (t, i) {
-    var delay = (-((i * 2.11 + (i % 4) * 0.47) % 3.6)).toFixed(2) + 's';
     return '<button type="button" class="arch-tile" data-arch="' + i + '">' +
-      teeVisual(t.sentence, { flip: true, delay: delay }) +
+      teeVisual(t.sentence, { image: ARCHIVE_IMG }) +
       '</button>';
   }).join('');
   return '<div class="screen arch">' +
@@ -445,7 +451,7 @@ function renderDetail() {
     '<div class="detail">' +
     '<button type="button" class="d-close" data-act="close-detail" aria-label="Close">✕</button>' +
     '<div class="d-grid">' +
-    '<div class="d-stage"><div class="d-float">' + teeVisual(t.sentence, { flip: true }) + '</div></div>' +
+    '<div class="d-stage"><div class="d-float">' + teeVisual(t.sentence, { flip: true, image: t.image }) + '</div></div>' +
     '<div class="d-info">' +
     '<h1 class="d-name">' + esc(t.name) + '</h1>' +
     '<span class="d-price">' + fmt(priceFor(t)) + '</span>' +
@@ -476,7 +482,7 @@ function renderPopup() {
     '<div class="pop-bar"><span class="pop-title">' + esc(t.name) + '</span>' +
     '<button type="button" class="pop-x" data-act="close-arch">✕</button></div>' +
     '<div class="pop-body">' +
-    '<div class="pop-screen">' + teeVisual(t.sentence, { flip: true, contain: true }) + '</div>' +
+    '<div class="pop-screen">' + teeVisual(t.sentence, { image: ARCHIVE_IMG }) + '</div>' +
     '<p class="pop-cap">RELEASED ' + MONTHS[S.arch % 12] + ' 2026 [ARCHIVED]</p>' +
     '<p class="pop-origin">' + esc(t.origin) + '</p>' +
     '</div></div></div>';
@@ -497,8 +503,10 @@ function renderCart() {
   } else {
     rows = S.cart.map(function (c, i) {
       return '<div class="c-row">' +
-        '<div class="c-thumb"><img src="assets/tee-clean-front.png" alt="" draggable="false">' +
-        '<div class="zone"><div class="print" style="font-size:' + sizeFor(c.sentence) + '">' + esc(c.sentence) + '</div></div></div>' +
+        (c.image
+          ? '<div class="c-thumb"><img src="' + c.image + '" alt="" draggable="false"></div>'
+          : '<div class="c-thumb"><img src="assets/tee-clean-front.png" alt="" draggable="false">' +
+            '<div class="zone"><div class="print" style="font-size:' + sizeFor(c.sentence) + '">' + esc(c.sentence) + '</div></div></div>') +
         '<div class="c-mid">' +
         '<span class="c-name">' + esc(c.name) + '</span>' +
         '<span class="c-meta">' + esc(c.meta) + '</span>' +
@@ -652,7 +660,7 @@ function wireDetail() {
     addToCart({
       key: t.id + ':' + S.size, id: t.id,
       name: t.name, meta: t.sentence + ' · ' + S.size,
-      sentence: t.sentence, size: S.size, price: priceFor(t),
+      sentence: t.sentence, size: S.size, price: priceFor(t), image: t.image,
     });
   });
 }
