@@ -6,7 +6,7 @@ HTML/CSS/JS — **no build step, no framework**. Each page is self-contained.
 | Path | What it is | System |
 |---|---|---|
 | `/` (`index.html`) | Personal landing page | **Shared dark system** (below) |
-| `/tees` | Pokie Tees store — **not built yet**, currently 404s | Shared dark system |
+| `/tees` | Pokie Tees store (catalogue → UPI checkout; see its section below) | Shared dark system |
 | `/jobhunt/` | Job Pilot — satirical AI job-hunt product | **Exception**: own cream system |
 | `/pokie/` | Pokie job agent (staging copy) | Shared dark system |
 
@@ -112,6 +112,27 @@ the glyph stands alone at 25px. It is the only Pokie Tees asset that exists.
 - The mobile padding override needs `!important` to beat the inline style.
 
 ---
+
+## Pokie Tees (`/tees/`)
+
+Hobby tee store: 12 sentence-tees, single-item checkout, personal-UPI payment,
+hostel hand-delivery or (Phase 6) Qikink dropshipping. `index.html` = shell +
+all CSS; `tees.js` = catalogue data + 5-step flow + fallbacks.
+
+- **Backend is NOT in this repo's deploy**: a Google Apps Script web app +
+  Sheet in the owner's account. Source and click-by-click setup live in
+  `tees/backend/Code.gs` + `tees/backend/SETUP.md`. POSTs are text/plain JSON
+  (no CORS preflight); errors always `{ok:false}` in a 200 body.
+- `tees.js` binds ONLY to `[data-tees="grid|flow|flowback|status|resume"]`
+  mounts — a reskin replaces the shell, never the JS.
+- `CONFIG` at the top of `tees.js` holds ENDPOINT/SECRET/WHATSAPP; empty
+  ENDPOINT = fallback mode (browse works, orders go to WhatsApp/mailto).
+  Owner's VPA is served by the backend, **never committed**.
+- Payment verification is manual by design (personal UPI has no API); the
+  owner's VERIFIED flip in the Sheet is also what triggers Qikink dispatch.
+- Qikink connector lives in Code.gs behind `POD_ENABLED`; the two
+  `TODO(sandbox)` payload markers get pinned against Qikink's Postman docs
+  during sandbox activation (SETUP.md §6).
 
 ## Job Pilot (`/jobhunt/`) — design-system exception
 
