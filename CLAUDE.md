@@ -6,7 +6,7 @@ HTML/CSS/JS — **no build step, no framework**. Each page is self-contained.
 | Path | What it is | System |
 |---|---|---|
 | `/` (`index.html`) | Personal landing page | **Shared dark system** (below) |
-| `/tees` | Pokie Tees store (catalogue → UPI checkout; see its section below) | Shared dark system |
+| `/tees` | Pokie Tees store (v7 design; see its section below) | **Exception**: v7 handoff tokens (bg `#000`, Bebas Neue print font) |
 | `/jobhunt/` | Job Pilot — satirical AI job-hunt product | **Exception**: own cream system |
 | `/pokie/` | Pokie job agent (staging copy) | Shared dark system |
 
@@ -115,21 +115,40 @@ the glyph stands alone at 25px. It is the only Pokie Tees asset that exists.
 
 ## Pokie Tees (`/tees/`)
 
-Hobby tee store: 12 sentence-tees, single-item checkout, personal-UPI payment,
-hostel hand-delivery or (Phase 6) Qikink dropshipping. `index.html` = shell +
-all CSS; `tees.js` = catalogue data + 5-step flow + fallbacks.
+Hobby tee store built pixel-perfect from the user's **v7 design handoff**
+("Rachit_Pokie_Tees__Complete_Handoff.md" — high-fidelity, copy final).
+A black-spotlight SPA: Shop (sidebar filters + photo grid), Product Detail
+overlay, Archive (retro `#0014A8` OS popups), Studio (write-your-own line),
+multi-item Cart drawer, Checkout → UPI pay screen → Placed.
+`index.html` = static skeleton + all CSS; `tees.js` = state + renderers +
+network layer.
 
+- **Design-system exception**: uses the handoff's own tokens — bg `#000000`
+  (not `--black`), accent `#EB6BA8`, borders `rgba(255,255,255,.18)`, Poppins
+  UI + **Bebas Neue** for every shirt print (self-hosted in `tees/fonts/`).
+  Signature: front/back product shots hard-cut every 1.8s (3.6s `teeFront`/
+  `teeBack` loop, per-tile negative delays), print line in a fixed chest zone
+  (33.5%/34%/28%, `container-type: inline-size`, cqw sizing via `sizeFor()`).
+- 12 tees + sold-out joke: `hunt-01` "Still Hunting" seeds at 0 stock — real
+  availability drives sold-out everywhere; offline, only the joke shows out.
 - **Backend is NOT in this repo's deploy**: a Google Apps Script web app +
   Sheet in the owner's account. Source and click-by-click setup live in
   `tees/backend/Code.gs` + `tees/backend/SETUP.md`. POSTs are text/plain JSON
   (no CORS preflight); errors always `{ok:false}` in a 200 body.
-- `tees.js` binds ONLY to `[data-tees="grid|flow|flowback|status|resume"]`
-  mounts — a reskin replaces the shell, never the JS.
+- **Contract v2 is multi-item**: `order` POST carries `items[]` (catalogue
+  `{designId,size,qty}` or Studio `{custom:{text},size,qty}`), `deliveryMode`
+  hostel|ship, `payMode` upi|cod (COD = hostel only; Card row is a disabled
+  joke). One order = one Sheet row = one Qikink `line_items[]` dispatch.
+  Sizes are XS–2XL. Shipping ₹79 under ₹2,500, free above, ship mode only.
+- `tees.js` binds ONLY to `[data-tees="screen|detail|popup|cart|toast|status|
+  resume|cartbtn|count"]` mounts + `[data-nav]` — a reskin replaces the shell,
+  never the JS.
 - `CONFIG` at the top of `tees.js` holds ENDPOINT/SECRET/WHATSAPP; empty
   ENDPOINT = fallback mode (browse works, orders go to WhatsApp/mailto).
   Owner's VPA is served by the backend, **never committed**.
 - Payment verification is manual by design (personal UPI has no API); the
   owner's VERIFIED flip in the Sheet is also what triggers Qikink dispatch.
+  Custom Studio lines have no SKU → flagged for manual POD placement.
 - Qikink connector lives in Code.gs behind `POD_ENABLED`; the two
   `TODO(sandbox)` payload markers get pinned against Qikink's Postman docs
   during sandbox activation (SETUP.md §6).
