@@ -1,5 +1,5 @@
 /**
- * Pokie Tees — order backend (Google Apps Script web app).
+ * Pokie Tees — order backend (Google Apps Script web app). Contract v2.
  *
  * This file is versioned here for reference; it RUNS in the owner's Google
  * account, bound to a Google Sheet (see SETUP.md). The static store at /tees
@@ -17,6 +17,17 @@
  *   security. Real guards: honeypot, min-fill-time, length caps, daily cap,
  *   and server-side price computation (the client's price is never trusted).
  *
+ * v2 (multi-item cart, matching the v7 storefront):
+ * - One order = one row = MANY line items (items[] in the POST; each line is
+ *   a catalogue tee {designId,size,qty} or a Studio line {custom:{text},...}).
+ *   One payment, one VERIFIED flip, one Qikink order with line_items[].
+ * - Sizes are XS S M L XL 2XL (the design's row).
+ * - payMode 'upi' (QR + UTR claim) or 'cod' (hostel hand-delivery only,
+ *   cash at handover — row just stays NEW until the owner collects).
+ * - Shipping: ship mode only — ₹79 under ₹2,500 subtotal, free above.
+ * - Custom lines are priced from the Stock row 'custom-line' and are NOT
+ *   stock-tracked; they flag the order for manual POD handling (no SKU).
+ *
  * Status ladder (Orders!C): NEW → CLAIMED → VERIFIED → PRINTED → DELIVERED
  * (or CANCELLED). The owner's flip to VERIFIED is the single manual step:
  * it confirms payment (personal UPI has no API) and — when POD_ENABLED=1 —
@@ -25,9 +36,24 @@
 
 var ORDERS = 'Orders';
 var STOCK = 'Stock';
-var SIZES = ['S', 'M', 'L', 'XL', 'XXL'];
+var SIZES = ['XS', 'S', 'M', 'L', 'XL', '2XL'];
 var STATUSES = ['NEW', 'CLAIMED', 'VERIFIED', 'PRINTED', 'DELIVERED', 'CANCELLED'];
 var DAILY_CAP = 40;
+var MAX_LINES = 8;
+var FREE_SHIP_AT = 2500;
+var SHIP_FEE = 79;
+var CUSTOM_ID = 'custom-line';
+
+/* Orders columns (A–Z):
+ *  A orderId  B createdAt  C status  D items(summary)  E itemsJson  F units
+ *  G subtotal H shipping   I total   J amountClientShown  K payMode
+ *  L buyerName M room  N phone  O address  P city  Q pin  R note  S self
+ *  T utr  U claimedAt  V adminNotes  W deliveryMode  X podOrderId
+ *  Y tracking  Z podStatus
+ */
+var COL = { status: 3, itemsJson: 5, buyerName: 12, phone: 14, address: 15,
+  city: 16, pin: 17, utr: 20, claimedAt: 21, deliveryMode: 23,
+  podOrderId: 24, tracking: 25, podStatus: 26 };
 
 /* ============ HTTP entry points ============ */
 
@@ -74,7 +100,7 @@ function availability_() {
   };
 }
 
-/* ============ order create ============ */
+/* ============ order create (multi-item) ============ */
 
 function handleOrder_(b) {
   var p = props_();
@@ -83,64 +109,116 @@ function handleOrder_(b) {
   if (!(Number(b.t) >= 3000)) return { ok: false, error: 'TOO_FAST' };
 
   var orderId = clip_(b.orderId, 24);
-  var designId = clip_(b.designId, 20);
-  var size = String(b.size || '');
-  var qty = Math.floor(Number(b.qty));
+  var items = b.items;
   var buyer = b.buyer || {};
   var name = clip_(buyer.name, 60);
   var room = clip_(buyer.room, 30);
   var phone = clip_(buyer.phone, 15);
+  var address = clip_(buyer.address, 300);
+  var city = clip_(buyer.city, 60);
+  var pin = clip_(buyer.pin, 10);
   var note = clip_(b.note, 200);
   var deliveryMode = b.deliveryMode === 'ship' ? 'ship' : 'hostel';
-  var address = deliveryMode === 'ship' ? clip_(b.address, 300) : '';
+  var payMode = (b.payMode === 'cod' && deliveryMode === 'hostel') ? 'cod' : 'upi';
 
   if (!/^PT-[0-9A-Z-]{4,}$/.test(orderId)) return { ok: false, error: 'BAD_REQUEST' };
-  if (!name || !designId || SIZES.indexOf(size) < 0) return { ok: false, error: 'BAD_REQUEST' };
-  if (!(qty >= 1 && qty <= 5)) return { ok: false, error: 'BAD_REQUEST' };
-  if (deliveryMode === 'ship' && !address) return { ok: false, error: 'BAD_REQUEST' };
+  if (!name) return { ok: false, error: 'BAD_REQUEST' };
+  if (!(items instanceof Array) || items.length < 1 || items.length > MAX_LINES) {
+    return { ok: false, error: 'BAD_REQUEST' };
+  }
+  if (deliveryMode === 'ship' && !(address && pin)) return { ok: false, error: 'BAD_REQUEST' };
   if (dailyCount_() >= DAILY_CAP) return { ok: false, error: 'RATE_LIMITED' };
+
+  // Normalise and pre-validate every line before touching the sheet.
+  var lines = [];
+  for (var li = 0; li < items.length; li++) {
+    var it = items[li] || {};
+    var size = String(it.size || '');
+    var qty = Math.floor(Number(it.qty));
+    if (SIZES.indexOf(size) < 0) return { ok: false, error: 'BAD_REQUEST' };
+    if (!(qty >= 1 && qty <= 5)) return { ok: false, error: 'BAD_REQUEST' };
+    if (it.custom && it.custom.text) {
+      var text = clip_(it.custom.text, 60);
+      if (!text) return { ok: false, error: 'BAD_REQUEST' };
+      lines.push({ custom: true, text: text, size: size, qty: qty });
+    } else {
+      var designId = clip_(it.designId, 20);
+      if (!designId) return { ok: false, error: 'BAD_REQUEST' };
+      lines.push({ custom: false, designId: designId, size: size, qty: qty });
+    }
+  }
 
   var lock = LockService.getScriptLock();
   lock.waitLock(10000);
   try {
     var st = sheet_(STOCK);
     var rows = st.getDataRange().getValues();
-    var rowIdx = -1;
+    var byId = {};
     for (var i = 1; i < rows.length; i++) {
-      if (String(rows[i][0]) === designId) { rowIdx = i; break; }
+      if (rows[i][0]) byId[String(rows[i][0])] = { idx: i, row: rows[i] };
     }
-    if (rowIdx < 0) return { ok: false, error: 'UNKNOWN_DESIGN' };
 
-    var sizeCol = 3 + SIZES.indexOf(size);          // 0-based in values
-    var have = Number(rows[rowIdx][sizeCol]);
-    var title = String(rows[rowIdx][1] || designId);
-    var price = Number(rows[rowIdx][2]) || 0;
-    if (isNaN(have) || have < qty) {
-      return { ok: false, error: 'SOLD_OUT', sizes: sizesOf_(rows[rowIdx]) };
+    var customPrice = byId[CUSTOM_ID] ? Number(byId[CUSTOM_ID].row[2]) || 0 : 0;
+    if (!customPrice) customPrice = 1490;
+
+    // Pass 1: check everything (no partial decrements on SOLD_OUT).
+    var soldOut = {};
+    for (var c = 0; c < lines.length; c++) {
+      var ln = lines[c];
+      if (ln.custom) { ln.price = customPrice; ln.title = 'Your line: “' + ln.text + '”'; continue; }
+      var hit = byId[ln.designId];
+      if (!hit) return { ok: false, error: 'UNKNOWN_DESIGN' };
+      ln.rowIdx = hit.idx;
+      ln.title = String(hit.row[1] || ln.designId);
+      ln.price = Number(hit.row[2]) || 0;
+      var have = Number(hit.row[3 + SIZES.indexOf(ln.size)]);
+      if (isNaN(have) || have < ln.qty) soldOut[ln.designId] = { sizes: sizesOf_(hit.row) };
     }
-    st.getRange(rowIdx + 1, sizeCol + 1).setValue(have - qty);
+    if (Object.keys(soldOut).length) return { ok: false, error: 'SOLD_OUT', stock: soldOut };
 
-    var amount = price * qty;
+    // Pass 2: decrement.
+    for (var d = 0; d < lines.length; d++) {
+      var l2 = lines[d];
+      if (l2.custom) continue;
+      var col = 3 + SIZES.indexOf(l2.size);
+      var have2 = Number(byId[l2.designId].row[col]);
+      st.getRange(l2.rowIdx + 1, col + 1).setValue(have2 - l2.qty);
+      byId[l2.designId].row[col] = have2 - l2.qty;   // same design twice in one cart
+    }
+
+    var subtotal = 0, units = 0;
+    var summary = lines.map(function (l) {
+      subtotal += l.price * l.qty; units += l.qty;
+      return l.qty + '× ' + l.title + ' (' + l.size + ')';
+    }).join('; ');
+    var shipping = deliveryMode === 'ship' ? (subtotal >= FREE_SHIP_AT ? 0 : SHIP_FEE) : 0;
+    var total = subtotal + shipping;
+    var hasCustom = lines.some(function (l) { return l.custom; });
+
     sheet_(ORDERS).appendRow([
       orderId, new Date().toISOString(), 'NEW',
-      designId, title, size, qty, price, amount, Number(b.amountShown) || '',
-      name, room, phone, note, b.self === true,
+      summary, JSON.stringify(lines), units,
+      subtotal, shipping, total, Number(b.amountShown) || '', payMode,
+      name, room, phone, address, city, pin, note, b.self === true,
       '', '', '',                                     // utr, claimedAt, adminNotes
-      deliveryMode, address, '', '', '',              // podOrderId, tracking, podStatus
+      deliveryMode, '', '', hasCustom ? 'HAS_CUSTOM' : '',
     ]);
     bumpDaily_();
 
-    notify_('Tee order ' + orderId + ' — ₹' + amount, [
-      title + ' / ' + size + ' ×' + qty + (b.self === true ? '  [SELF]' : ''),
+    notify_('Tee order ' + orderId + ' — ₹' + total + (payMode === 'cod' ? ' (COD)' : ''), [
+      summary + (b.self === true ? '  [SELF]' : ''),
       'Buyer: ' + name + (room ? ' · ' + room : '') + (phone ? ' · ' + phone : ''),
-      deliveryMode === 'ship' ? 'Ship to: ' + address : 'Hostel hand-delivery',
+      deliveryMode === 'ship' ? 'Ship to: ' + address + ', ' + city + ' ' + pin : 'Hostel hand-delivery',
       note ? 'Note: ' + note : '',
-      'Awaiting payment (₹' + amount + ' on UPI). Verify in your UPI app, then set status VERIFIED in the Sheet.',
+      hasCustom ? 'Has a CUSTOM line — needs manual placement with the POD supplier.' : '',
+      payMode === 'cod'
+        ? 'COD: collect ₹' + total + ' at handover, then set status VERIFIED in the Sheet.'
+        : 'Awaiting payment (₹' + total + ' on UPI). Verify in your UPI app, then set status VERIFIED in the Sheet.',
     ]);
 
     return {
-      ok: true, orderId: orderId, amount: amount, status: 'NEW',
-      payment: { vpa: p.UPI_VPA || '', payee: p.UPI_PAYEE || '' },
+      ok: true, orderId: orderId, amount: subtotal, shipping: shipping, total: total,
+      status: 'NEW', payment: { vpa: p.UPI_VPA || '', payee: p.UPI_PAYEE || '' },
     };
   } finally {
     lock.releaseLock();
@@ -162,13 +240,13 @@ function handleClaim_(b) {
   var cell = os.getRange('A:A').createTextFinder(orderId).matchEntireCell(true).findNext();
   if (!cell) return { ok: false, error: 'NOT_FOUND' };
   var row = cell.getRow();
-  var status = String(os.getRange(row, 3).getValue());
+  var status = String(os.getRange(row, COL.status).getValue());
   if (STATUSES.indexOf(status) > STATUSES.indexOf('CLAIMED')) {
     return { ok: false, error: 'ALREADY_VERIFIED' };
   }
-  os.getRange(row, 3).setValue('CLAIMED');
-  os.getRange(row, 16).setValue(utr);                       // P: utr
-  os.getRange(row, 17).setValue(new Date().toISOString()); // Q: claimedAt
+  os.getRange(row, COL.status).setValue('CLAIMED');
+  os.getRange(row, COL.utr).setValue(utr);
+  os.getRange(row, COL.claimedAt).setValue(new Date().toISOString());
 
   notify_('Payment claimed ' + orderId, [
     'UTR/ref: ' + utr,
@@ -179,7 +257,7 @@ function handleClaim_(b) {
 
 /* ============ Qikink dropshipping connector (inert until POD_ENABLED=1) ====
  * Activation (SETUP.md §6): create the Qikink account, upload designs, put
- * per-size SKUs in Stock!I:M, set Script Properties QIKINK_CLIENT_ID /
+ * per-size SKUs in Stock!J:O, set Script Properties QIKINK_CLIENT_ID /
  * QIKINK_CLIENT_SECRET / POD_BASE (sandbox first: https://sandbox.qikink.com)
  * / POD_ENABLED=1, and install the two triggers (setupTriggers()).
  * Exact request/response field names: Qikink's Postman docs
@@ -191,7 +269,7 @@ function onVerifiedEdit(e) {                 // installable onEdit trigger
   try {
     if (!e || !e.range) return;
     var sh = e.range.getSheet();
-    if (sh.getName() !== ORDERS || e.range.getColumn() !== 3) return;
+    if (sh.getName() !== ORDERS || e.range.getColumn() !== COL.status) return;
     if (String(e.range.getValue()) !== 'VERIFIED') return;
     if (props_().POD_ENABLED !== '1') return;
     podDispatch_(e.range.getRow());
@@ -202,22 +280,42 @@ function onVerifiedEdit(e) {                 // installable onEdit trigger
 
 function podDispatch_(row) {
   var os = sheet_(ORDERS);
-  var r = os.getRange(row, 1, 1, 23).getValues()[0];
-  if (r[20]) return;                                        // U: podOrderId already set
-  var deliveryMode = String(r[18] || 'hostel');
+  var r = os.getRange(row, 1, 1, 26).getValues()[0];
+  if (r[COL.podOrderId - 1]) return;                       // already dispatched
+  var deliveryMode = String(r[COL.deliveryMode - 1] || 'hostel');
   var p = props_();
-  var sku = podSku_(String(r[3]), String(r[5]));
-  if (!sku) { os.getRange(row, 23).setValue('NO_SKU'); return; }
+
+  var lines = safeJson_(String(r[COL.itemsJson - 1])) || [];
+  var lineItems = [];
+  var manualLines = [];
+  for (var i = 0; i < lines.length; i++) {
+    var ln = lines[i];
+    if (ln.custom) { manualLines.push(ln); continue; }     // no SKU — owner places by hand
+    var sku = podSku_(String(ln.designId), String(ln.size));
+    if (!sku) { os.getRange(row, COL.podStatus).setValue('NO_SKU ' + ln.designId + '/' + ln.size); return; }
+    lineItems.push({ sku: sku, quantity: Number(ln.qty) });
+  }
+  if (manualLines.length) {
+    notify_('Order ' + r[0] + ' has ' + manualLines.length + ' CUSTOM line(s)', [
+      'Place these by hand in the Qikink panel:',
+      manualLines.map(function (l) { return l.qty + '× “' + l.text + '” (' + l.size + ')'; }).join('\n'),
+    ]);
+  }
+  if (!lineItems.length) {
+    os.getRange(row, COL.podStatus).setValue('ALL_CUSTOM (manual)');
+    return;
+  }
 
   var shipTo = deliveryMode === 'ship'
-    ? { name: String(r[10]), phone: String(r[12]), address: String(r[19]) }
+    ? { name: String(r[COL.buyerName - 1]), phone: String(r[COL.phone - 1]),
+        address: String(r[COL.address - 1]) + ', ' + String(r[COL.city - 1]) + ' ' + String(r[COL.pin - 1]) }
     : { name: p.UPI_PAYEE || 'Owner', phone: p.OWNER_PHONE || '', address: p.OWNER_ADDRESS || '' };
 
   // TODO(sandbox): pin exact payload field names against Qikink's docs.
   var payload = {
     order_number: String(r[0]),
     payment_type: 'prepaid',
-    line_items: [{ sku: sku, quantity: Number(r[6]) }],
+    line_items: lineItems,
     shipping_address: shipTo,
   };
   var res = UrlFetchApp.fetch(podBase_() + '/api/order/create', {
@@ -227,11 +325,11 @@ function podDispatch_(row) {
   });
   var body = safeJson_(res.getContentText());
   if (res.getResponseCode() < 300 && body) {
-    os.getRange(row, 21).setValue(String(body.order_id || body.id || 'OK')); // U
-    os.getRange(row, 23).setValue('DISPATCHED');                              // W
+    os.getRange(row, COL.podOrderId).setValue(String(body.order_id || body.id || 'OK'));
+    os.getRange(row, COL.podStatus).setValue('DISPATCHED');
     notify_('Qikink order placed for ' + r[0], ['Supplier ref: ' + (body.order_id || body.id || '?')]);
   } else {
-    os.getRange(row, 23).setValue('DISPATCH_FAILED ' + res.getResponseCode());
+    os.getRange(row, COL.podStatus).setValue('DISPATCH_FAILED ' + res.getResponseCode());
     notify_('Qikink dispatch FAILED for ' + r[0], [res.getContentText().slice(0, 500)]);
   }
 }
@@ -241,7 +339,7 @@ function podPoll_() {                        // time-driven trigger (6h)
   var os = sheet_(ORDERS);
   var data = os.getDataRange().getValues();
   for (var i = 1; i < data.length; i++) {
-    var podId = data[i][20], podStatus = String(data[i][22] || '');
+    var podId = data[i][COL.podOrderId - 1], podStatus = String(data[i][COL.podStatus - 1] || '');
     if (!podId || podStatus.indexOf('DELIVERED') === 0) continue;
     // TODO(sandbox): pin exact status endpoint + fields against Qikink's docs.
     var res = UrlFetchApp.fetch(podBase_() + '/api/order/status?order_id=' + encodeURIComponent(podId), {
@@ -249,9 +347,9 @@ function podPoll_() {                        // time-driven trigger (6h)
     });
     var body = safeJson_(res.getContentText());
     if (body && body.status) {
-      os.getRange(i + 1, 23).setValue(String(body.status));
+      os.getRange(i + 1, COL.podStatus).setValue(String(body.status));
       if (body.tracking_number || body.awb) {
-        os.getRange(i + 1, 22).setValue(String(body.courier || '') + ' ' + String(body.tracking_number || body.awb));
+        os.getRange(i + 1, COL.tracking).setValue(String(body.courier || '') + ' ' + String(body.tracking_number || body.awb));
       }
     }
   }
@@ -279,7 +377,7 @@ function podBase_() { return props_().POD_BASE || 'https://sandbox.qikink.com'; 
 function podSku_(designId, size) {
   var rows = sheet_(STOCK).getDataRange().getValues();
   for (var i = 1; i < rows.length; i++) {
-    if (String(rows[i][0]) === designId) return String(rows[i][8 + SIZES.indexOf(size)] || ''); // I:M
+    if (String(rows[i][0]) === designId) return String(rows[i][9 + SIZES.indexOf(size)] || ''); // J:O
   }
   return '';
 }
@@ -310,29 +408,34 @@ function setupSheet() {
   var os = ss.getSheetByName(ORDERS) || ss.insertSheet(ORDERS);
   var st = ss.getSheetByName(STOCK) || ss.insertSheet(STOCK);
 
-  os.getRange(1, 1, 1, 23).setValues([[
-    'orderId', 'createdAt', 'status', 'designId', 'designTitle', 'size', 'qty',
-    'unitPrice', 'amount', 'amountClientShown', 'buyerName', 'room', 'phone',
-    'note', 'self', 'utr', 'claimedAt', 'adminNotes',
-    'deliveryMode', 'address', 'podOrderId', 'tracking', 'podStatus',
+  os.getRange(1, 1, 1, 26).setValues([[
+    'orderId', 'createdAt', 'status', 'items', 'itemsJson', 'units',
+    'subtotal', 'shipping', 'total', 'amountClientShown', 'payMode',
+    'buyerName', 'room', 'phone', 'address', 'city', 'pin', 'note', 'self',
+    'utr', 'claimedAt', 'adminNotes',
+    'deliveryMode', 'podOrderId', 'tracking', 'podStatus',
   ]]).setFontWeight('bold');
   os.setFrozenRows(1);
   var rule = SpreadsheetApp.newDataValidation().requireValueInList(STATUSES, true).build();
   os.getRange('C2:C1000').setDataValidation(rule);
   setStatusColors_(os);
 
-  st.getRange(1, 1, 1, 13).setValues([[
-    'designId', 'title', 'price', 'S', 'M', 'L', 'XL', 'XXL',
-    'podSkuS', 'podSkuM', 'podSkuL', 'podSkuXL', 'podSkuXXL',
+  st.getRange(1, 1, 1, 15).setValues([[
+    'designId', 'title', 'price', 'XS', 'S', 'M', 'L', 'XL', '2XL',
+    'podSkuXS', 'podSkuS', 'podSkuM', 'podSkuL', 'podSkuXL', 'podSku2XL',
   ]]).setFontWeight('bold');
   st.setFrozenRows(1);
   if (st.getLastRow() < 2) {
     var seed = [
-      ['agent-01'], ['agent-02'], ['agent-03'], ['agent-04'],
-      ['reject-01'], ['reject-02'], ['reject-03'], ['reject-04'],
-      ['hunt-01'], ['hunt-02'], ['hunt-03'], ['hunt-04'],
-    ].map(function (r) { return [r[0], '', 0, 0, 0, 0, 0, 0, '', '', '', '', '']; });
-    st.getRange(2, 1, seed.length, 13).setValues(seed);
+      ['agent-01', 'It Hunts'], ['agent-02', 'While You Slept'],
+      ['agent-03', 'Just Decided'], ['agent-04', 'Night Shift'],
+      ['reject-01', 'On File'], ['reject-02', 'Strong Profile'],
+      ['reject-03', 'Senior And Junior'], ['reject-04', 'Algorithm'],
+      ['hunt-01', 'Still Hunting'], ['hunt-02', 'No Nonsense'],
+      ['hunt-03', 'All Of It'], ['hunt-04', 'Between Opportunities'],
+    ].map(function (r) { return [r[0], r[1], 1490, 0, 0, 0, 0, 0, 0, '', '', '', '', '', '']; });
+    seed.push([CUSTOM_ID, 'Your line (Studio)', 1490, '', '', '', '', '', '', '', '', '', '', '', '']);
+    st.getRange(2, 1, seed.length, 15).setValues(seed);
   }
 }
 
