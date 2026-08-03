@@ -129,8 +129,10 @@ network layer.
   Signature: front/back product shots hard-cut every 1.8s (3.6s `teeFront`/
   `teeBack` loop, per-tile negative delays), print line in a fixed chest zone
   (33.5%/34%/28%, `container-type: inline-size`, cqw sizing via `sizeFor()`).
-- 12 tees + sold-out joke: `hunt-01` "Still Hunting" seeds at 0 stock — real
+- 12 tees + sold-out joke: `grind-02` "Attendance 74.9%." seeds at 0 stock — real
   availability drives sold-out everywhere; offline, only the joke shows out.
+  Catalogue copy is the owner's v8 set (Delusion/Grind/Audacity collections,
+  ids `del-*`/`grind-*`/`aud-*`) — it supersedes the handoff's job-hunt lines.
 - **Backend is NOT in this repo's deploy**: a Google Apps Script web app +
   Sheet in the owner's account. Source and click-by-click setup live in
   `tees/backend/Code.gs` + `tees/backend/SETUP.md`. POSTs are text/plain JSON

@@ -427,12 +427,12 @@ function setupSheet() {
   st.setFrozenRows(1);
   if (st.getLastRow() < 2) {
     var seed = [
-      ['agent-01', 'It Hunts'], ['agent-02', 'While You Slept'],
-      ['agent-03', 'Just Decided'], ['agent-04', 'Night Shift'],
-      ['reject-01', 'On File'], ['reject-02', 'Strong Profile'],
-      ['reject-03', 'Senior And Junior'], ['reject-04', 'Algorithm'],
-      ['hunt-01', 'Still Hunting'], ['hunt-02', 'No Nonsense'],
-      ['hunt-03', 'All Of It'], ['hunt-04', 'Between Opportunities'],
+      ['del-01', 'Main Character'], ['del-02', 'Assembled Wrong'],
+      ['del-03', 'Full Confidence'], ['del-04', 'Group Chat'],
+      ['grind-01', 'Mess Food'], ['grind-02', 'Attendance'],
+      ['grind-03', 'Legends Sleep'], ['grind-04', 'Last Minute'],
+      ['aud-01', 'Said It'], ['aud-02', 'Energy Efficient'],
+      ['aud-03', 'Unavailable'], ['aud-04', 'Out Of Office'],
     ].map(function (r) { return [r[0], r[1], 1490, 0, 0, 0, 0, 0, 0, '', '', '', '', '', '']; });
     seed.push([CUSTOM_ID, 'Your line (Studio)', 1490, '', '', '', '', '', '', '', '', '', '', '', '']);
     st.getRange(2, 1, seed.length, 15).setValues(seed);
