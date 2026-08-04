@@ -82,27 +82,29 @@ Pokie uses 900px internally.
 
 Dark, Poppins, sticky top nav. Do not restyle it when working on other projects.
 
-Nav order: Work · Ventures · Numbers · Capabilities · Pokie mark · Tees · Get in
-touch. `data-mob="…"` attributes on elements are inline-style overrides swapped
+Nav order: Work · Ventures · Numbers · Capabilities · hobby-projects
+disclosure (three-line icon → Tees, Pokie; more rows to come) · Get in touch.
+`data-mob="…"` attributes on elements are inline-style overrides swapped
 in below 820px by `applyMob()`; class-styled components don't need them.
 
-### Pokie Tees launcher
+### Hobby-projects disclosure + Pokie Tees glyph
 
-Tees is a **nav link, not a second brand mark** (`.tee-link`, in the text-link
-group before the Pokie mark): a small solid pink tee glyph inline with a "Tees"
-label, styled identically to Work/Ventures/etc. Below 820px the label hides and
-the glyph stands alone at 25px. It is the only Pokie Tees asset that exists.
+Tees and Pokie both live under **one three-line minimiser** (`details.more`
+`#moreMenu`, owner-requested): a hamburger `summary` in the text-link group
+that expands a `.more-menu` panel of icon+label rows on both breakpoints.
+Native `<details>` = works without JS; a small end-of-body script adds
+click-outside/Escape/after-click closing. Adding a hobby project = one more
+`.more-item` row.
 
-- Brand facts it fixes: name **Pokie Tees**, tagline **"one sentence, one tee"**
-  (`aria-label`), nav label "Tees".
-- **Keep the hierarchy: quiet text links → ONE standalone accent mark (Pokie's
-  diamond) → one white CTA.** Every failed revision of this element made the
-  tee a second standalone glyph next to Pokie's — as a filled chip, then as a
-  bare mark — and two adjacent pink glyphs compete no matter how well their
-  construction matches. Don't promote the tee back into a standalone mark, and
-  don't put a chip/disc behind it.
-- The single chest bar is deliberate — one sentence, one tee. It types on once
-  per 4s loop (the site's idle tempo, shared easing) and freezes on hover.
+- Bar hierarchy is now: quiet text links → one three-line disclosure → one
+  white CTA. (Historically two adjacent standalone pink glyphs always
+  competed — the disclosure is what finally resolved it. Don't promote either
+  glyph back into the bar.)
+- Brand facts the Tees row fixes: name **Pokie Tees**, tagline **"one
+  sentence, one tee"** (`aria-label`), label "Tees".
+- The tee glyph's single chest bar is deliberate — one sentence, one tee. It
+  types on once per 4s loop (the site's idle tempo, shared easing) and
+  freezes on hover.
 - **Never draw the glyph with hairline strokes.** At 20px an authored stroke
   resolves to fractional device pixels and antialiases to grey. It is a fill;
   the body's same-colour round-join stroke exists only to round corners. The

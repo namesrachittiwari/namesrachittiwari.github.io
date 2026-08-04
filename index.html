@@ -31,14 +31,8 @@
   .pokie-eye { transform-origin: center; transform-box: fill-box; animation: pokie-blink 3.8s infinite; }
   .pokie-eye.delay { animation-delay: .08s; }
   .pokie-spin { animation: pokie-flip 7s ease-in-out infinite; }
-  /* The nav Pokie mark and the tee chip beside it read as one pair, so they
-     are sized together here rather than inline — the chip steps down at
-     820px and an inline width cannot follow it. The mark is a rotated
-     square: its pink area is roughly half the chip's filled circle at the
-     same box, so it is scaled UP to match by ink, not by bounding box.
-     POKIE_MARK_SIZE */
-  .pokie-mark { width: 34px; height: 34px; display: block; }
-  @media (max-width: 820px) { .pokie-mark { width: 32px; height: 32px; } }
+  /* The Pokie mark now lives inside the hobby-projects disclosure (.pokie-mm
+     below) rather than standalone in the bar. */
   @media (prefers-reduced-motion: reduce) { .pokie-eye, .pokie-spin { animation: none !important; } }
   @keyframes om-word { from { opacity: 0; transform: translateY(90%); } to { opacity: 1; transform: none; } }
   @keyframes om-rise { from { opacity: 0; transform: translateY(28px); } to { opacity: 1; transform: none; } }
@@ -61,15 +55,29 @@
   .hv-glow:hover { filter: brightness(1.35); }
   .hv-dim:hover { filter: brightness(.9); }
 
-  /* ---- Pokie Tees nav link ----
-     Tees is a NAV LINK, not a second brand mark. Two adjacent standalone pink
-     glyphs (Pokie + a big tee) competed no matter how well their construction
-     matched — the bar's hierarchy is quiet text links → ONE accent mark
-     (Pokie's diamond) → one white CTA. So the tee is a small solid glyph
-     inline with a "Tees" label, sitting in the text-link group; below 820px
-     the label hides and the glyph stands alone. Single chest bar = the brand:
-     one sentence, one tee. It types on once per 4s loop (the site's idle
-     tempo) and freezes on hover. */
+  /* ---- hobby-projects disclosure (three-line minimiser) ----
+     Tees and Pokie live under one hamburger, per the owner — the bar's
+     hierarchy is now quiet text links → one three-line disclosure → one
+     white CTA. <details>/<summary> so it opens without JS; a small script
+     adds click-outside + Escape closing. New hobby projects = one more
+     .more-item row. */
+  .more { position: relative; }
+  .more summary { list-style: none; }
+  .more summary::-webkit-details-marker { display: none; }
+  .more-btn { display: flex; align-items: center; padding: 12px 14px; border-radius: 999px; cursor: pointer; transition: background .2s ease; }
+  .more-btn:hover { background: #212121; }
+  .more[open] .more-btn { background: #212121; }
+  .more-btn svg { display: block; width: 20px; height: 20px; fill: #fff; }
+  .more-menu { position: absolute; top: calc(100% + 10px); right: 0; min-width: 176px; background: #0B0B0B; border: 1px solid rgba(255,255,255,.09); border-radius: 18px; padding: 8px; box-shadow: 0 24px 60px rgba(0,0,0,.6); z-index: 80; animation: more-in .22s cubic-bezier(.16,1,.3,1) both; }
+  @keyframes more-in { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: none; } }
+  .more-item { display: flex; align-items: center; gap: 11px; padding: 11px 14px; border-radius: 999px; font-size: 15px; font-weight: 500; color: #fff; transition: background .2s ease; }
+  .more-item:hover { background: #141414; }
+  .pokie-mm { width: 24px; height: 24px; margin: -2px 0 -2px -2px; }  /* rotated-square ink ≈ tee glyph at this size */
+  @media (prefers-reduced-motion: reduce) { .more-menu { animation: none; } }
+
+  /* ---- Pokie Tees glyph (now a .more-item row) ----
+     Single chest bar = the brand: one sentence, one tee. It types on once
+     per 4s loop (the site's idle tempo) and freezes on hover. */
   @keyframes tee-print {
     0%, 40%   { transform: scaleX(0);    opacity: 0; }
     50%       { transform: scaleX(1.07); opacity: 1; }
@@ -91,11 +99,6 @@
     animation: tee-print 4s cubic-bezier(.16,1,.3,1) infinite;
   }
   .tee-link:hover .tee-line { animation-play-state: paused; }
-  @media (max-width: 820px) {
-    .tee-link { padding: 8px !important; }     /* beats the inline 12px 18px */
-    .tee-link .tee-lb { display: none; }
-    .tee-link svg { width: 25px; height: 25px; }
-  }
   @media (prefers-reduced-motion: reduce) {
     .tee-link .tee-line { animation: none !important; transform: none; opacity: 1; }
   }
@@ -215,20 +218,32 @@
         <a href="#ventures" data-nav="ventures" data-flip class="hv-nav" data-mob="display:none" style="font-size:16px; font-weight:500; padding:12px 18px; border-radius:999px; color:#fff; transition:background .2s ease, color .2s ease">Ventures</a>
         <a href="#numbers" data-nav="numbers" data-flip class="hv-nav" data-mob="display:none" style="font-size:16px; font-weight:500; padding:12px 18px; border-radius:999px; color:#fff; transition:background .2s ease, color .2s ease">Numbers</a>
         <a href="#caps" data-nav="caps" data-flip class="hv-nav" data-mob="display:none" style="font-size:16px; font-weight:500; padding:12px 18px; border-radius:999px; color:#fff; transition:background .2s ease, color .2s ease">Capabilities</a>
-        <a href="/tees" class="hv-nav tee-link" aria-label="Pokie Tees — one sentence, one tee" style="display:flex; align-items:center; gap:8px; font-size:16px; font-weight:500; padding:12px 18px; border-radius:999px; color:#fff; transition:background .2s ease, color .2s ease">
-          <svg viewBox="0 0 24 24" aria-hidden="true">
-            <path class="tee-body" d="M9.5 3.4 C9.5 5.5 14.5 5.5 14.5 3.4 L18 4.5 L21.6 8.6 L18.4 11.2 L17.3 10.2 L17.3 20.6 L6.7 20.6 L6.7 10.2 L5.6 11.2 L2.4 8.6 L6 4.5 Z"></path>
-            <rect class="tee-line" x="8.7" y="12.4" width="6.6" height="2.4" rx="1.2"></rect>
-          </svg>
-          <span class="tee-lb">Tees</span>
-        </a>
-        <a href="https://pokie.rachittiwari.com" target="_blank" rel="noopener" class="hv-nav" aria-label="Pokie — an autonomous job-finding agent" style="display:flex; align-items:center; padding:8px 12px; border-radius:999px; transition:background .2s ease">
-          <svg viewBox="0 0 24 24" fill="none" class="pokie-spin pokie-mark">
-            <g transform="rotate(45 12 12)"><rect x="3.6" y="3.6" width="16.8" height="16.8" rx="5.4" fill="#EB6BA8"></rect></g>
-            <ellipse class="pokie-eye" cx="9.1" cy="12" rx="1.35" ry="2.6" fill="#fff"></ellipse>
-            <ellipse class="pokie-eye delay" cx="14.9" cy="12" rx="1.35" ry="2.6" fill="#fff"></ellipse>
-          </svg>
-        </a>
+        <details class="more" id="moreMenu">
+          <summary class="more-btn" aria-label="Hobby projects" title="Hobby projects">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <rect x="4" y="6.4" width="16" height="2.2" rx="1.1"></rect>
+              <rect x="4" y="10.9" width="16" height="2.2" rx="1.1"></rect>
+              <rect x="4" y="15.4" width="16" height="2.2" rx="1.1"></rect>
+            </svg>
+          </summary>
+          <div class="more-menu">
+            <a class="more-item tee-link" href="/tees" aria-label="Pokie Tees — one sentence, one tee">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path class="tee-body" d="M9.5 3.4 C9.5 5.5 14.5 5.5 14.5 3.4 L18 4.5 L21.6 8.6 L18.4 11.2 L17.3 10.2 L17.3 20.6 L6.7 20.6 L6.7 10.2 L5.6 11.2 L2.4 8.6 L6 4.5 Z"></path>
+                <rect class="tee-line" x="8.7" y="12.4" width="6.6" height="2.4" rx="1.2"></rect>
+              </svg>
+              <span>Tees</span>
+            </a>
+            <a class="more-item" href="https://pokie.rachittiwari.com" target="_blank" rel="noopener" aria-label="Pokie — an autonomous job-finding agent">
+              <svg viewBox="0 0 24 24" fill="none" class="pokie-spin pokie-mm">
+                <g transform="rotate(45 12 12)"><rect x="3.6" y="3.6" width="16.8" height="16.8" rx="5.4" fill="#EB6BA8"></rect></g>
+                <ellipse class="pokie-eye" cx="9.1" cy="12" rx="1.35" ry="2.6" fill="#fff"></ellipse>
+                <ellipse class="pokie-eye delay" cx="14.9" cy="12" rx="1.35" ry="2.6" fill="#fff"></ellipse>
+              </svg>
+              <span>Pokie</span>
+            </a>
+          </div>
+        </details>
         <a href="#talk" data-flip class="hv-invert" data-mob="padding:11px 20px; font-size:15px; margin-left:0" style="background:#fff; color:#070707; font-size:16px; font-weight:600; padding:12px 26px; border-radius:999px; margin-left:8px">Get in touch</a>
       </div>
     </div>
@@ -1373,6 +1388,22 @@
     }
     gate();
     setInterval(gate, 380);
+  });
+})();
+
+/* hobby-projects disclosure: close on outside click / Escape (enhancement —
+   the <details> opens natively without JS) */
+(function () {
+  var more = document.getElementById('moreMenu');
+  if (!more) return;
+  document.addEventListener('click', function (e) {
+    if (more.open && !more.contains(e.target)) more.open = false;
+  });
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') more.open = false;
+  });
+  more.querySelectorAll('.more-item').forEach(function (a) {
+    a.addEventListener('click', function () { more.open = false; });
   });
 })();
 </script>
