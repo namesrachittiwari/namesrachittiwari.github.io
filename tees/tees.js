@@ -34,7 +34,7 @@ var SHIP_FEE = 79;
 var MONTHS = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
 
 var TEES = [
-  { id: 'del-01',   name: 'Main Character',   sentence: 'Main character. No plot.',                    collection: 'The Delusion', origin: 'Wore it to one lecture. Three people said “fair.”' },
+  { id: 'del-01',   name: 'Been There',       sentence: 'Been there.\nDone that.',                     collection: 'The Delusion', origin: 'Past tense on both counts. No further questions.' },
   { id: 'del-02',   name: 'Assembled Wrong',  sentence: 'Built different. Assembled wrong.',           collection: 'The Delusion', origin: 'The quality-control tee. There was no quality control.' },
   { id: 'del-03',   name: 'Full Confidence',  sentence: 'Zero idea. Full confidence.',                 collection: 'The Delusion', origin: 'Printed the night before a viva. Worked, somehow.' },
   { id: 'del-04',   name: 'Group Chat',       sentence: 'I peaked in the group chat.',                 collection: 'The Delusion', origin: 'Four hundred messages a day, all bangers, zero witnesses.' },

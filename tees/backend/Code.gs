@@ -427,7 +427,7 @@ function setupSheet() {
   st.setFrozenRows(1);
   if (st.getLastRow() < 2) {
     var seed = [
-      ['del-01', 'Main Character'], ['del-02', 'Assembled Wrong'],
+      ['del-01', 'Been There'], ['del-02', 'Assembled Wrong'],
       ['del-03', 'Full Confidence'], ['del-04', 'Group Chat'],
       ['grind-01', 'Mess Food'], ['grind-02', 'Attendance'],
       ['grind-03', 'Legends Sleep'], ['grind-04', 'Last Minute'],
