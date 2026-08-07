@@ -83,7 +83,7 @@ var el = {
 };
 
 var fmt = function (n) { return '₹' + Number(n).toLocaleString('en-IN'); };
-var sizeFor = function (s) { var l = (s || '').length; return l > 38 ? '8.4cqw' : l > 28 ? '9.6cqw' : l > 18 ? '11.5cqw' : '14cqw'; };
+var sizeFor = function (s) { var l = (s || '').length; return l > 38 ? '6.4cqw' : l > 28 ? '7.4cqw' : l > 18 ? '8.8cqw' : '10.6cqw'; };  // tuned for Poppins 600 (wider than the old Bebas)
 
 function esc(s) {
   return String(s).replace(/[&<>"']/g, function (c) {

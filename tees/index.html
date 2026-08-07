@@ -54,7 +54,9 @@ button { -webkit-tap-highlight-color: transparent; }
 .tee-visual.flip .front, .tee-visual.flip .zone { animation: teeFront 3.6s linear infinite; animation-delay: var(--fd, 0s); }
 .tee-visual.flip .back { animation: teeBack 3.6s linear infinite; animation-delay: var(--fd, 0s); }
 .zone { position: absolute; left: 33.5%; right: 33.5%; top: 34%; height: 28%; container-type: inline-size; display: grid; place-items: center; overflow: hidden; }
-.print { text-align: center; font-family: 'Bebas Neue', 'Poppins', sans-serif; font-weight: 400; line-height: 1.04; letter-spacing: .035em; color: #f6f6f6; text-shadow: 0 0 9px rgba(255,255,255,.2); text-wrap: balance; white-space: pre-line; }
+/* print theme (owner reference): bold sentence-case grotesque, left-aligned,
+   flat white — supersedes the handoff's Bebas Neue caps */
+.print { text-align: left; font-family: 'Poppins', system-ui, sans-serif; font-weight: 600; line-height: 1.18; letter-spacing: -.01em; color: #f6f6f6; text-wrap: balance; white-space: pre-line; }
 
 /* ===== screens ===== */
 .screen { animation: screenIn .45s cubic-bezier(.16,1,.3,1) both; }
@@ -107,7 +109,6 @@ button { -webkit-tap-highlight-color: transparent; }
 .d-stage { position: relative; display: grid; place-items: center; padding: 90px 30px 60px; border-right: 1px solid rgba(255,255,255,.12); }
 .d-float { position: relative; width: min(88%, 640px); aspect-ratio: 1 / 1; animation: levitate 6.5s ease-in-out infinite; }
 .d-float .tee-visual { position: absolute; inset: 0; }
-.d-float .print { text-shadow: 0 0 9px rgba(255,255,255,.22); }
 .d-info { padding: 100px clamp(26px, 4vw, 60px) 70px; display: flex; flex-direction: column; animation: screenIn .4s cubic-bezier(.16,1,.3,1) .1s both; }
 .d-name { font-size: 20px; font-weight: 500; letter-spacing: .08em; text-transform: uppercase; margin: 0; }
 .d-price { font-size: 16px; color: #9A9A9A; margin-top: 10px; }
