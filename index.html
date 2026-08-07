@@ -135,6 +135,32 @@
     .tee-link .tee-line { animation: none !important; transform: none; opacity: 1; }
   }
 
+  /* ---- work case-study overlay ----
+     Clicking a #work card opens its case study. Content lives in the CASES
+     object in the end-of-body script; adding a study = one object + the
+     card's data-case attribute. */
+  .cs-pill { font-size: 13px; font-weight: 600; padding: 6px 13px; border-radius: 999px; background: rgba(7,7,7,.15); white-space: nowrap; }
+  [data-case] { cursor: pointer; }
+  [data-case]:hover .cs-pill { background: rgba(7,7,7,.3); }
+  .case-back { position: fixed; inset: 0; z-index: 200; background: rgba(0,0,0,.66); display: none; align-items: flex-start; justify-content: center; overflow-y: auto; padding: clamp(16px, 5vh, 60px) clamp(12px, 3vw, 32px); }
+  .case-back.on { display: flex; animation: case-fade .2s ease both; }
+  @keyframes case-fade { from { opacity: 0; } to { opacity: 1; } }
+  .case-card { width: min(720px, 100%); background: #0B0B0B; border: 1px solid rgba(255,255,255,.09); border-radius: 28px; padding: clamp(24px, 4vw, 44px); animation: case-rise .3s cubic-bezier(.16,1,.3,1) both; }
+  @keyframes case-rise { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: none; } }
+  .case-top { display: flex; align-items: center; justify-content: space-between; gap: 14px; }
+  .case-who { display: flex; align-items: center; gap: 12px; font-size: 15px; font-weight: 600; color: #fff; }
+  .case-badge { width: 26px; height: 26px; border-radius: 8px; color: #070707; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 600; flex: none; }
+  .case-sub { font-size: 13.5px; color: #9A9A9A; font-weight: 400; }
+  .case-x { width: 38px; height: 38px; flex: none; border-radius: 50%; border: 1px solid rgba(255,255,255,.14); background: transparent; color: #fff; font-size: 15px; display: grid; place-items: center; cursor: pointer; transition: background .2s ease; }
+  .case-x:hover { background: #212121; }
+  .case-h { margin: 26px 0 0; font-size: clamp(24px, 3.4vw, 34px); font-weight: 600; line-height: 1.16; color: #fff; }
+  .case-body h4 { margin: 30px 0 10px; font-size: 13px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: #9A9A9A; }
+  .case-body p { margin: 0; font-size: 15.5px; line-height: 1.7; color: #d6d6d6; }
+  .case-chips { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 30px; padding-top: 24px; border-top: 1px solid rgba(255,255,255,.09); }
+  .case-chip { display: flex; align-items: center; gap: 8px; font-size: 13.5px; font-weight: 500; color: #fff; border: 1px solid rgba(255,255,255,.14); border-radius: 999px; padding: 8px 15px; }
+  .case-chip .dot { width: 7px; height: 7px; border-radius: 50%; flex: none; }
+  @media (prefers-reduced-motion: reduce) { .case-back.on, .case-card { animation: none; } }
+
   /* ---- hero: physics keyword pile ---- */
   .hero { position:relative; height:100vh; min-height:760px; overflow:hidden; background:#070707; margin-top:-78px }
   .hero__inner { position:relative; box-sizing:border-box; height:100%; display:flex; align-items:center; justify-content:center; padding:40px 44px 120px; max-width:1440px; margin:0 auto }
@@ -345,8 +371,8 @@
 
       <div data-mob="padding-bottom:60px" style="display:flex; flex-direction:column; gap:26px; padding-bottom:120px">
         <div data-mob="top:66px" style="position:sticky; top:110px">
-          <div data-stack data-mob="padding:20px 16px; border-radius:24px; min-height:0; gap:12px" style="background:#4791FF; color:#070707; border-radius:44px; padding:44px 52px; min-height:340px; display:flex; flex-direction:column; justify-content:space-between; gap:24px">
-            <div data-mob="flex-direction:column; align-items:flex-start; gap:4px; font-size:13px" style="display:flex; justify-content:space-between; align-items:center; gap:16px; font-size:15px; font-weight:600"><span style="display:flex; align-items:center; gap:10px"><span style="width:24px; height:24px; border-radius:7px; background:rgba(7,7,7,.15); color:#070707; display:flex; align-items:center; justify-content:center; font-size:10px; font-weight:600; flex:none">FA</span>FieldAssist</span><span>2024 to 2025, enterprise CRM</span></div>
+          <div data-stack data-case="fieldassist" data-mob="padding:20px 16px; border-radius:24px; min-height:0; gap:12px" style="background:#4791FF; color:#070707; border-radius:44px; padding:44px 52px; min-height:340px; display:flex; flex-direction:column; justify-content:space-between; gap:24px">
+            <div data-mob="flex-direction:column; align-items:flex-start; gap:4px; font-size:13px" style="display:flex; justify-content:space-between; align-items:center; gap:16px; font-size:15px; font-weight:600"><span style="display:flex; align-items:center; gap:10px"><span style="width:24px; height:24px; border-radius:7px; background:rgba(7,7,7,.15); color:#070707; display:flex; align-items:center; justify-content:center; font-size:10px; font-weight:600; flex:none">FA</span>FieldAssist</span><span style="display:flex; align-items:center; gap:12px; flex-wrap:wrap"><span>2024 to 2025, enterprise CRM</span><span class="cs-pill">Case study →</span></span></div>
             <div data-mob="flex-direction:column-reverse; align-items:stretch; gap:16px" style="display:flex; align-items:center; gap:52px">
               <div data-mob="align-self:center" style="flex:none">
                 <div data-mob="height:min(38vh,330px); height:min(38dvh,330px)" style="position:relative; box-sizing:border-box; height:clamp(400px,54vh,520px); aspect-ratio:9/19.5; background:#070707; border-radius:26px; padding:7px; box-shadow:0 22px 50px rgba(7,7,7,.32)">
@@ -370,8 +396,8 @@
           </div>
         </div>
         <div data-mob="top:66px" style="position:sticky; top:124px">
-          <div data-stack data-mob="padding:20px 16px; border-radius:24px; min-height:0; gap:12px" style="background:#ECE42E; color:#070707; border-radius:44px; padding:44px 52px; min-height:340px; display:flex; flex-direction:column; justify-content:space-between; gap:24px">
-            <div data-mob="flex-direction:column; align-items:flex-start; gap:4px; font-size:13px" style="display:flex; justify-content:space-between; align-items:center; gap:16px; font-size:15px; font-weight:600"><span style="display:flex; align-items:center; gap:10px"><span style="width:24px; height:24px; border-radius:7px; background:rgba(7,7,7,.15); color:#070707; display:flex; align-items:center; justify-content:center; font-size:10px; font-weight:600; flex:none">V</span>VLCC</span><span>2024, AI skin analyzer</span></div>
+          <div data-stack data-case="vlcc" data-mob="padding:20px 16px; border-radius:24px; min-height:0; gap:12px" style="background:#ECE42E; color:#070707; border-radius:44px; padding:44px 52px; min-height:340px; display:flex; flex-direction:column; justify-content:space-between; gap:24px">
+            <div data-mob="flex-direction:column; align-items:flex-start; gap:4px; font-size:13px" style="display:flex; justify-content:space-between; align-items:center; gap:16px; font-size:15px; font-weight:600"><span style="display:flex; align-items:center; gap:10px"><span style="width:24px; height:24px; border-radius:7px; background:rgba(7,7,7,.15); color:#070707; display:flex; align-items:center; justify-content:center; font-size:10px; font-weight:600; flex:none">V</span>VLCC</span><span style="display:flex; align-items:center; gap:12px; flex-wrap:wrap"><span>2024, AI skin analyzer</span><span class="cs-pill">Case study →</span></span></div>
             <div data-mob="flex-direction:column-reverse; align-items:stretch; gap:16px" style="display:flex; align-items:center; gap:52px">
               <div data-mob="align-self:center" style="flex:none">
                 <div data-mob="height:min(38vh,330px); height:min(38dvh,330px)" style="position:relative; box-sizing:border-box; height:clamp(400px,54vh,520px); aspect-ratio:9/19.5; background:#070707; border-radius:26px; padding:7px; box-shadow:0 22px 50px rgba(7,7,7,.32)">
@@ -390,8 +416,8 @@
           </div>
         </div>
         <div data-mob="top:66px" style="position:sticky; top:138px">
-          <div data-stack data-mob="padding:20px 16px; border-radius:24px; min-height:0; gap:12px" style="background:#4791FF; color:#070707; border-radius:44px; padding:44px 52px; min-height:340px; display:flex; flex-direction:column; justify-content:space-between; gap:24px">
-            <div data-mob="flex-direction:column; align-items:flex-start; gap:4px; font-size:13px" style="display:flex; justify-content:space-between; align-items:center; gap:16px; font-size:15px; font-weight:600"><span style="display:flex; align-items:center; gap:10px"><span style="width:24px; height:24px; border-radius:7px; background:rgba(7,7,7,.15); color:#070707; display:flex; align-items:center; justify-content:center; font-size:10px; font-weight:600; flex:none">AB</span>AuthBridge</span><span>2022 to 2024, B2B SaaS</span></div>
+          <div data-stack data-case="authbridge" data-mob="padding:20px 16px; border-radius:24px; min-height:0; gap:12px" style="background:#4791FF; color:#070707; border-radius:44px; padding:44px 52px; min-height:340px; display:flex; flex-direction:column; justify-content:space-between; gap:24px">
+            <div data-mob="flex-direction:column; align-items:flex-start; gap:4px; font-size:13px" style="display:flex; justify-content:space-between; align-items:center; gap:16px; font-size:15px; font-weight:600"><span style="display:flex; align-items:center; gap:10px"><span style="width:24px; height:24px; border-radius:7px; background:rgba(7,7,7,.15); color:#070707; display:flex; align-items:center; justify-content:center; font-size:10px; font-weight:600; flex:none">AB</span>AuthBridge</span><span style="display:flex; align-items:center; gap:12px; flex-wrap:wrap"><span>2022 to 2024, B2B SaaS</span><span class="cs-pill">Case study →</span></span></div>
             <div data-mob="flex-direction:column-reverse; align-items:stretch; gap:16px" style="display:flex; align-items:center; gap:52px">
               <div data-mob="align-self:center" style="flex:none">
                 <div data-mob="height:min(38vh,330px); height:min(38dvh,330px)" style="position:relative; box-sizing:border-box; height:clamp(400px,54vh,520px); aspect-ratio:9/19.5; background:#070707; border-radius:26px; padding:7px; box-shadow:0 22px 50px rgba(7,7,7,.32)">
@@ -410,8 +436,8 @@
           </div>
         </div>
         <div data-mob="top:66px" style="position:sticky; top:152px">
-          <div data-stack data-mob="padding:20px 16px; border-radius:24px; min-height:0; gap:12px" style="background:#EB6BA8; color:#070707; border-radius:44px; padding:44px 52px; min-height:340px; display:flex; flex-direction:column; justify-content:space-between; gap:24px">
-            <div data-mob="flex-direction:column; align-items:flex-start; gap:4px; font-size:13px" style="display:flex; justify-content:space-between; align-items:center; gap:16px; font-size:15px; font-weight:600"><span style="display:flex; align-items:center; gap:10px"><span style="width:24px; height:24px; border-radius:7px; background:rgba(7,7,7,.15); color:#070707; display:flex; align-items:center; justify-content:center; font-size:10px; font-weight:600; flex:none">A</span>Amazon</span><span>2019 to 2020, ops at scale</span></div>
+          <div data-stack data-case="amazon" data-mob="padding:20px 16px; border-radius:24px; min-height:0; gap:12px" style="background:#EB6BA8; color:#070707; border-radius:44px; padding:44px 52px; min-height:340px; display:flex; flex-direction:column; justify-content:space-between; gap:24px">
+            <div data-mob="flex-direction:column; align-items:flex-start; gap:4px; font-size:13px" style="display:flex; justify-content:space-between; align-items:center; gap:16px; font-size:15px; font-weight:600"><span style="display:flex; align-items:center; gap:10px"><span style="width:24px; height:24px; border-radius:7px; background:rgba(7,7,7,.15); color:#070707; display:flex; align-items:center; justify-content:center; font-size:10px; font-weight:600; flex:none">A</span>Amazon</span><span style="display:flex; align-items:center; gap:12px; flex-wrap:wrap"><span>2019 to 2020, ops at scale</span><span class="cs-pill">Case study →</span></span></div>
             <div data-mob="flex-direction:column-reverse; align-items:stretch; gap:16px" style="display:flex; align-items:center; gap:52px">
               <div data-mob="align-self:center" style="flex:none">
                 <div data-dash aria-label="Amazon metrics" data-mob="width:min(100%,430px); height:min(36vh,300px); height:min(36dvh,300px)" style="box-sizing:border-box; width:clamp(250px,27vw,330px); height:clamp(400px,54vh,520px); background:#0D0D0D; border:1px solid rgba(255,255,255,.09); border-radius:24px; padding:14px; display:flex; flex-direction:column; gap:9px; box-shadow:0 22px 50px rgba(7,7,7,.32)"><div style="display:flex; justify-content:space-between; align-items:center"><span style="color:#fff; font-size:14px; font-weight:600">Network health</span><span style="width:8.5px; height:8.5px; border-radius:50%; background:#EB6BA8"></span></div><div style="background:rgba(255,255,255,.05); border-radius:15.9px; padding:13px; display:flex; flex-direction:column; gap:6px"><span style="color:rgba(255,255,255,.5); font-size:9.2px; font-weight:600">Shipments / day</span><span data-pnum="100" data-pnum-prefix="" data-pnum-suffix="K" style="color:#fff; font-size:20.7px; font-weight:600; line-height:1">0K</span><div style="display:flex; align-items:flex-end; gap:3.5px; height:44px"><span data-pbar="42" style="flex:1; height:4%; background:rgba(255,255,255,.13); border-radius:3px; transition:height .8s cubic-bezier(.16,1,.3,1) 0.00s"></span><span data-pbar="58" style="flex:1; height:4%; background:rgba(255,255,255,.13); border-radius:3px; transition:height .8s cubic-bezier(.16,1,.3,1) 0.07s"></span><span data-pbar="50" style="flex:1; height:4%; background:rgba(255,255,255,.13); border-radius:3px; transition:height .8s cubic-bezier(.16,1,.3,1) 0.14s"></span><span data-pbar="72" style="flex:1; height:4%; background:rgba(255,255,255,.13); border-radius:3px; transition:height .8s cubic-bezier(.16,1,.3,1) 0.21s"></span><span data-pbar="64" style="flex:1; height:4%; background:rgba(255,255,255,.13); border-radius:3px; transition:height .8s cubic-bezier(.16,1,.3,1) 0.28s"></span><span data-pbar="86" style="flex:1; height:4%; background:#EB6BA8; border-radius:3px; transition:height .8s cubic-bezier(.16,1,.3,1) 0.35s"></span><span data-pbar="78" style="flex:1; height:4%; background:rgba(255,255,255,.13); border-radius:3px; transition:height .8s cubic-bezier(.16,1,.3,1) 0.42s"></span></div></div><div style="flex:1; min-height:0; background:rgba(255,255,255,.05); border-radius:15.9px; padding:13px; display:flex; flex-direction:column; justify-content:center; gap:9px"><div style="display:flex; flex-direction:column; gap:3.5px"><div style="display:flex; justify-content:space-between"><span style="color:rgba(255,255,255,.5); font-size:9.2px; font-weight:600">Exceptions cleared</span><span style="color:#fff; font-size:9.2px; font-weight:600">98%</span></div><span style="display:block; height:4px; border-radius:9px; background:rgba(255,255,255,.08); overflow:hidden"><span data-pfill="98" style="display:block; height:100%; width:0%; background:#EB6BA8; border-radius:9px; transition:width .9s cubic-bezier(.16,1,.3,1) 0.00s"></span></span></div><div style="display:flex; flex-direction:column; gap:3.5px"><div style="display:flex; justify-content:space-between"><span style="color:rgba(255,255,255,.5); font-size:9.2px; font-weight:600">SLA held</span><span style="color:#fff; font-size:9.2px; font-weight:600">91%</span></div><span style="display:block; height:4px; border-radius:9px; background:rgba(255,255,255,.08); overflow:hidden"><span data-pfill="91" style="display:block; height:100%; width:0%; background:#EB6BA8; border-radius:9px; transition:width .9s cubic-bezier(.16,1,.3,1) 0.12s"></span></span></div><div style="display:flex; flex-direction:column; gap:3.5px"><div style="display:flex; justify-content:space-between"><span style="color:rgba(255,255,255,.5); font-size:9.2px; font-weight:600">Escalations closed</span><span style="color:#fff; font-size:9.2px; font-weight:600">84%</span></div><span style="display:block; height:4px; border-radius:9px; background:rgba(255,255,255,.08); overflow:hidden"><span data-pfill="84" style="display:block; height:100%; width:0%; background:#EB6BA8; border-radius:9px; transition:width .9s cubic-bezier(.16,1,.3,1) 0.24s"></span></span></div></div><div style="display:flex; gap:5px; flex-wrap:wrap"><span style="font-size:7px; font-weight:600; padding:3.4px 6.9px; border-radius:99px; background:#EB6BA8; color:#070707">20+ centres</span><span style="font-size:7px; font-weight:600; padding:3.4px 6.9px; border-radius:99px; background:rgba(255,255,255,.09); color:rgba(255,255,255,.75)">3 regions</span><span style="font-size:7px; font-weight:600; padding:3.4px 6.9px; border-radius:99px; background:rgba(255,255,255,.09); color:rgba(255,255,255,.75)">500 pincodes</span></div></div>
@@ -425,8 +451,8 @@
           </div>
         </div>
         <div data-mob="top:66px" style="position:sticky; top:166px">
-          <div data-stack data-mob="padding:20px 16px; border-radius:24px; min-height:0; gap:12px" style="background:#ECE42E; color:#070707; border-radius:44px; padding:44px 52px; min-height:340px; display:flex; flex-direction:column; justify-content:space-between; gap:24px">
-            <div data-mob="flex-direction:column; align-items:flex-start; gap:4px; font-size:13px" style="display:flex; justify-content:space-between; align-items:center; gap:16px; font-size:15px; font-weight:600"><span style="display:flex; align-items:center; gap:10px"><span style="width:24px; height:24px; border-radius:7px; background:rgba(7,7,7,.15); color:#070707; display:flex; align-items:center; justify-content:center; font-size:10px; font-weight:600; flex:none">JM</span>Jio Mart</span><span>2020 to 2021, retail launch</span></div>
+          <div data-stack data-case="jiomart" data-mob="padding:20px 16px; border-radius:24px; min-height:0; gap:12px" style="background:#ECE42E; color:#070707; border-radius:44px; padding:44px 52px; min-height:340px; display:flex; flex-direction:column; justify-content:space-between; gap:24px">
+            <div data-mob="flex-direction:column; align-items:flex-start; gap:4px; font-size:13px" style="display:flex; justify-content:space-between; align-items:center; gap:16px; font-size:15px; font-weight:600"><span style="display:flex; align-items:center; gap:10px"><span style="width:24px; height:24px; border-radius:7px; background:rgba(7,7,7,.15); color:#070707; display:flex; align-items:center; justify-content:center; font-size:10px; font-weight:600; flex:none">JM</span>Jio Mart</span><span style="display:flex; align-items:center; gap:12px; flex-wrap:wrap"><span>2020 to 2021, retail launch</span><span class="cs-pill">Case study →</span></span></div>
             <div data-mob="flex-direction:column-reverse; align-items:stretch; gap:16px" style="display:flex; align-items:center; gap:52px">
               <div data-mob="align-self:center" style="flex:none">
                 <div data-dash aria-label="Jio Mart metrics" data-mob="width:min(100%,430px); height:min(36vh,300px); height:min(36dvh,300px)" style="box-sizing:border-box; width:clamp(250px,27vw,330px); height:clamp(400px,54vh,520px); background:#0D0D0D; border:1px solid rgba(255,255,255,.09); border-radius:24px; padding:14px; display:flex; flex-direction:column; gap:9px; box-shadow:0 22px 50px rgba(7,7,7,.32)"><div style="display:flex; justify-content:space-between; align-items:center"><span style="color:#fff; font-size:14px; font-weight:600">Launch metrics</span><span style="width:8.5px; height:8.5px; border-radius:50%; background:#ECE42E"></span></div><div style="background:rgba(255,255,255,.05); border-radius:15.9px; padding:13px; display:flex; flex-direction:column; gap:6px"><span style="color:rgba(255,255,255,.5); font-size:9.2px; font-weight:600">Delivery time</span><div style="display:flex; align-items:baseline; gap:6px"><span style="color:#ECE42E; font-size:20.7px; font-weight:600; line-height:1">Same day</span><span style="color:rgba(255,255,255,.32); font-size:9.5px; text-decoration:line-through">4 days</span></div><svg viewBox="0 0 60 20" preserveAspectRatio="none" style="width:100%; height:22px; display:block"><polyline data-pspark points="0,3 10,5 20,4 30,8 40,11 50,15 60,17" fill="none" stroke="#ECE42E" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div style="display:flex; gap:9px"><div style="flex:1; background:rgba(255,255,255,.05); border-radius:15.9px; padding:13px; display:flex; flex-direction:column; gap:6px"><span style="color:rgba(255,255,255,.5); font-size:9.2px; font-weight:600">Stores live</span><span data-pnum="30" data-pnum-prefix="" data-pnum-suffix="+" style="color:#fff; font-size:20.7px; font-weight:600; line-height:1">0+</span></div><div style="flex:1; background:rgba(255,255,255,.05); border-radius:15.9px; padding:13px; display:flex; flex-direction:column; gap:6px"><span style="color:rgba(255,255,255,.5); font-size:9.2px; font-weight:600">Revenue</span><span data-pnum="10" data-pnum-prefix="₹" data-pnum-suffix="Cr" style="color:#fff; font-size:20.7px; font-weight:600; line-height:1">₹0Cr</span></div></div><div style="flex:1; min-height:0; background:rgba(255,255,255,.05); border-radius:15.9px; padding:13px; display:flex; flex-direction:column; gap:6px"><span style="color:rgba(255,255,255,.5); font-size:9.2px; font-weight:600">Orders per store</span><div style="flex:1; min-height:0; display:flex; align-items:flex-end; gap:4px"><span data-pbar="34" style="flex:1; height:4%; background:rgba(255,255,255,.13); border-radius:3px; transition:height .8s cubic-bezier(.16,1,.3,1) 0.00s"></span><span data-pbar="46" style="flex:1; height:4%; background:rgba(255,255,255,.13); border-radius:3px; transition:height .8s cubic-bezier(.16,1,.3,1) 0.07s"></span><span data-pbar="58" style="flex:1; height:4%; background:rgba(255,255,255,.13); border-radius:3px; transition:height .8s cubic-bezier(.16,1,.3,1) 0.14s"></span><span data-pbar="52" style="flex:1; height:4%; background:rgba(255,255,255,.13); border-radius:3px; transition:height .8s cubic-bezier(.16,1,.3,1) 0.21s"></span><span data-pbar="74" style="flex:1; height:4%; background:rgba(255,255,255,.13); border-radius:3px; transition:height .8s cubic-bezier(.16,1,.3,1) 0.28s"></span><span data-pbar="95" style="flex:1; height:4%; background:#ECE42E; border-radius:3px; transition:height .8s cubic-bezier(.16,1,.3,1) 0.35s"></span></div></div></div>
@@ -1420,6 +1446,107 @@
     }
     gate();
     setInterval(gate, 380);
+  });
+})();
+
+/* work case studies: click a #work card → overlay. Content is here so a new
+   study is one object + a data-case attribute on the card. */
+(function () {
+  var CASES = {
+    fieldassist: {
+      name: 'FieldAssist', badge: 'FA', accent: '#4791FF', sub: '2024 to 2025 · enterprise CRM',
+      title: 'Getting field reps to open the CRM between outlets, not after dinner.',
+      body: [
+        ['The setup', 'FieldAssist builds sales-force automation for consumer-goods brands — the app a rep carries from outlet to outlet on a beat. I owned the enterprise side: the large accounts whose field teams decide whether the product lives or dies.'],
+        ['The problem', 'Reps treated the app as end-of-day data entry. Beats actually ran on calls and WhatsApp, orders were reconstructed from memory at night, and managers had dashboards full of numbers nobody had entered honestly. For enterprise buyers evaluating renewal, "my team doesn’t use it" was the whole conversation.'],
+        ['What I did', 'I spent days riding along on beats before touching the roadmap. The rebuild put the visit loop at the centre — punch in with GPS at the outlet, see the route and what’s left, book the order with credit checks inline — so the app was the fastest way to finish a visit, not extra homework after it. Internally, I moved the team to an OKR-led roadmap so enterprise onboarding asks stopped arriving as surprise escalations.'],
+        ['What it moved', 'Key accounts onboarded and stayed. The app earned its place in the two minutes between one outlet and the next — which is the only place a field CRM can win.'],
+      ],
+      chips: ['₹10Cr+ annual revenue', 'Key accounts onboarded', 'OKR-led roadmap'],
+    },
+    vlcc: {
+      name: 'VLCC', badge: 'V', accent: '#ECE42E', sub: '2024 · AI skin analyzer',
+      title: 'A camera in the store that tells the counsellor what to recommend.',
+      body: [
+        ['The setup', 'VLCC’s in-store consults drive its services and product sales. Every recommendation depended on a counsellor’s eye — which meant every store, and every counsellor, converted differently.'],
+        ['The problem', 'Without an objective read of a customer’s skin, consults opened with opinion and closed with discounts. The chain had a ₹100Cr CRM portfolio of customers and no consistent way to turn a walk-in into a personalised routine.'],
+        ['What I did', 'Shipped an in-store capture flow and skin-scoring model — hydration, texture, pores in a three-second scan — that hands the counsellor a scored profile and a matched routine before they say a word. The design goal was the counsellor’s script, not the model’s accuracy alone: the output is a briefing, in their language, tied to products on the shelf behind them.'],
+        ['What it moved', 'Rolled out across 50+ stores. Consults started from evidence, and per-store sales rose 25% — the model didn’t replace the counsellor, it gave them a better opening line.'],
+      ],
+      chips: ['+25% per-store sales', '50+ stores', '₹100Cr CRM portfolio'],
+    },
+    authbridge: {
+      name: 'AuthBridge', badge: 'AB', accent: '#4791FF', sub: '2022 to 2024 · B2B SaaS',
+      title: 'Four verification products, one platform, no engineer in the setup loop.',
+      body: [
+        ['The setup', 'AuthBridge runs background verification and KYC for enterprises — identity, address, employment, criminal checks. I came in when these were four separately-sold products with four setups.'],
+        ['The problem', 'Every new tenant was hand-configured by engineers. Sales cycles stalled on setup queues, custom configs drifted apart, and engineering spent its sprints on onboarding instead of product. The checks themselves were fast; getting a client live was not.'],
+        ['What I did', 'Unified the four products on one platform with self-serve tenant configuration — the setup an engineer used to do by hand became forms, defaults and templates an ops person could finish in an afternoon. On the end-user side, rebuilt the KYC journey around liveness plus OCR so a candidate goes from camera to verified in seconds, not form-filling.'],
+        ['What it moved', 'Engineering dependency on onboarding fell by 70%, which is the difference between selling a platform and selling four projects. The platform underpins ₹50Cr ARR.'],
+      ],
+      chips: ['₹50Cr ARR', '4 products, one platform', '70% less eng dependency'],
+    },
+    amazon: {
+      name: 'Amazon', badge: 'A', accent: '#EB6BA8', sub: '2019 to 2020 · ops at scale',
+      title: 'Tooling for the hours when a delivery network stops going to plan.',
+      body: [
+        ['The setup', 'Last-mile operations moving 100K shipments a day across 20+ delivery centres and 500 pincodes. At that scale the plan is a fiction by 11am — weather, misroutes, absent riders, festival spikes.'],
+        ['The problem', 'Exceptions were handled by phone calls and heroics. A breach surfaced when a customer complained, not when it happened, and every centre improvised its own recovery — so the network’s worst hours were also its blindest.'],
+        ['What I did', 'Built the exception-handling layer: surface breaches as they form, not after; route around them with pre-agreed playbooks instead of improvisation; and close the loop so a cleared exception updates the promise the customer sees. Dashboards made SLA health and exception queues the shared language between centres and regions.'],
+        ['What it moved', 'Exception clearance reached 98% and SLA held at 91% through the messiest hours of the day — the point of the tooling was never the good days.'],
+      ],
+      chips: ['100K daily shipments', '20+ centres', '500 pincodes'],
+    },
+    jiomart: {
+      name: 'Jio Mart', badge: 'JM', accent: '#ECE42E', sub: '2020 to 2021 · retail launch',
+      title: 'Thirty stores that had never shipped an online order, doing it same-day.',
+      body: [
+        ['The setup', 'Launching online grocery from physical retail stores — turning shop floors into fulfilment nodes during the steepest demand spike retail has seen.'],
+        ['The problem', 'The delivery promise was four days, which for groceries is a refusal. Stores had no picking flow, no slotting, no handoff to delivery partners — an online order was a printout somebody dealt with when the queue died down.'],
+        ['What I did', 'Wrote the store playbook and made it operable by people who had never done e-commerce: order slotting by hour, a picking path that follows the store’s own aisle logic, packing and partner handoff at the door with nothing left to judgement. Launched store by store — 30+ of them — fixing the playbook against reality each time before scaling it.'],
+        ['What it moved', 'Four-day delivery became same-day across the network, and the stores did ₹10Cr in revenue through a channel that hadn’t existed for them a year earlier.'],
+      ],
+      chips: ['4 days → same day', '30+ stores', '₹10Cr revenue'],
+    },
+  };
+
+  var back = document.createElement('div');
+  back.className = 'case-back';
+  document.body.appendChild(back);
+  var esc = function (s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); };
+
+  function openCase(key) {
+    var c = CASES[key];
+    if (!c) return;
+    back.innerHTML =
+      '<div class="case-card" role="dialog" aria-modal="true" aria-label="' + esc(c.name) + ' case study" tabindex="-1">' +
+      '<div class="case-top"><span class="case-who">' +
+      '<span class="case-badge" style="background:' + c.accent + '">' + esc(c.badge) + '</span>' +
+      esc(c.name) + '<span class="case-sub">' + esc(c.sub) + '</span></span>' +
+      '<button type="button" class="case-x" aria-label="Close">✕</button></div>' +
+      '<h3 class="case-h">' + esc(c.title) + '</h3>' +
+      '<div class="case-body">' + c.body.map(function (s) {
+        return '<h4>' + esc(s[0]) + '</h4><p>' + esc(s[1]) + '</p>';
+      }).join('') + '</div>' +
+      '<div class="case-chips">' + c.chips.map(function (m) {
+        return '<span class="case-chip"><span class="dot" style="background:' + c.accent + '"></span>' + esc(m) + '</span>';
+      }).join('') + '</div></div>';
+    back.classList.add('on');
+    document.documentElement.style.overflow = 'hidden';
+    back.querySelector('.case-x').addEventListener('click', closeCase);
+    back.querySelector('.case-card').focus();
+  }
+  function closeCase() {
+    back.classList.remove('on');
+    back.innerHTML = '';
+    document.documentElement.style.overflow = '';
+  }
+  back.addEventListener('click', function (e) { if (e.target === back) closeCase(); });
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && back.classList.contains('on')) closeCase();
+  });
+  document.querySelectorAll('[data-case]').forEach(function (card) {
+    card.addEventListener('click', function () { openCase(card.getAttribute('data-case')); });
   });
 })();
 

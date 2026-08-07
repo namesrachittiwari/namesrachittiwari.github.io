@@ -84,6 +84,9 @@ Dark, Poppins, sticky top nav. Do not restyle it when working on other projects.
 
 Nav order: Work · Ventures · Numbers · Capabilities · hobby-projects
 disclosure (three-line icon → Tees, Pokie; more rows to come) · Get in touch.
+The five `#work` cards open **case-study overlays** on click (`data-case`
+attr → `CASES` object in the end-of-body script; a new study = one object +
+one attribute; the ventures cards deliberately have none).
 `data-mob="…"` attributes on elements are inline-style overrides swapped
 in below 820px by `applyMob()`; class-styled components don't need them.
 
@@ -127,10 +130,14 @@ network layer.
 
 - **Design-system exception**: uses the handoff's own tokens — bg `#000000`
   (not `--black`), accent `#EB6BA8`, borders `rgba(255,255,255,.18)`, Poppins
-  UI + **Bebas Neue** for every shirt print (self-hosted in `tees/fonts/`).
-  Signature: front/back product shots hard-cut every 1.8s (3.6s `teeFront`/
-  `teeBack` loop, per-tile negative delays), print line in a fixed chest zone
-  (33.5%/34%/28%, `container-type: inline-size`, cqw sizing via `sizeFor()`).
+  UI. **Print theme (owner reference, supersedes the handoff's Bebas caps):**
+  Poppins 600, sentence case, left-aligned, flat white, `white-space:
+  pre-line` (sentences may carry explicit `\n` breaks); Bebas Neue stays
+  self-hosted in `tees/fonts/` but unused. Signature: front/back product
+  shots hard-cut every 1.8s (3.6s `teeFront`/`teeBack` loop, per-tile
+  negative delays), print line in a fixed chest zone (33.5%/34%/28%,
+  `container-type: inline-size`, cqw sizing via `sizeFor()` — tuned for
+  Poppins widths).
 - 12 tees + sold-out joke: `grind-02` "Attendance 74.9%." seeds at 0 stock — real
   availability drives sold-out everywhere; offline, only the joke shows out.
   Catalogue copy is the owner's v8 set (Delusion/Grind/Audacity collections,
