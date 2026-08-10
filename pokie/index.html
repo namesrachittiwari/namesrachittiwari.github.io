@@ -133,25 +133,26 @@ button:focus-visible, input:focus-visible { outline:2px solid var(--pink); outli
 
 /* ============ Chat active ============ */
 .thread-scroll { flex:1; overflow-y:auto; display:flex; justify-content:center; padding:36px 40px 24px; }
-.thread { width:100%; max-width:760px; display:flex; flex-direction:column; gap:28px; }
+.thread { width:100%; max-width:760px; display:flex; flex-direction:column; gap:24px; }
+/* Turns are content, not flex space to reclaim — without this they shrink to
+   fit the scroll container and the lists collapse instead of scrolling. */
+.thread > * { flex-shrink:0; }
 .u-bubble { align-self:flex-end; max-width:78%; background:var(--elev); border-radius:24px; padding:16px 22px; font-size:16px; line-height:1.55; }
-.a-text { font-size:19px; line-height:1.6; }
-.a-text.md { font-size:17px; line-height:1.65; }
-.result-card {
-  background:var(--panel); border:1px solid var(--border); border-radius:26px;
-  padding:24px 28px; display:flex; flex-direction:column; gap:14px; cursor:pointer;
-  transition:border-color .25s ease;
+.a-text { font-size:17px; line-height:1.6; }
+.a-text.md { font-size:16px; line-height:1.65; }
+/* Answers are one row per result, not a card each — the detail lives on the
+   screen the row opens. Whole row is the primary action. */
+.ans-list { display:flex; flex-direction:column; gap:1px; background:var(--hair); border:1px solid var(--border); border-radius:16px; overflow:hidden; }
+.ans-row {
+  display:grid; grid-template-columns:auto 1fr auto auto; gap:12px; align-items:center;
+  background:var(--panel); padding:14px 20px; width:100%; text-align:left;
+  border:0; font:inherit; color:inherit; cursor:pointer; transition:background .2s ease;
 }
-.result-card:hover { border-color:rgba(255,255,255,.28) !important; }
-.rc-top { display:flex; align-items:center; justify-content:space-between; }
-.rc-kind { font-size:13px; font-weight:600; }
-.rc-meta { font-size:13px; color:var(--t3); }
-.rc-title { font-size:21px; font-weight:600; line-height:1.35; }
-.rc-body { font-size:15px; color:var(--t2); line-height:1.6; }
-.rc-actions { display:flex; gap:9px; padding-top:4px; }
-.rc-primary { font-size:14px; font-weight:600; padding:11px 22px; border-radius:999px; color:#070707; cursor:pointer; }
-.rc-secondary { font-size:14px; font-weight:500; padding:11px 22px; border-radius:999px; border:1px solid rgba(255,255,255,.2); color:#fff; cursor:pointer; }
-.rc-secondary:hover { background:var(--elev); }
+.ans-row:hover { background:var(--panel-hov); }
+.ans-row .kd { width:5px; height:5px; border-radius:50%; }
+.ans-row .tt { font-size:15px; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.ans-row .mt { font-size:13px; color:var(--t3); white-space:nowrap; }
+.ans-row .pa { font-size:13px; font-weight:600; white-space:nowrap; }
 .list-answer { display:flex; flex-direction:column; gap:1px; background:var(--hair); border:1px solid var(--border); border-radius:22px; overflow:hidden; }
 .list-answer .row { display:flex; align-items:center; justify-content:space-between; gap:20px; background:var(--panel); padding:16px 22px; }
 .list-answer .role { font-size:16px; }
@@ -374,12 +375,15 @@ button:focus-visible, input:focus-visible { outline:2px solid var(--pink); outli
 .hist-tabs span.on { background:#fff; color:#070707; }
 .day-label { font-size:13px; color:var(--t3); padding-left:4px; }
 .day-card { background:var(--panel); border:1px solid var(--border); border-radius:26px; overflow:hidden; }
-.hist-row { display:grid; grid-template-columns:76px 90px 1fr auto; gap:18px; align-items:center; padding:17px 26px; border-top:1px solid var(--hair); transition:background .2s ease; }
+/* One line per event: when it happened, what it was, what you can do. The
+   "why" behind each row lives behind its action, not in the list. */
+.hist-row { display:grid; grid-template-columns:52px 1fr auto; gap:16px; align-items:center; padding:13px 22px; border-top:1px solid var(--hair); transition:background .2s ease; }
 .hist-row:hover { background:var(--panel-hov); }
 .hist-row .tm { font-size:13px; color:var(--t3); font-variant-numeric:tabular-nums; }
-.actor { font-size:12px; font-weight:600; padding:5px 12px; border-radius:999px; text-align:center; }
-.hist-row .tx { font-size:16px; }
-.hist-row .dt { font-size:13px; color:var(--t3); }
+.hist-row .tx { font-size:15px; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+/* Actor as a dot, so the Pokie/You filter still reads at a glance. */
+.actor { display:inline-block; width:5px; height:5px; border-radius:50%; margin-right:9px; vertical-align:middle; }
+.sr { position:absolute; width:1px; height:1px; margin:-1px; padding:0; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; border:0; }
 .hist-act { font-size:13px; font-weight:600; padding:8px 16px; border-radius:999px; cursor:pointer; border:1px solid; white-space:nowrap; }
 
 /* ============ Mobile brief ============ */
@@ -463,10 +467,28 @@ button:focus-visible, input:focus-visible { outline:2px solid var(--pink); outli
   .jd-inner { padding:20px 18px 16px; }
   .jd-actions { padding:14px 18px; }
   .two-col { grid-template-columns:1fr; }
-  .hist-row { grid-template-columns:56px 1fr auto; }
-  .hist-row .tm { display:none; }
+  /* Same three columns as desktop — the timestamp is the point of the row,
+     so it survives here. Two lines of text rather than one, since the
+     column is narrow enough that one would clip most titles. */
+  .hist-row { grid-template-columns:44px 1fr auto; gap:12px; padding:12px 16px; }
+  .hist-row .tx { font-size:14px; white-space:normal; display:-webkit-box; -webkit-box-orient:vertical; -webkit-line-clamp:2; }
+  .hist-act { font-size:12px; padding:7px 13px; }
   .chat-greet .h { font-size:27px; }
-  .a-text { font-size:17px; }
+  .a-text { font-size:16px; }
+  .a-text.md { font-size:15px; }
+  .thread { gap:20px; }
+  /* Row keeps the title and its action; the meta is the first thing to go. */
+  /* align-items:start keeps the dot on the first line of a wrapped title
+     instead of floating between the two. */
+  .ans-row { grid-template-columns:auto 1fr; gap:10px; padding:12px 16px; row-gap:6px; align-items:start; }
+  .ans-row .kd { margin-top:9px; }
+  .ans-row .mt { display:none; }
+  .ans-row .tt { white-space:normal; }
+  .ans-row .pa { grid-column:2; justify-self:start; }
+  /* Reason under the role rather than fighting it for width. */
+  .list-answer .row { flex-direction:column; align-items:flex-start; gap:3px; padding:12px 16px; }
+  .list-answer .role { font-size:15px; }
+  .list-answer .why { text-align:left; }
   .ap-title { font-size:24px; }
   .draft-card { padding:22px 20px; }
 }

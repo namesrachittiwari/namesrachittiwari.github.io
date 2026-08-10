@@ -227,6 +227,15 @@ data (verbatim from the handoff view model), hash router, screen renderers, run
 simulation, interactions. Backend contract in `pokie/API.md` (REST + SSE); no
 backend exists yet — all data is hardcoded and the live run is a timer.
 
+**List density (owner-requested).** Chat answers and History are one row per
+item on both breakpoints, not a card each: History rows are `time · one line ·
+action` (the `detail` field is still carried in the data and by `api.js`, just
+not rendered), and chat answers are `dot · title · meta · action →` with the
+whole row acting as the primary action. Don't reintroduce per-row description
+sub-lines. The timestamp stays visible on mobile — it used to be `display:none`
+there, which was the main complaint. `.thread > * { flex-shrink:0 }` is
+load-bearing: without it the thread's lists collapse instead of scrolling.
+
 Routing: the app lands directly on `#chat`; there is no welcome screen. `onboard`
 is the one cold screen (renders without the rail) and is reachable at `#onboard`.
 Unknown hashes fall back to chat. Below 900px the rail collapses to a 5-tab
