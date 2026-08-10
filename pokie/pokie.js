@@ -270,6 +270,12 @@ const HANDLED = [
 ];
 
 /* ================= Render helpers ================= */
+// Only needed where a value lands in an attribute — live rows carry
+// backend text, and a stray quote there would break the markup.
+function esc(s) {
+  return String(s == null ? '' : s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+}
+
 function railHTML() {
   const groups = NAV.map(g => `
     <div class="nav-group">
@@ -407,18 +413,17 @@ const SCREENS = {
       <div class="thread-scroll"><div class="thread">
         <div class="u-bubble">What happened last night?</div>
         <span class="a-text">Seven roles cleared your bar. I applied to three. Two want you — one is time-sensitive.</span>
-        ${CHAT_CARDS.map(c => `
-          <div class="result-card" style="border-color:${c.border}" data-go="${c.go}">
-            <div class="rc-top"><span class="rc-kind" style="color:${c.kindColor}">${c.kind}</span><span class="rc-meta">${c.meta}</span></div>
-            <span class="rc-title">${c.title}</span>
-            <span class="rc-body">${c.body}</span>
-            <div class="rc-actions">
-              <span class="rc-primary" style="background:${c.primaryBg}">${c.primary}</span>
-              <span class="rc-secondary">${c.secondary}</span>
-            </div>
-          </div>`).join('')}
+        <div class="ans-list">
+          ${CHAT_CARDS.map(c => `
+            <button class="ans-row" data-go="${c.go}">
+              <i class="kd" style="background:${c.kindColor}" aria-hidden="true"></i>
+              <span class="tt">${c.title}</span>
+              <span class="mt">${c.meta}</span>
+              <span class="pa" style="color:${c.kindColor}">${c.primary} →</span>
+            </button>`).join('')}
+        </div>
         <div class="u-bubble">What did you skip, and why?</div>
-        <div style="display:flex;flex-direction:column;gap:14px">
+        <div style="display:flex;flex-direction:column;gap:12px">
           <span class="a-text md">Three hundred and sixty-one, almost all on comp. The four worth naming:</span>
           <div class="list-answer">
             ${SKIPPED.map(k => `<div class="row"><span class="role">${k.role}</span><span class="why">${k.reason}</span></div>`).join('')}
@@ -724,7 +729,7 @@ const SCREENS = {
       <div class="page-head">
         <div style="display:flex;flex-direction:column;gap:6px">
           <span class="t">Everything Pokie has done.</span>
-          <span class="s">Complete audit trail. Anything with an undo can be pulled back — including sent mail, within 30 minutes.</span>
+          <span class="s">Anything undoable can be pulled back within 30 minutes.</span>
         </div>
         <div class="hist-tabs">
           ${['All', 'Pokie', 'Undoable'].map((t, i) => `<span class="${tab === i ? 'on' : ''}" data-htab="${i}">${t}</span>`).join('')}
@@ -746,11 +751,9 @@ const SCREENS = {
               return `
               <div class="hist-row" style="${i === 0 ? 'border-top:none' : ''}">
                 <span class="tm">${r.time}</span>
-                <span class="actor" style="background:${isPokie ? 'rgba(235,107,168,.16)' : '#212121'};color:${isPokie ? PINK : '#fff'}">${r.actor}</span>
-                <div style="display:flex;flex-direction:column;gap:3px;min-width:0">
-                  <span class="tx" style="${undone ? 'color:#5c5c5c;text-decoration:line-through' : ''}">${r.text}</span>
-                  <span class="dt">${undone ? 'Undone just now' : r.detail}</span>
-                </div>
+                <span class="tx" title="${esc(r.text)}" style="${undone ? 'color:#5c5c5c;text-decoration:line-through' : ''}">
+                  <i class="actor" style="background:${isPokie ? PINK : '#5c5c5c'}" aria-hidden="true"></i><span class="sr">${r.actor}: </span>${r.text}
+                </span>
                 <button class="hist-act" data-hist="${r.id}" data-undo="${r.undoable ? 1 : 0}" style="border-color:${aBorder};color:${aFg}" ${undone ? 'disabled' : ''}>${undone ? 'Undone' : r.action}</button>
               </div>`;
             }).join('')}
