@@ -26,14 +26,6 @@
   a { color: #EB6BA8; text-decoration: none; }
   a:hover { color: #fff; }
   #work, #ventures, #numbers { scroll-margin-top: 90px; }
-  @keyframes pokie-flip { 0%, 72% { transform: rotateY(0); } 86%, 100% { transform: rotateY(360deg); } }
-  @keyframes pokie-blink { 0%, 90%, 100% { transform: scaleY(1); } 94% { transform: scaleY(.12); } }
-  .pokie-eye { transform-origin: center; transform-box: fill-box; animation: pokie-blink 3.8s infinite; }
-  .pokie-eye.delay { animation-delay: .08s; }
-  .pokie-spin { animation: pokie-flip 7s ease-in-out infinite; }
-  /* The Pokie mark now lives inside the hobby-projects disclosure (.pokie-mm
-     below) rather than standalone in the bar. */
-  @media (prefers-reduced-motion: reduce) { .pokie-eye, .pokie-spin { animation: none !important; } }
   @keyframes om-word { from { opacity: 0; transform: translateY(90%); } to { opacity: 1; transform: none; } }
   @keyframes om-rise { from { opacity: 0; transform: translateY(28px); } to { opacity: 1; transform: none; } }
   @keyframes om-bob { 0%,100% { transform: translateY(0); } 50% { transform: translateY(6px); } }
@@ -56,7 +48,7 @@
   .hv-dim:hover { filter: brightness(.9); }
 
   /* ---- hobby-projects disclosure (three-line minimiser) ----
-     Tees and Pokie live under one hamburger, per the owner — the bar's
+     Tees lives under one hamburger, per the owner — the bar's
      hierarchy is now quiet text links → one three-line disclosure → one
      white CTA. <details>/<summary> so it opens without JS; a small script
      adds click-outside + Escape closing. New hobby projects = one more
@@ -104,7 +96,6 @@
   @keyframes more-in { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: none; } }
   .more-item { display: flex; align-items: center; gap: 11px; padding: 11px 14px; border-radius: 999px; font-size: 15px; font-weight: 500; color: #fff; transition: background .2s ease; }
   .more-item:hover { background: #141414; }
-  .pokie-mm { width: 24px; height: 24px; margin: -2px 0 -2px -2px; }  /* rotated-square ink ≈ tee glyph at this size */
   @media (prefers-reduced-motion: reduce) { .more-menu { animation: none; } }
 
   /* ---- Pokie Tees glyph (now a .more-item row) ----
@@ -291,14 +282,6 @@
                 <rect class="tee-line" x="8.7" y="12.4" width="6.6" height="2.4" rx="1.2"></rect>
               </svg>
               <span>Tees</span>
-            </a>
-            <a class="more-item" href="https://pokie.rachittiwari.com" target="_blank" rel="noopener" aria-label="Pokie — an autonomous job-finding agent">
-              <svg viewBox="0 0 24 24" fill="none" class="pokie-spin pokie-mm">
-                <g transform="rotate(45 12 12)"><rect x="3.6" y="3.6" width="16.8" height="16.8" rx="5.4" fill="#EB6BA8"></rect></g>
-                <ellipse class="pokie-eye" cx="9.1" cy="12" rx="1.35" ry="2.6" fill="#fff"></ellipse>
-                <ellipse class="pokie-eye delay" cx="14.9" cy="12" rx="1.35" ry="2.6" fill="#fff"></ellipse>
-              </svg>
-              <span>Pokie</span>
             </a>
           </div>
         </details>
