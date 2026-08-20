@@ -255,7 +255,7 @@ function archiveHTML() {
   return '<div class="screen arch">' +
     '<div class="arch-head">' +
     '<span class="l">Archive — every run that filled and closed</span>' +
-    '<span class="r">Click one. It won’t come back.</span>' +
+    '<span class="r">Click one. Peer pressure works.</span>' +
     '</div>' +
     '<div class="arch-grid">' + tiles + '</div>' +
     '</div>';
@@ -481,13 +481,18 @@ function renderPopup() {
   var h =
     '<div class="pop-back" data-act="close-arch">' +
     '<div class="pop-win" data-stop>' +
-    '<div class="pop-bar"><span class="pop-title">' + esc(t.name) + '</span>' +
-    '<button type="button" class="pop-x" data-act="close-arch">✕</button></div>' +
     '<div class="pop-body">' +
     '<div class="pop-screen">' + teeVisual(t.sentence, { flip: true, contain: true, image: t.image }) + '</div>' +
-    '<p class="pop-cap">RELEASED ' + MONTHS[S.arch % 12] + ' 2026 [ARCHIVED]</p>' +
+    '<div class="pop-copy">' +
+    '<p class="pop-kicker">Archived · ' + MONTHS[S.arch % 12] + ' 2026</p>' +
+    '<h2 class="pop-title">' + esc(t.name) + '</h2>' +
     '<p class="pop-origin">' + esc(t.origin) + '</p>' +
-    '</div></div></div>';
+    '<p class="pop-question">Should this one escape the archive?</p>' +
+    '<button type="button" class="pop-want" data-act="want-arch">Want it. Make it real.</button>' +
+    '<p class="pop-note">Opens a pre-filled email. No fake waitlist, no accidental checkout.</p>' +
+    '</div></div>' +
+    '<button type="button" class="pop-x" data-act="close-arch" aria-label="Close">✕</button>' +
+    '</div></div>';
   var skipped = finishOverlay(el.popup, h, 'popupHTML', last.arch === S.arch, '.pop-back');
   last.arch = S.arch;
   if (skipped === 'skip') return;
@@ -676,6 +681,14 @@ function wirePopup() {
       if (e.target.closest('[data-stop]') && !e.target.closest('.pop-x')) return;
       set({ arch: -1 });
     });
+  });
+  var want = el.popup.querySelector('[data-act="want-arch"]');
+  if (want) want.addEventListener('click', function () {
+    var t = TEES[S.arch];
+    var subject = 'Bring back the ' + t.name + ' tee';
+    var body = 'I want this one: "' + t.sentence.replace(/\n/g, ' ') + '"\n\nOne vote closer to escaping the archive.';
+    location.href = 'mailto:' + CONFIG.EMAIL + '?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body);
+    say('Demand noted. Capitalism may resume shortly.');
   });
 }
 
