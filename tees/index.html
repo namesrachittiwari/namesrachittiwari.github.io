@@ -88,17 +88,30 @@ button { -webkit-tap-highlight-color: transparent; }
 .arch-tile .tee-visual { position: absolute; inset: 0; }
 .arch-tile .print { text-shadow: none; }
 
-/* archive retro popup */
-.pop-back { position: fixed; inset: 0; z-index: 70; background: rgba(0,0,0,.62); display: grid; place-items: center; padding: 20px; animation: fadeIn .2s ease both; }
-.pop-win { width: min(720px, 94vw); background: #c9c9c9; border: 2px solid; border-color: #ffffff #6b6b6b #6b6b6b #ffffff; box-shadow: 0 30px 80px rgba(0,0,0,.7); animation: popIn .25s cubic-bezier(.16,1,.3,1) both; }
-.pop-bar { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 7px 8px 7px 14px; background: #0014A8; }
-.pop-title { font-family: ui-monospace, monospace; font-size: 14px; font-weight: 500; letter-spacing: .08em; text-transform: uppercase; color: #ffffff; }
-.pop-x { width: 24px; height: 22px; display: grid; place-items: center; cursor: pointer; font-size: 13px; font-weight: 500; color: #000000; background: #c9c9c9; border: 2px solid; border-color: #ffffff #6b6b6b #6b6b6b #ffffff; padding: 0; line-height: 1; }
-.pop-body { padding: 28px 30px 30px; background: #cfcfcf; border-top: 1px solid #9a9a9a; }
-.pop-screen { position: relative; height: min(46vh, 380px); background: #060606; border: 2px solid; border-color: #6b6b6b #ffffff #ffffff #6b6b6b; overflow: hidden; }
-.pop-screen .tee-visual { position: absolute; inset: 12px; }
-.pop-cap { font-family: ui-monospace, monospace; font-size: 14px; letter-spacing: .08em; text-transform: uppercase; color: #111111; text-align: center; margin: 22px 0 0; }
-.pop-origin { font-size: 12px; line-height: 1.6; color: #4a4a4a; text-align: center; margin: 10px auto 0; max-width: 52ch; }
+/* archive interest card */
+.pop-back { position: fixed; inset: 0; z-index: 70; background: rgba(0,0,0,.78); backdrop-filter: blur(12px); display: grid; place-items: center; padding: 20px; animation: fadeIn .2s ease both; }
+.pop-win { position: relative; width: min(860px, 94vw); background: #0B0B0B; border: 1px solid rgba(255,255,255,.14); border-radius: 24px; box-shadow: 0 30px 90px rgba(0,0,0,.82); overflow: hidden; animation: popIn .3s cubic-bezier(.16,1,.3,1) both; }
+.pop-x { position: absolute; top: 18px; right: 18px; z-index: 2; width: 38px; height: 38px; display: grid; place-items: center; cursor: pointer; font-size: 15px; color: #ffffff; background: rgba(255,255,255,.07); border: 1px solid rgba(255,255,255,.12); border-radius: 50%; padding: 0; line-height: 1; transition: background .2s ease, transform .2s ease; }
+.pop-x:hover { background: rgba(255,255,255,.14); transform: rotate(8deg); }
+.pop-body { display: grid; grid-template-columns: minmax(0, 1.08fr) minmax(300px, .92fr); min-height: 500px; }
+.pop-screen { position: relative; min-height: 500px; background: radial-gradient(circle at 50% 42%, #191919 0, #080808 57%, #050505 100%); overflow: hidden; border-right: 1px solid rgba(255,255,255,.08); }
+.pop-screen .tee-visual { position: absolute; inset: 7%; }
+.pop-copy { display: flex; flex-direction: column; justify-content: center; padding: 74px 46px 52px; }
+.pop-kicker { font-size: 12px; font-weight: 500; letter-spacing: .1em; text-transform: uppercase; color: #EB6BA8; margin: 0 0 14px; }
+.pop-title { font-size: clamp(28px, 3.4vw, 44px); font-weight: 600; letter-spacing: -.04em; color: #ffffff; margin: 0; }
+.pop-origin { font-size: 14px; line-height: 1.65; color: #9A9A9A; margin: 20px 0 0; max-width: 34ch; }
+.pop-question { font-size: 17px; line-height: 1.45; color: #ffffff; margin: 38px 0 0; }
+.pop-want { width: fit-content; margin-top: 18px; padding: 14px 24px; border: none; border-radius: 999px; background: #EB6BA8; color: #070707; font: inherit; font-size: 14px; font-weight: 600; cursor: pointer; transition: transform .25s cubic-bezier(.16,1,.3,1), background .2s ease; }
+.pop-want:hover { transform: translateY(-2px); background: #ffffff; }
+.pop-note { font-size: 11.5px; line-height: 1.5; color: #5c5c5c; margin: 12px 0 0; }
+@media (max-width: 700px) {
+  .pop-back { align-items: end; padding: 12px; }
+  .pop-win { border-radius: 22px; max-height: calc(100vh - 24px); overflow: auto; }
+  .pop-body { grid-template-columns: 1fr; min-height: 0; }
+  .pop-screen { min-height: min(48vh, 390px); border-right: 0; border-bottom: 1px solid rgba(255,255,255,.08); }
+  .pop-copy { padding: 34px 26px 30px; }
+  .pop-question { margin-top: 26px; }
+}
 
 /* product detail overlay */
 .detail { position: fixed; inset: 0; z-index: 60; background: #000000; overflow: auto; animation: fadeIn .25s ease both; }

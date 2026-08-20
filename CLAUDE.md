@@ -123,7 +123,7 @@ click-outside/Escape/after-click closing. Adding a hobby project = one more
 Hobby tee store built pixel-perfect from the user's **v7 design handoff**
 ("Rachit_Pokie_Tees__Complete_Handoff.md" — high-fidelity, copy final).
 A black-spotlight SPA: Shop (sidebar filters + photo grid), Product Detail
-overlay, Archive (retro `#0014A8` OS popups), Studio (write-your-own line),
+overlay, Archive (on-brand demand cards with pre-filled email interest), Studio (write-your-own line),
 multi-item Cart drawer, Checkout → UPI pay screen → Placed.
 `index.html` = static skeleton + all CSS; `tees.js` = state + renderers +
 network layer.
