@@ -83,7 +83,7 @@ Pokie uses 900px internally.
 Dark, Poppins, sticky top nav. Do not restyle it when working on other projects.
 
 Nav order: Work · Ventures · Numbers · Capabilities · hobby-projects
-disclosure (three-line icon → Tees, Pokie; more rows to come) · Get in touch.
+disclosure (three-line icon → Tees; more rows to come) · Get in touch.
 The five `#work` cards open **case-study overlays** on click (`data-case`
 attr → `CASES` object in the end-of-body script; a new study = one object +
 one attribute; the ventures cards deliberately have none).
@@ -92,8 +92,8 @@ in below 820px by `applyMob()`; class-styled components don't need them.
 
 ### Hobby-projects disclosure + Pokie Tees glyph
 
-Tees and Pokie both live under **one three-line minimiser** (`details.more`
-`#moreMenu`, owner-requested): a hamburger `summary` in the text-link group
+Tees lives under **one three-line minimiser** (`details.more` `#moreMenu`,
+owner-requested): a hamburger `summary` in the text-link group
 that expands a `.more-menu` panel of icon+label rows on both breakpoints.
 Native `<details>` = works without JS; a small end-of-body script adds
 click-outside/Escape/after-click closing. Adding a hobby project = one more
