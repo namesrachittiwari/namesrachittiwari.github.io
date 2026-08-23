@@ -87,6 +87,9 @@ disclosure (three-line icon → Tees; more rows to come) · Get in touch.
 The five `#work` cards open **case-study overlays** on click (`data-case`
 attr → `CASES` object in the end-of-body script; a new study = one object +
 one attribute; the ventures cards deliberately have none).
+Case-study claims must stay grounded in `Rachit-Tiwari-Resume.pdf`: preserve
+the résumé's exact scope, role, dates and metrics, and do not invent discovery
+work, workflows or outcome percentages to make the narrative sound richer.
 `data-mob="…"` attributes on elements are inline-style overrides swapped
 in below 820px by `applyMob()`; class-styled components don't need them.
 
