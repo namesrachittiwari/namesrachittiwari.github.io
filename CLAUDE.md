@@ -87,12 +87,31 @@ disclosure (three-line icon → Tees; more rows to come) · Get in touch.
 The five `#work` cards and two `#ventures` cards open **case-study overlays**
 on click (`data-case` attr → `CASES` object in the end-of-body script; a new
 study = one object + one attribute).
+The hero proof strip and the `#case-index` recruiter scan link to the same
+studies. Case-study URLs use `#case=<key>` (for example `#case=innerally`),
+support browser back/forward, open directly from a shared URL, trap keyboard
+focus, and expose a Copy link action. Do not replace this with click-only modal
+state.
 Case-study claims must stay grounded in `Rachit-Tiwari-Resume.pdf` and verified
 facts already surfaced on the site: preserve exact scope, role, dates and
 metrics, and do not invent discovery work, workflows or outcome percentages
 to make the narrative sound richer.
+The product-tool rail sits below Capabilities so proof remains above tools.
+Keep it deliberately short and résumé-grounded.
+Conversion actions dispatch `portfolio:track` events and push to `dataLayer`;
+the same helper forwards to `gtag` or `plausible` if either provider is later
+connected. Current event names include `case_open`, `case_link_copy`,
+`resume_download`, `linkedin_click`, `contact_email`, and `contact_phone`.
 `data-mob="…"` attributes on elements are inline-style overrides swapped
 in below 820px by `applyMob()`; class-styled components don't need them.
+
+The miniature product flows should explain the product, not decorate the card.
+InnerAlly shows anonymous therapist matching, VLCC ends with product matches,
+and AuthBridge ends with onboarding readiness; avoid unsupported speed claims.
+The hero keyword pills stay hidden until they are fully below the navigation so
+falling pills never appear clipped at the top edge. Below 560px they become a
+four-pill static floor below the CTAs: the physics pile was too noisy over the
+mobile headline.
 
 ### Hobby-projects disclosure + Pokie Tees glyph
 
@@ -264,5 +283,9 @@ globally (`NODE_PATH=$(npm root -g)`). Gotchas:
 
 ## Git
 
-Never commit to `master` directly. Work on a `claude/*` branch and push with
+Never commit to `master` directly. Work on a `Codex/*` branch and push with
 `git push -u origin <branch>`.
+
+The production baseline immediately before the 2026 portfolio conversion pass
+is the pushed tag `pre-conversion-pass-2026-08-23` (`29d4a26`). Roll back a
+deployed pass with a normal revert PR; never force-reset `master` to the tag.

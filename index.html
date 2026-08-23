@@ -3,15 +3,24 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Rachit Tiwari — Product Builder</title>
-<meta name="description" content="Senior product manager building AI and SaaS products that ship. Seven years across AI, enterprise SaaS and consumer. Bangalore, India.">
+<title>Rachit Tiwari — Senior Product Manager | AI, SaaS &amp; 0-to-1</title>
+<meta name="description" content="Senior Product Manager with 7+ years building AI, enterprise SaaS and 0-to-1 products. +25% per-store sales, ₹50Cr annual SaaS revenue and 300+ monthly sessions.">
 <link rel="canonical" href="https://rachittiwari.com/">
 <meta name="theme-color" content="#070707">
 <meta name="color-scheme" content="dark">
-<meta property="og:title" content="Rachit Tiwari — Product Builder">
-<meta property="og:description" content="I build AI and SaaS products that ship. Seven years across AI, enterprise SaaS and consumer.">
+<meta property="og:title" content="Rachit Tiwari — Senior Product Manager">
+<meta property="og:description" content="AI, enterprise SaaS and 0-to-1 products with measurable outcomes: +25% sales, ₹50Cr annual SaaS revenue and 300+ monthly sessions.">
 <meta property="og:url" content="https://rachittiwari.com/">
 <meta property="og:type" content="website">
+<meta property="og:image" content="https://rachittiwari.com/og-portfolio.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Rachit Tiwari — Senior Product Manager building AI, SaaS and 0-to-1 products">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Rachit Tiwari — Senior Product Manager">
+<meta name="twitter:description" content="AI, enterprise SaaS and 0-to-1 products with measurable outcomes.">
+<meta name="twitter:image" content="https://rachittiwari.com/og-portfolio.png">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Person","name":"Rachit Tiwari","url":"https://rachittiwari.com/","jobTitle":"Senior Product Manager","email":"mailto:rachittiwari10@gmail.com","sameAs":["https://www.linkedin.com/in/namesrachit/"],"knowsAbout":["AI product management","B2B SaaS","CRM","0-to-1 products","go-to-market strategy"]}</script>
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><g transform='rotate(45 12 12)'><rect x='3.6' y='3.6' width='16.8' height='16.8' rx='5.4' fill='%23EB6BA8'/></g><ellipse cx='9.1' cy='12' rx='1.35' ry='2.6' fill='%23fff'/><ellipse cx='14.9' cy='12' rx='1.35' ry='2.6' fill='%23fff'/></svg>">
 <link rel="icon" type="image/png" href="favicon.png?v=2">
 <link rel="apple-touch-icon" href="apple-touch-icon.png?v=2">
@@ -25,7 +34,7 @@
   body { margin: 0; background: #070707; color: #fff; font-family: 'Poppins', system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
   a { color: #EB6BA8; text-decoration: none; }
   a:hover { color: #fff; }
-  #work, #ventures, #numbers { scroll-margin-top: 90px; }
+  #case-index, #work, #ventures, #numbers, #caps, #talk { scroll-margin-top: 90px; }
   @keyframes om-word { from { opacity: 0; transform: translateY(90%); } to { opacity: 1; transform: none; } }
   @keyframes om-rise { from { opacity: 0; transform: translateY(28px); } to { opacity: 1; transform: none; } }
   @keyframes om-bob { 0%,100% { transform: translateY(0); } 50% { transform: translateY(6px); } }
@@ -151,6 +160,14 @@
   .case-chips { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 30px; padding-top: 24px; border-top: 1px solid rgba(255,255,255,.09); }
   .case-chip { display: flex; align-items: center; gap: 8px; font-size: 13.5px; font-weight: 500; color: #fff; border: 1px solid rgba(255,255,255,.14); border-radius: 999px; padding: 8px 15px; }
   .case-chip .dot { width: 7px; height: 7px; border-radius: 50%; flex: none; }
+  .case-actions { display:flex; align-items:center; gap:8px; flex:none; }
+  .case-copy { min-height:38px; border:1px solid rgba(255,255,255,.14); border-radius:999px; padding:0 14px; background:transparent; color:#fff; font:500 12px/1 'Poppins',system-ui,sans-serif; cursor:pointer; transition:background .2s ease,border-color .2s ease; }
+  .case-copy:hover { background:#212121; border-color:rgba(255,255,255,.22); }
+  [data-case]:focus-visible, .case-index__item:focus-visible, .proof-item:focus-visible, .hero-current:focus-visible, .case-copy:focus-visible, .case-x:focus-visible { outline:2px solid #fff; outline-offset:4px; }
+  @media (max-width:520px) {
+    .case-actions { align-items:flex-end; flex-direction:column-reverse; }
+    .case-copy { min-height:34px; padding:0 11px; font-size:11px; }
+  }
   @media (prefers-reduced-motion: reduce) { .case-back.on, .case-card { animation: none; } }
 
   /* ---- hero: physics keyword pile ---- */
@@ -162,6 +179,9 @@
   .pill { position:absolute; top:0; left:0; font-size:16px; font-weight:600; padding:12px 24px; border-radius:999px; white-space:nowrap; visibility:hidden; will-change:transform; color:#070707 }
   .hero__h1 { margin:0; max-width:1000px; font-size:clamp(38px,5.4vw,84px); font-weight:600; line-height:1.03; letter-spacing:-2.5px; color:#fff }
   .hero__sub { margin:0; font-size:clamp(16px,1.4vw,20px); font-weight:400; color:#9A9A9A; max-width:600px; text-wrap:pretty }
+  .hero-current { display:inline-flex; align-items:center; gap:9px; color:#fff; border:1px solid rgba(255,255,255,.14); background:#0B0B0B; border-radius:999px; padding:10px 16px; font-size:14px; font-weight:500; transition:background .2s ease,border-color .2s ease }
+  .hero-current::before { content:''; width:8px; height:8px; border-radius:50%; background:#1CE15F; flex:none }
+  .hero-current:hover { color:#fff; background:#141414; border-color:rgba(255,255,255,.24) }
   .hero__ctas { display:flex; gap:12px; margin-top:6px }
   .glow-ring { position:relative; display:inline-flex; padding:2px; border-radius:999px; overflow:hidden; isolation:isolate; background:rgba(255,255,255,.10); box-shadow:0 0 34px rgba(226,232,240,.22) }
   .glow-ring::before { content:''; position:absolute; inset:-80%; background:conic-gradient(from 0turn,rgba(226,232,240,0) 0turn,rgba(255,255,255,.9) .08turn,rgba(203,213,225,.5) .16turn,rgba(226,232,240,0) .3turn,rgba(226,232,240,0) 1turn); animation:ring 3.8s linear infinite }
@@ -211,6 +231,46 @@
 
   @media (prefers-reduced-motion:reduce) {
     .glow-ring::before, .glow-ring::after { animation:none }
+  }
+
+  /* ---- recruiter proof strip + quick case index ---- */
+  .proof-shell { max-width:1360px; margin:0 auto; padding:28px 44px 0 }
+  .proof-strip { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); overflow:hidden; background:#0B0B0B; border:1px solid rgba(255,255,255,.09); border-radius:28px }
+  .proof-item { min-width:0; padding:22px 26px; color:#fff; border-right:1px solid rgba(255,255,255,.09); transition:background .2s cubic-bezier(.16,1,.3,1) }
+  .proof-item:last-child { border-right:0 }
+  .proof-item:hover { color:#fff; background:#141414 }
+  .proof-value { display:block; color:#EB6BA8; font-size:clamp(24px,2.6vw,36px); font-weight:600; line-height:1.05; letter-spacing:-1px }
+  .proof-label { display:block; margin-top:6px; color:#9A9A9A; font-size:13px; line-height:1.4 }
+  .case-index { padding:0 0 110px }
+  .case-index__head { display:flex; align-items:flex-end; justify-content:space-between; gap:24px; margin-bottom:22px }
+  .case-index__grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px }
+  .case-index__item { display:grid; grid-template-columns:minmax(110px,.7fr) minmax(0,1.6fr) auto; align-items:center; gap:18px; min-height:72px; box-sizing:border-box; padding:16px 20px; color:#fff; background:#0B0B0B; border:1px solid rgba(255,255,255,.09); border-radius:18px; transition:background .2s cubic-bezier(.16,1,.3,1),border-color .2s ease,transform .2s cubic-bezier(.16,1,.3,1) }
+  .case-index__item:hover { color:#fff; background:#141414; border-color:rgba(255,255,255,.18); transform:translateY(-2px) }
+  .case-index__item:first-child { grid-column:1 / -1 }
+  .case-index__name { display:flex; align-items:center; gap:9px; font-size:14px; font-weight:600 }
+  .case-index__name::before { content:''; width:7px; height:7px; border-radius:50%; background:#EB6BA8; flex:none }
+  .case-index__result { min-width:0; color:#d6d6d6; font-size:14px; line-height:1.45 }
+  .case-index__arrow { color:#9A9A9A; font-size:18px }
+  .contact-details { display:flex; align-items:center; gap:10px 18px; flex-wrap:wrap }
+  .contact-details a { color:#070707; font-size:20px; font-weight:500; text-decoration:underline; text-decoration-color:rgba(7,7,7,.24); text-underline-offset:4px }
+  .contact-details a:hover { color:#070707; text-decoration-color:#070707 }
+  @media (max-width:820px) {
+    .hero-current { font-size:12.5px; line-height:1.35; padding:9px 13px; border-radius:16px }
+    .proof-shell { padding:18px 20px 0 }
+    .proof-strip { grid-template-columns:repeat(2,minmax(0,1fr)); border-radius:22px }
+    .proof-item { padding:18px 16px; border-right:1px solid rgba(255,255,255,.09); border-bottom:1px solid rgba(255,255,255,.09) }
+    .proof-item:nth-child(2) { border-right:0 }
+    .proof-item:nth-child(n+3) { border-bottom:0 }
+    .proof-value { font-size:26px }
+    .case-index { padding:0 0 70px }
+    .case-index__head { align-items:flex-start; flex-direction:column; gap:8px }
+    .case-index__grid { grid-template-columns:1fr }
+    .case-index__item:first-child { grid-column:auto }
+    .case-index__item { grid-template-columns:1fr auto; gap:4px 14px; padding:15px 16px; border-radius:16px }
+    .case-index__result { grid-column:1; font-size:13px }
+    .case-index__arrow { grid-column:2; grid-row:1 / 3 }
+    .contact-details { flex-direction:column; align-items:flex-start; gap:8px }
+    .contact-details a { font-size:16px }
   }
 
 
@@ -306,11 +366,13 @@
             <span class="om-w" style="animation-delay:.12s">I</span> <span class="om-w" style="animation-delay:.17s">build</span> <span class="om-w" style="animation-delay:.22s; color:#EB6BA8">AI</span> <span class="om-w" style="animation-delay:.27s; color:#EB6BA8">and</span> <span class="om-w" style="animation-delay:.32s; color:#EB6BA8">SaaS</span> <span class="om-w" style="animation-delay:.37s">products</span> <span class="om-w" style="animation-delay:.42s">that</span> <span class="om-w" style="animation-delay:.47s">ship.</span>
           </h1>
 
-          <p class="hero__sub om-load-3">Seven years across AI, enterprise SaaS and consumer, close to the data and through to launch.</p>
+          <p class="hero__sub om-load-3">Senior Product Manager with 7+ years turning AI, enterprise SaaS and 0-to-1 bets into measurable outcomes.</p>
+
+          <a href="#case=innerally" class="hero-current om-load-3">Currently building InnerAlly from 0-to-1 · 300+ sessions/month →</a>
 
           <div class="hero__ctas om-load-4">
-            <span class="glow-ring"><a href="#work" id="cta-primary" class="btn btn--primary">See selected work</a></span>
-            <span class="glow-ring glow-ring--ghost"><a href="Rachit-Tiwari-Resume.pdf" download="Rachit-Tiwari-Resume.pdf" class="btn btn--ghost">Download résumé</a></span>
+            <span class="glow-ring"><a href="#case-index" id="cta-primary" class="btn btn--primary" data-track="selected_work_click">See selected work</a></span>
+            <span class="glow-ring glow-ring--ghost"><a href="Rachit-Tiwari-Resume.pdf" download="Rachit-Tiwari-Resume.pdf" class="btn btn--ghost" data-track="resume_download">Download résumé</a></span>
           </div>
         </div>
       </div>
@@ -322,19 +384,13 @@
     </div>
   </section>
 
-  <div id="rail-wrap" data-mob="padding:44px 0" style="position:relative; border-top:1px solid rgba(255,255,255,.08); border-bottom:1px solid rgba(255,255,255,.08); background:#070707; overflow:hidden; padding:62px 0">
-    <div data-mob="padding:0 20px 22px" style="display:flex; align-items:baseline; justify-content:space-between; gap:16px; padding:0 44px 30px; max-width:1360px; margin:0 auto">
-      <span style="font-size:14px; color:#9A9A9A">Tools and agents I work in</span>
-      <span data-mob="display:none" style="font-size:14px; color:#9A9A9A">scroll to move the rail</span>
+  <div class="proof-shell" aria-label="Selected product outcomes">
+    <div class="proof-strip">
+      <a class="proof-item" href="#case=vlcc"><span class="proof-value">+25%</span><span class="proof-label">per-store sales · VLCC AI</span></a>
+      <a class="proof-item" href="#case=authbridge"><span class="proof-value">₹50Cr</span><span class="proof-label">annual SaaS revenue · AuthBridge</span></a>
+      <a class="proof-item" href="#case=amazon"><span class="proof-value">100K</span><span class="proof-label">shipments per day · Amazon</span></a>
+      <a class="proof-item" href="#case=innerally"><span class="proof-value">300+</span><span class="proof-label">sessions per month · InnerAlly</span></a>
     </div>
-
-    <div style="display:flex; flex-direction:column; gap:16px">
-      <div id="rail-a" style="display:flex; gap:16px; width:max-content; will-change:transform"></div>
-      <div id="rail-b" style="display:flex; gap:16px; width:max-content; will-change:transform"></div>
-    </div>
-
-    <div data-mob="width:34px" style="position:absolute; top:0; bottom:0; left:0; width:120px; background:linear-gradient(90deg,#070707 0%,rgba(7,7,7,0) 100%); pointer-events:none"></div>
-    <div data-mob="width:34px" style="position:absolute; top:0; bottom:0; right:0; width:120px; background:linear-gradient(270deg,#070707 0%,rgba(7,7,7,0) 100%); pointer-events:none"></div>
   </div>
 
   <div data-mob="padding:0 20px" style="max-width:1360px; margin:0 auto; padding:0 44px">
@@ -344,13 +400,32 @@
       <div data-reveal style="font-size:clamp(24px,3.3vw,46px); font-weight:500; line-height:1.22; max-width:940px; text-wrap:pretty">Most roadmaps stop making sense the moment real users touch the product. I write the version that <span style="color:#1CE15F">still holds up</span> in week six, when the data disagrees and the room already has an opinion.</div>
     </div>
 
+    <section class="case-index" id="case-index" aria-labelledby="case-index-title">
+      <div class="case-index__head">
+        <div>
+          <span style="display:block; font-size:14px; color:#9A9A9A; margin-bottom:8px">Selected outcomes</span>
+          <h2 id="case-index-title" style="margin:0; font-size:clamp(28px,3.4vw,46px); font-weight:600; line-height:1.1">Proof, without the long scroll.</h2>
+        </div>
+        <span style="font-size:14px; color:#9A9A9A">Open any case, or keep scrolling for the product flows.</span>
+      </div>
+      <div class="case-index__grid">
+        <a class="case-index__item" href="#case=innerally"><span class="case-index__name">InnerAlly · current</span><span class="case-index__result">0-to-1 health-tech · 300+ sessions/month</span><span class="case-index__arrow">→</span></a>
+        <a class="case-index__item" href="#case=fieldassist"><span class="case-index__name">FieldAssist</span><span class="case-index__result">Enterprise SaaS · ₹10Cr+ annual revenue</span><span class="case-index__arrow">→</span></a>
+        <a class="case-index__item" href="#case=vlcc"><span class="case-index__name">VLCC</span><span class="case-index__result">AI recommendations · +25% per-store sales</span><span class="case-index__arrow">→</span></a>
+        <a class="case-index__item" href="#case=authbridge"><span class="case-index__name">AuthBridge</span><span class="case-index__result">B2B SaaS · 70% less engineering dependency</span><span class="case-index__arrow">→</span></a>
+        <a class="case-index__item" href="#case=massoi"><span class="case-index__name">Massoi</span><span class="case-index__result">Founder · 4,000+ meals · later sold</span><span class="case-index__arrow">→</span></a>
+        <a class="case-index__item" href="#case=jiomart"><span class="case-index__name">Jio Mart</span><span class="case-index__result">30+ stores · four days to same-day</span><span class="case-index__arrow">→</span></a>
+        <a class="case-index__item" href="#case=amazon"><span class="case-index__name">Amazon</span><span class="case-index__result">100K shipments/day · 20+ centres</span><span class="case-index__arrow">→</span></a>
+      </div>
+    </section>
+
     <div id="work" style="padding:20px 0 0">
       <div data-mob="flex-direction:column; align-items:flex-start; gap:10px" style="display:flex; align-items:baseline; justify-content:space-between; margin-bottom:38px">
         <div data-reveal style="display:flex; flex-direction:column; gap:8px">
           <span style="font-size:14px; color:#9A9A9A">002 / Work</span>
           <h2 style="margin:0; font-size:clamp(32px,4.4vw,60px); font-weight:600; line-height:1.1">Where I&#8217;ve shipped.</h2>
         </div>
-        <span data-reveal style="font-size:16px; color:#9A9A9A">Five roles, most recent first.</span>
+        <span data-reveal style="font-size:16px; color:#9A9A9A">Five prior teams, newest first.</span>
       </div>
 
       <div data-mob="padding-bottom:60px" style="display:flex; flex-direction:column; gap:26px; padding-bottom:120px">
@@ -386,7 +461,7 @@
               <div data-mob="align-self:center" style="flex:none">
                 <div data-mob="height:min(38vh,330px); height:min(38dvh,330px)" style="position:relative; box-sizing:border-box; height:clamp(400px,54vh,520px); aspect-ratio:9/19.5; background:#070707; border-radius:26px; padding:7px; box-shadow:0 22px 50px rgba(7,7,7,.32)">
                   <div style="position:relative; width:100%; height:100%; background:#0B0B0B; border-radius:20px; overflow:hidden">
-                    <div data-flow aria-label="VLCC app flow" style="position:absolute; inset:0; background:#0D0D0D; overflow:hidden"><div data-fscreen="1"><div style="display:flex; justify-content:space-between; font-size:8px; font-weight:600; color:rgba(255,255,255,.45)"><span>9:41</span><span>●●●</span></div><div data-fstep="1"><div style="color:#fff; font-size:13px; font-weight:600; line-height:1.25">Skin analysis</div><div style="color:rgba(255,255,255,.5); font-size:8.5px; margin-top:2px">Hold still for 3 seconds</div></div><div data-fstep="2" style="display:flex; flex:1; min-height:112px"><div style="position:relative; flex:1; min-height:112px; border-radius:13px; background:linear-gradient(160deg,#1b1b1b,#0B0B0B); overflow:hidden; display:flex; align-items:center; justify-content:center"><span style="width:54%; height:52%; border:1.5px dashed #ECE42Eb3; border-radius:50%"></span><span style="position:absolute; width:14px; height:14px; top:8px; left:8px; border-top:1.5px solid #ECE42E; border-left:1.5px solid #ECE42E; border-radius:3px 0 0 0"></span><span style="position:absolute; width:14px; height:14px; top:8px; right:8px; border-top:1.5px solid #ECE42E; border-right:1.5px solid #ECE42E; border-radius:0 3px 0 0"></span><span style="position:absolute; width:14px; height:14px; bottom:8px; left:8px; border-bottom:1.5px solid #ECE42E; border-left:1.5px solid #ECE42E; border-radius:0 0 0 3px"></span><span style="position:absolute; width:14px; height:14px; bottom:8px; right:8px; border-bottom:1.5px solid #ECE42E; border-right:1.5px solid #ECE42E; border-radius:0 0 3px 0"></span><span data-fscan style="position:absolute; left:9%; right:9%; top:14%; height:2px; background:#ECE42E; box-shadow:0 0 12px #ECE42E"></span></div></div><div data-fstep="3" style="display:flex; gap:4px; flex-wrap:wrap"><span style="font-size:7px; font-weight:600; padding:3.4px 6.9px; border-radius:99px; background:#ECE42E; color:#070707">Lighting ok</span><span style="font-size:7px; font-weight:600; padding:3.4px 6.9px; border-radius:99px; background:rgba(255,255,255,.09); color:rgba(255,255,255,.75)">Centred</span><span style="font-size:7px; font-weight:600; padding:3.4px 6.9px; border-radius:99px; background:rgba(255,255,255,.09); color:rgba(255,255,255,.75)">Focus</span></div><div data-fstep="4" data-tap data-dur="900" data-push="1" style="margin-top:auto; background:#ECE42E; color:#070707; font-size:9.5px; font-weight:600; text-align:center; padding:8.5px; border-radius:99px">Analyse</div></div><div data-fscreen="2"><div style="display:flex; justify-content:space-between; font-size:8px; font-weight:600; color:rgba(255,255,255,.45)"><span>9:41</span><span>●●●</span></div><div data-fstep="5"><div style="color:#fff; font-size:13px; font-weight:600; line-height:1.25">Your skin score</div></div><div data-fstep="6" style="display:flex; align-items:baseline; gap:4px"><span data-fstep="6" data-num="72" data-num-prefix="" data-num-suffix="" style="color:#ECE42E; font-size:24px; font-weight:600; line-height:1">0</span><span style="color:rgba(255,255,255,.4); font-size:9px; font-weight:600">/ 100</span></div><div data-fstep="7" style="display:flex; flex-direction:column; gap:3.5px"><div style="display:flex; justify-content:space-between; align-items:baseline"><span style="color:rgba(255,255,255,.4); font-size:7.5px">Hydration</span><span style="color:#fff; font-size:8.5px; font-weight:600">72</span></div><span style="display:block; height:4px; border-radius:9px; background:rgba(255,255,255,.08); overflow:hidden"><span data-fstep="7" data-grow="72" style="display:block; height:100%; width:0%; border-radius:9px; background:#ECE42E"></span></span></div><div data-fstep="7" style="display:flex; flex-direction:column; gap:3.5px"><div style="display:flex; justify-content:space-between; align-items:baseline"><span style="color:rgba(255,255,255,.4); font-size:7.5px">Texture</span><span style="color:#fff; font-size:8.5px; font-weight:600">58</span></div><span style="display:block; height:4px; border-radius:9px; background:rgba(255,255,255,.08); overflow:hidden"><span data-fstep="7" data-grow="58" style="display:block; height:100%; width:0%; border-radius:9px; background:#ECE42E"></span></span></div><div data-fstep="7" style="display:flex; flex-direction:column; gap:3.5px"><div style="display:flex; justify-content:space-between; align-items:baseline"><span style="color:rgba(255,255,255,.4); font-size:7.5px">Pores</span><span style="color:#fff; font-size:8.5px; font-weight:600">64</span></div><span style="display:block; height:4px; border-radius:9px; background:rgba(255,255,255,.08); overflow:hidden"><span data-fstep="7" data-grow="64" style="display:block; height:100%; width:0%; border-radius:9px; background:#ECE42E"></span></span></div><div data-fstep="8" style="display:flex; flex-direction:column; gap:5px"><div data-fstep="8" style="display:flex; align-items:center; gap:7px; background:rgba(255,255,255,.05); border-radius:10px; padding:7px"><span style="width:19px; height:19px; border-radius:5px; background:#ECE42E; flex:none"></span><span style="display:flex; flex-direction:column; gap:3px; flex:1"><span style="height:5px; width:76%; background:rgba(255,255,255,.45); border-radius:9px"></span><span style="height:4px; width:48%; background:rgba(255,255,255,.18); border-radius:9px"></span></span></div><div data-fstep="8" style="display:flex; align-items:center; gap:7px; background:rgba(255,255,255,.05); border-radius:10px; padding:7px"><span style="width:19px; height:19px; border-radius:5px; background:rgba(255,255,255,.16); flex:none"></span><span style="display:flex; flex-direction:column; gap:3px; flex:1"><span style="height:5px; width:62%; background:rgba(255,255,255,.45); border-radius:9px"></span><span style="height:4px; width:40%; background:rgba(255,255,255,.18); border-radius:9px"></span></span></div></div><div data-fstep="9" data-tap data-dur="900" data-push="2" style="margin-top:auto; background:#ECE42E; color:#070707; font-size:9.5px; font-weight:600; text-align:center; padding:8.5px; border-radius:99px">Build routine</div></div><div data-fscreen="3"><div style="display:flex; justify-content:space-between; font-size:8px; font-weight:600; color:rgba(255,255,255,.45)"><span>9:41</span><span>●●●</span></div><div data-fstep="10" style="margin:auto; display:flex; flex-direction:column; align-items:center; gap:8px; text-align:center; padding:0 8px"><span style="width:30px; height:30px; border-radius:50%; background:#ECE42E; color:#070707; display:flex; align-items:center; justify-content:center; font-size:14px; font-weight:600">✓</span><span style="color:#fff; font-size:10.5px; font-weight:600; line-height:1.3">Routine ready</span><span data-fstep="10" data-num="3" data-num-prefix="" data-num-suffix="" style="color:#ECE42E; font-size:21px; font-weight:600; line-height:1">0</span><span style="color:rgba(255,255,255,.55); font-size:8.2px; line-height:1.45">Matched to your skin, counsellor briefed</span></div></div><span data-fripple style="position:absolute; width:30px; height:30px; margin:-15px 0 0 -15px; border-radius:50%; background:rgba(255,255,255,.55); opacity:0; pointer-events:none"></span></div>
+                    <div data-flow aria-label="VLCC app flow" style="position:absolute; inset:0; background:#0D0D0D; overflow:hidden"><div data-fscreen="1"><div style="display:flex; justify-content:space-between; font-size:8px; font-weight:600; color:rgba(255,255,255,.45)"><span>9:41</span><span>●●●</span></div><div data-fstep="1"><div style="color:#fff; font-size:13px; font-weight:600; line-height:1.25">Skin analysis</div><div style="color:rgba(255,255,255,.5); font-size:8.5px; margin-top:2px">Hold still for 3 seconds</div></div><div data-fstep="2" style="display:flex; flex:1; min-height:112px"><div style="position:relative; flex:1; min-height:112px; border-radius:13px; background:linear-gradient(160deg,#1b1b1b,#0B0B0B); overflow:hidden; display:flex; align-items:center; justify-content:center"><span style="width:54%; height:52%; border:1.5px dashed #ECE42Eb3; border-radius:50%"></span><span style="position:absolute; width:14px; height:14px; top:8px; left:8px; border-top:1.5px solid #ECE42E; border-left:1.5px solid #ECE42E; border-radius:3px 0 0 0"></span><span style="position:absolute; width:14px; height:14px; top:8px; right:8px; border-top:1.5px solid #ECE42E; border-right:1.5px solid #ECE42E; border-radius:0 3px 0 0"></span><span style="position:absolute; width:14px; height:14px; bottom:8px; left:8px; border-bottom:1.5px solid #ECE42E; border-left:1.5px solid #ECE42E; border-radius:0 0 0 3px"></span><span style="position:absolute; width:14px; height:14px; bottom:8px; right:8px; border-bottom:1.5px solid #ECE42E; border-right:1.5px solid #ECE42E; border-radius:0 0 3px 0"></span><span data-fscan style="position:absolute; left:9%; right:9%; top:14%; height:2px; background:#ECE42E; box-shadow:0 0 12px #ECE42E"></span></div></div><div data-fstep="3" style="display:flex; gap:4px; flex-wrap:wrap"><span style="font-size:7px; font-weight:600; padding:3.4px 6.9px; border-radius:99px; background:#ECE42E; color:#070707">Lighting ok</span><span style="font-size:7px; font-weight:600; padding:3.4px 6.9px; border-radius:99px; background:rgba(255,255,255,.09); color:rgba(255,255,255,.75)">Centred</span><span style="font-size:7px; font-weight:600; padding:3.4px 6.9px; border-radius:99px; background:rgba(255,255,255,.09); color:rgba(255,255,255,.75)">Focus</span></div><div data-fstep="4" data-tap data-dur="900" data-push="1" style="margin-top:auto; background:#ECE42E; color:#070707; font-size:9.5px; font-weight:600; text-align:center; padding:8.5px; border-radius:99px">Analyse</div></div><div data-fscreen="2"><div style="display:flex; justify-content:space-between; font-size:8px; font-weight:600; color:rgba(255,255,255,.45)"><span>9:41</span><span>●●●</span></div><div data-fstep="5"><div style="color:#fff; font-size:13px; font-weight:600; line-height:1.25">Your skin score</div></div><div data-fstep="6" style="display:flex; align-items:baseline; gap:4px"><span data-fstep="6" data-num="72" data-num-prefix="" data-num-suffix="" style="color:#ECE42E; font-size:24px; font-weight:600; line-height:1">0</span><span style="color:rgba(255,255,255,.4); font-size:9px; font-weight:600">/ 100</span></div><div data-fstep="7" style="display:flex; flex-direction:column; gap:3.5px"><div style="display:flex; justify-content:space-between; align-items:baseline"><span style="color:rgba(255,255,255,.4); font-size:7.5px">Hydration</span><span style="color:#fff; font-size:8.5px; font-weight:600">72</span></div><span style="display:block; height:4px; border-radius:9px; background:rgba(255,255,255,.08); overflow:hidden"><span data-fstep="7" data-grow="72" style="display:block; height:100%; width:0%; border-radius:9px; background:#ECE42E"></span></span></div><div data-fstep="7" style="display:flex; flex-direction:column; gap:3.5px"><div style="display:flex; justify-content:space-between; align-items:baseline"><span style="color:rgba(255,255,255,.4); font-size:7.5px">Texture</span><span style="color:#fff; font-size:8.5px; font-weight:600">58</span></div><span style="display:block; height:4px; border-radius:9px; background:rgba(255,255,255,.08); overflow:hidden"><span data-fstep="7" data-grow="58" style="display:block; height:100%; width:0%; border-radius:9px; background:#ECE42E"></span></span></div><div data-fstep="7" style="display:flex; flex-direction:column; gap:3.5px"><div style="display:flex; justify-content:space-between; align-items:baseline"><span style="color:rgba(255,255,255,.4); font-size:7.5px">Pores</span><span style="color:#fff; font-size:8.5px; font-weight:600">64</span></div><span style="display:block; height:4px; border-radius:9px; background:rgba(255,255,255,.08); overflow:hidden"><span data-fstep="7" data-grow="64" style="display:block; height:100%; width:0%; border-radius:9px; background:#ECE42E"></span></span></div><div data-fstep="8" style="display:flex; flex-direction:column; gap:5px"><div data-fstep="8" style="display:flex; align-items:center; gap:7px; background:rgba(255,255,255,.05); border-radius:10px; padding:7px"><span style="width:19px; height:19px; border-radius:5px; background:#ECE42E; flex:none"></span><span style="display:flex; flex-direction:column; gap:3px; flex:1"><span style="height:5px; width:76%; background:rgba(255,255,255,.45); border-radius:9px"></span><span style="height:4px; width:48%; background:rgba(255,255,255,.18); border-radius:9px"></span></span></div><div data-fstep="8" style="display:flex; align-items:center; gap:7px; background:rgba(255,255,255,.05); border-radius:10px; padding:7px"><span style="width:19px; height:19px; border-radius:5px; background:rgba(255,255,255,.16); flex:none"></span><span style="display:flex; flex-direction:column; gap:3px; flex:1"><span style="height:5px; width:62%; background:rgba(255,255,255,.45); border-radius:9px"></span><span style="height:4px; width:40%; background:rgba(255,255,255,.18); border-radius:9px"></span></span></div></div><div data-fstep="9" data-tap data-dur="900" data-push="2" style="margin-top:auto; background:#ECE42E; color:#070707; font-size:9.5px; font-weight:600; text-align:center; padding:8.5px; border-radius:99px">Build routine</div></div><div data-fscreen="3"><div style="display:flex; justify-content:space-between; font-size:8px; font-weight:600; color:rgba(255,255,255,.45)"><span>9:41</span><span>●●●</span></div><div data-fstep="10" style="margin:auto; display:flex; flex-direction:column; align-items:center; gap:8px; text-align:center; padding:0 8px"><span style="width:30px; height:30px; border-radius:50%; background:#ECE42E; color:#070707; display:flex; align-items:center; justify-content:center; font-size:14px; font-weight:600">✓</span><span style="color:#fff; font-size:10.5px; font-weight:600; line-height:1.3">Routine ready</span><span data-fstep="10" data-num="3" data-num-prefix="" data-num-suffix=" matches" style="color:#ECE42E; font-size:18px; font-weight:600; line-height:1">0 matches</span><span style="color:rgba(255,255,255,.55); font-size:8.2px; line-height:1.45">Matched to your skin, counsellor briefed</span></div></div><span data-fripple style="position:absolute; width:30px; height:30px; margin:-15px 0 0 -15px; border-radius:50%; background:rgba(255,255,255,.55); opacity:0; pointer-events:none"></span></div>
                   </div>
                   <span style="position:absolute; top:13px; left:50%; transform:translateX(-50%); width:42px; height:5px; border-radius:99px; background:rgba(255,255,255,.18)"></span>
                 </div>
@@ -394,7 +469,7 @@
               <div data-mob="gap:12px" style="display:flex; flex-direction:column; gap:22px; flex:1 1 auto; min-width:0">
                 <div data-mob="font-size:21px" style="font-size:clamp(28px,3.2vw,44px); font-weight:600; line-height:1.12; max-width:720px">AI-powered recommendations deployed across 50+ stores, lifting per-store sales by 25%.</div>
                 <hr style="border:0; border-top:1px solid rgba(7,7,7,.2); margin:0">
-                <div data-mob="gap:5px 14px; font-size:15px" style="display:flex; flex-wrap:wrap; gap:40px; font-size:20px; font-weight:500"><span>+25% per-store sales</span><span>₹100Cr CRM portfolio</span><span>50+ stores</span></div>
+                <div data-mob="gap:5px 14px; font-size:15px" style="display:flex; flex-wrap:wrap; gap:40px; font-size:20px; font-weight:500"><span>+25% per-store sales</span><span>₹100Cr annual business</span><span>50+ stores</span></div>
               </div>
             </div>
           </div>
@@ -406,7 +481,7 @@
               <div data-mob="align-self:center" style="flex:none">
                 <div data-mob="height:min(38vh,330px); height:min(38dvh,330px)" style="position:relative; box-sizing:border-box; height:clamp(400px,54vh,520px); aspect-ratio:9/19.5; background:#070707; border-radius:26px; padding:7px; box-shadow:0 22px 50px rgba(7,7,7,.32)">
                   <div style="position:relative; width:100%; height:100%; background:#0B0B0B; border-radius:20px; overflow:hidden">
-                    <div data-flow aria-label="AuthBridge app flow" style="position:absolute; inset:0; background:#0D0D0D; overflow:hidden"><div data-fscreen="1"><div style="display:flex; justify-content:space-between; font-size:8px; font-weight:600; color:rgba(255,255,255,.45)"><span>9:41</span><span>●●●</span></div><div style="display:flex; gap:3.5px"><span style="flex:1; height:3.5px; border-radius:9px; background:rgba(255,255,255,.14); overflow:hidden"><span data-fstep="1" data-grow="100" style="display:block; height:100%; width:0%; background:#4791FF"></span></span><span style="flex:1; height:3.5px; border-radius:9px; background:rgba(255,255,255,.14); overflow:hidden"><span data-fstep="6" data-grow="100" style="display:block; height:100%; width:0%; background:#4791FF"></span></span><span style="flex:1; height:3.5px; border-radius:9px; background:rgba(255,255,255,.14); overflow:hidden"><span data-fstep="10" data-grow="100" style="display:block; height:100%; width:0%; background:#4791FF"></span></span></div><div data-fstep="1"><div style="color:#fff; font-size:13px; font-weight:600; line-height:1.25">Verify it's you</div><div style="color:rgba(255,255,255,.5); font-size:8.5px; margin-top:2px">Liveness · 10 seconds</div></div><div data-fstep="2" style="display:flex; flex:1; min-height:100px"><div style="position:relative; flex:1; min-height:100px; border-radius:13px; background:linear-gradient(160deg,#1b1b1b,#0B0B0B); overflow:hidden; display:flex; align-items:center; justify-content:center"><span style="width:54%; height:52%; border:1.5px dashed #4791FFb3; border-radius:50%"></span><span style="position:absolute; width:14px; height:14px; top:8px; left:8px; border-top:1.5px solid #4791FF; border-left:1.5px solid #4791FF; border-radius:3px 0 0 0"></span><span style="position:absolute; width:14px; height:14px; top:8px; right:8px; border-top:1.5px solid #4791FF; border-right:1.5px solid #4791FF; border-radius:0 3px 0 0"></span><span style="position:absolute; width:14px; height:14px; bottom:8px; left:8px; border-bottom:1.5px solid #4791FF; border-left:1.5px solid #4791FF; border-radius:0 0 0 3px"></span><span style="position:absolute; width:14px; height:14px; bottom:8px; right:8px; border-bottom:1.5px solid #4791FF; border-right:1.5px solid #4791FF; border-radius:0 0 3px 0"></span><span data-fscan style="position:absolute; left:9%; right:9%; top:14%; height:2px; background:#4791FF; box-shadow:0 0 12px #4791FF"></span></div></div><div data-fstep="3" style="display:flex; flex-direction:column; gap:5px"><div style="display:flex; justify-content:space-between; align-items:baseline; border-bottom:1px solid rgba(255,255,255,.07); padding-bottom:4.5px"><span style="color:rgba(255,255,255,.4); font-size:7.5px">Liveness</span><span style="color:#fff; font-size:8.5px; font-weight:600">Blink detected</span></div><div style="display:flex; justify-content:space-between; align-items:baseline; border-bottom:1px solid rgba(255,255,255,.07); padding-bottom:4.5px"><span style="color:rgba(255,255,255,.4); font-size:7.5px">Face match</span><span style="color:#fff; font-size:8.5px; font-weight:600">98.4%</span></div></div><div data-fstep="4" data-tap data-dur="900" data-push="1" style="margin-top:auto; background:#4791FF; color:#070707; font-size:9.5px; font-weight:600; text-align:center; padding:8.5px; border-radius:99px">Scan ID</div></div><div data-fscreen="2"><div style="display:flex; justify-content:space-between; font-size:8px; font-weight:600; color:rgba(255,255,255,.45)"><span>9:41</span><span>●●●</span></div><div data-fstep="6"><div style="color:#fff; font-size:13px; font-weight:600; line-height:1.25">Aadhaar captured</div><div style="color:rgba(255,255,255,.5); font-size:8.5px; margin-top:2px">OCR · auto-filled</div></div><div data-fstep="7" style="display:flex; flex:1; min-height:84px"><div style="position:relative; flex:1; min-height:84px; border-radius:13px; background:linear-gradient(160deg,#1b1b1b,#0B0B0B); overflow:hidden; display:flex; align-items:center; justify-content:center"><span style="width:64%; height:44%; border:1.5px dashed #4791FFb3; border-radius:6px"></span><span style="position:absolute; width:14px; height:14px; top:8px; left:8px; border-top:1.5px solid #4791FF; border-left:1.5px solid #4791FF; border-radius:3px 0 0 0"></span><span style="position:absolute; width:14px; height:14px; top:8px; right:8px; border-top:1.5px solid #4791FF; border-right:1.5px solid #4791FF; border-radius:0 3px 0 0"></span><span style="position:absolute; width:14px; height:14px; bottom:8px; left:8px; border-bottom:1.5px solid #4791FF; border-left:1.5px solid #4791FF; border-radius:0 0 0 3px"></span><span style="position:absolute; width:14px; height:14px; bottom:8px; right:8px; border-bottom:1.5px solid #4791FF; border-right:1.5px solid #4791FF; border-radius:0 0 3px 0"></span><span data-fscan style="position:absolute; left:9%; right:9%; top:14%; height:2px; background:#4791FF; box-shadow:0 0 12px #4791FF"></span></div></div><div data-fstep="8" style="display:flex; flex-direction:column; gap:5px"><div style="display:flex; justify-content:space-between; align-items:baseline; border-bottom:1px solid rgba(255,255,255,.07); padding-bottom:4.5px"><span style="color:rgba(255,255,255,.4); font-size:7.5px">Name</span><span style="color:#fff; font-size:8.5px; font-weight:600">R. Tiwari</span></div><div style="display:flex; justify-content:space-between; align-items:baseline; border-bottom:1px solid rgba(255,255,255,.07); padding-bottom:4.5px"><span style="color:rgba(255,255,255,.4); font-size:7.5px">DOB</span><span style="color:#fff; font-size:8.5px; font-weight:600">12 · 04 · 1994</span></div><div style="display:flex; justify-content:space-between; align-items:baseline; border-bottom:1px solid rgba(255,255,255,.07); padding-bottom:4.5px"><span style="color:rgba(255,255,255,.4); font-size:7.5px">ID</span><span style="color:#fff; font-size:8.5px; font-weight:600">XXXX 4821</span></div></div><div data-fstep="9" style="align-self:flex-start; background:rgba(255,255,255,.09); color:#fff; font-size:7px; font-weight:600; padding:3.4px 8px; border-radius:99px"><span style="display:inline-block; width:5px; height:5px; border-radius:50%; background:#4791FF; margin-right:4px"></span>Address matched · Bangalore</div><div data-fstep="9" data-tap data-dur="900" data-push="2" style="margin-top:auto; background:#4791FF; color:#070707; font-size:9.5px; font-weight:600; text-align:center; padding:8.5px; border-radius:99px">Submit KYC</div></div><div data-fscreen="3"><div style="display:flex; justify-content:space-between; font-size:8px; font-weight:600; color:rgba(255,255,255,.45)"><span>9:41</span><span>●●●</span></div><div data-fstep="10" style="margin:auto; display:flex; flex-direction:column; align-items:center; gap:8px; text-align:center; padding:0 8px"><span style="width:30px; height:30px; border-radius:50%; background:#4791FF; color:#070707; display:flex; align-items:center; justify-content:center; font-size:14px; font-weight:600">✓</span><span style="color:#fff; font-size:10.5px; font-weight:600; line-height:1.3">Verified</span><span data-fstep="10" data-num="8" data-num-prefix="" data-num-suffix="s" style="color:#4791FF; font-size:21px; font-weight:600; line-height:1">0s</span><span style="color:rgba(255,255,255,.55); font-size:8.2px; line-height:1.45">Face, ID and address, one platform</span></div></div><span data-fripple style="position:absolute; width:30px; height:30px; margin:-15px 0 0 -15px; border-radius:50%; background:rgba(255,255,255,.55); opacity:0; pointer-events:none"></span></div>
+                    <div data-flow aria-label="AuthBridge app flow" style="position:absolute; inset:0; background:#0D0D0D; overflow:hidden"><div data-fscreen="1"><div style="display:flex; justify-content:space-between; font-size:8px; font-weight:600; color:rgba(255,255,255,.45)"><span>9:41</span><span>●●●</span></div><div style="display:flex; gap:3.5px"><span style="flex:1; height:3.5px; border-radius:9px; background:rgba(255,255,255,.14); overflow:hidden"><span data-fstep="1" data-grow="100" style="display:block; height:100%; width:0%; background:#4791FF"></span></span><span style="flex:1; height:3.5px; border-radius:9px; background:rgba(255,255,255,.14); overflow:hidden"><span data-fstep="6" data-grow="100" style="display:block; height:100%; width:0%; background:#4791FF"></span></span><span style="flex:1; height:3.5px; border-radius:9px; background:rgba(255,255,255,.14); overflow:hidden"><span data-fstep="10" data-grow="100" style="display:block; height:100%; width:0%; background:#4791FF"></span></span></div><div data-fstep="1"><div style="color:#fff; font-size:13px; font-weight:600; line-height:1.25">Verify it's you</div><div style="color:rgba(255,255,255,.5); font-size:8.5px; margin-top:2px">Liveness · 10 seconds</div></div><div data-fstep="2" style="display:flex; flex:1; min-height:100px"><div style="position:relative; flex:1; min-height:100px; border-radius:13px; background:linear-gradient(160deg,#1b1b1b,#0B0B0B); overflow:hidden; display:flex; align-items:center; justify-content:center"><span style="width:54%; height:52%; border:1.5px dashed #4791FFb3; border-radius:50%"></span><span style="position:absolute; width:14px; height:14px; top:8px; left:8px; border-top:1.5px solid #4791FF; border-left:1.5px solid #4791FF; border-radius:3px 0 0 0"></span><span style="position:absolute; width:14px; height:14px; top:8px; right:8px; border-top:1.5px solid #4791FF; border-right:1.5px solid #4791FF; border-radius:0 3px 0 0"></span><span style="position:absolute; width:14px; height:14px; bottom:8px; left:8px; border-bottom:1.5px solid #4791FF; border-left:1.5px solid #4791FF; border-radius:0 0 0 3px"></span><span style="position:absolute; width:14px; height:14px; bottom:8px; right:8px; border-bottom:1.5px solid #4791FF; border-right:1.5px solid #4791FF; border-radius:0 0 3px 0"></span><span data-fscan style="position:absolute; left:9%; right:9%; top:14%; height:2px; background:#4791FF; box-shadow:0 0 12px #4791FF"></span></div></div><div data-fstep="3" style="display:flex; flex-direction:column; gap:5px"><div style="display:flex; justify-content:space-between; align-items:baseline; border-bottom:1px solid rgba(255,255,255,.07); padding-bottom:4.5px"><span style="color:rgba(255,255,255,.4); font-size:7.5px">Liveness</span><span style="color:#fff; font-size:8.5px; font-weight:600">Blink detected</span></div><div style="display:flex; justify-content:space-between; align-items:baseline; border-bottom:1px solid rgba(255,255,255,.07); padding-bottom:4.5px"><span style="color:rgba(255,255,255,.4); font-size:7.5px">Face match</span><span style="color:#fff; font-size:8.5px; font-weight:600">98.4%</span></div></div><div data-fstep="4" data-tap data-dur="900" data-push="1" style="margin-top:auto; background:#4791FF; color:#070707; font-size:9.5px; font-weight:600; text-align:center; padding:8.5px; border-radius:99px">Scan ID</div></div><div data-fscreen="2"><div style="display:flex; justify-content:space-between; font-size:8px; font-weight:600; color:rgba(255,255,255,.45)"><span>9:41</span><span>●●●</span></div><div data-fstep="6"><div style="color:#fff; font-size:13px; font-weight:600; line-height:1.25">Aadhaar captured</div><div style="color:rgba(255,255,255,.5); font-size:8.5px; margin-top:2px">OCR · auto-filled</div></div><div data-fstep="7" style="display:flex; flex:1; min-height:84px"><div style="position:relative; flex:1; min-height:84px; border-radius:13px; background:linear-gradient(160deg,#1b1b1b,#0B0B0B); overflow:hidden; display:flex; align-items:center; justify-content:center"><span style="width:64%; height:44%; border:1.5px dashed #4791FFb3; border-radius:6px"></span><span style="position:absolute; width:14px; height:14px; top:8px; left:8px; border-top:1.5px solid #4791FF; border-left:1.5px solid #4791FF; border-radius:3px 0 0 0"></span><span style="position:absolute; width:14px; height:14px; top:8px; right:8px; border-top:1.5px solid #4791FF; border-right:1.5px solid #4791FF; border-radius:0 3px 0 0"></span><span style="position:absolute; width:14px; height:14px; bottom:8px; left:8px; border-bottom:1.5px solid #4791FF; border-left:1.5px solid #4791FF; border-radius:0 0 0 3px"></span><span style="position:absolute; width:14px; height:14px; bottom:8px; right:8px; border-bottom:1.5px solid #4791FF; border-right:1.5px solid #4791FF; border-radius:0 0 3px 0"></span><span data-fscan style="position:absolute; left:9%; right:9%; top:14%; height:2px; background:#4791FF; box-shadow:0 0 12px #4791FF"></span></div></div><div data-fstep="8" style="display:flex; flex-direction:column; gap:5px"><div style="display:flex; justify-content:space-between; align-items:baseline; border-bottom:1px solid rgba(255,255,255,.07); padding-bottom:4.5px"><span style="color:rgba(255,255,255,.4); font-size:7.5px">Name</span><span style="color:#fff; font-size:8.5px; font-weight:600">R. Tiwari</span></div><div style="display:flex; justify-content:space-between; align-items:baseline; border-bottom:1px solid rgba(255,255,255,.07); padding-bottom:4.5px"><span style="color:rgba(255,255,255,.4); font-size:7.5px">DOB</span><span style="color:#fff; font-size:8.5px; font-weight:600">12 · 04 · 1994</span></div><div style="display:flex; justify-content:space-between; align-items:baseline; border-bottom:1px solid rgba(255,255,255,.07); padding-bottom:4.5px"><span style="color:rgba(255,255,255,.4); font-size:7.5px">ID</span><span style="color:#fff; font-size:8.5px; font-weight:600">XXXX 4821</span></div></div><div data-fstep="9" style="align-self:flex-start; background:rgba(255,255,255,.09); color:#fff; font-size:7px; font-weight:600; padding:3.4px 8px; border-radius:99px"><span style="display:inline-block; width:5px; height:5px; border-radius:50%; background:#4791FF; margin-right:4px"></span>Address matched · Bangalore</div><div data-fstep="9" data-tap data-dur="900" data-push="2" style="margin-top:auto; background:#4791FF; color:#070707; font-size:9.5px; font-weight:600; text-align:center; padding:8.5px; border-radius:99px">Submit KYC</div></div><div data-fscreen="3"><div style="display:flex; justify-content:space-between; font-size:8px; font-weight:600; color:rgba(255,255,255,.45)"><span>9:41</span><span>●●●</span></div><div data-fstep="10" style="margin:auto; display:flex; flex-direction:column; align-items:center; gap:8px; text-align:center; padding:0 8px"><span style="width:30px; height:30px; border-radius:50%; background:#4791FF; color:#070707; display:flex; align-items:center; justify-content:center; font-size:14px; font-weight:600">✓</span><span style="color:#fff; font-size:10.5px; font-weight:600; line-height:1.3">Verified</span><span data-fstep="10" style="color:#4791FF; font-size:15px; font-weight:600; line-height:1.2">Ready to onboard</span><span style="color:rgba(255,255,255,.55); font-size:8.2px; line-height:1.45">Face, ID and address, one platform</span></div></div><span data-fripple style="position:absolute; width:30px; height:30px; margin:-15px 0 0 -15px; border-radius:50%; background:rgba(255,255,255,.55); opacity:0; pointer-events:none"></span></div>
                   </div>
                   <span style="position:absolute; top:13px; left:50%; transform:translateX(-50%); width:42px; height:5px; border-radius:99px; background:rgba(255,255,255,.18)"></span>
                 </div>
@@ -469,13 +544,13 @@
               <div data-mob="align-self:center" style="flex:none">
                 <div data-mob="height:min(38vh,330px); height:min(38dvh,330px)" style="position:relative; box-sizing:border-box; height:clamp(400px,54vh,520px); aspect-ratio:9/19.5; background:#070707; border-radius:26px; padding:7px; box-shadow:0 22px 50px rgba(7,7,7,.32)">
                   <div style="position:relative; width:100%; height:100%; background:#0B0B0B; border-radius:20px; overflow:hidden">
-                    <div data-flow aria-label="InnerAlly app flow" style="position:absolute; inset:0; background:#0D0D0D; overflow:hidden"><div data-fscreen="1"><div style="display:flex; justify-content:space-between; font-size:8px; font-weight:600; color:rgba(255,255,255,.45)"><span>9:41</span><span>●●●</span></div><div data-fstep="1"><div style="color:#fff; font-size:13px; font-weight:600; line-height:1.25">Talk to someone<br>in 90 seconds</div><div style="color:rgba(255,255,255,.5); font-size:8.5px; margin-top:2px">Anonymous · no sign up</div></div><div data-fstep="2" style="display:flex; gap:4px; flex-wrap:wrap"><span style="font-size:7px; font-weight:600; padding:3.4px 6.9px; border-radius:99px; background:#1CE15F; color:#070707">Anxiety</span><span style="font-size:7px; font-weight:600; padding:3.4px 6.9px; border-radius:99px; background:rgba(255,255,255,.09); color:rgba(255,255,255,.75)">Sleep</span><span style="font-size:7px; font-weight:600; padding:3.4px 6.9px; border-radius:99px; background:rgba(255,255,255,.09); color:rgba(255,255,255,.75)">Work</span></div><div data-fstep="3" style="display:flex; flex-direction:column; gap:5px"><div data-fstep="3" style="display:flex; align-items:center; gap:7px; background:rgba(255,255,255,.05); border-radius:10px; padding:7px"><span style="width:19px; height:19px; border-radius:50%; background:#1CE15F; flex:none"></span><span style="display:flex; flex-direction:column; gap:3px; flex:1"><span style="height:5px; width:72%; background:rgba(255,255,255,.45); border-radius:9px"></span><span style="height:4px; width:44%; background:rgba(255,255,255,.18); border-radius:9px"></span></span><span style="width:6.5px; height:6.5px; border-radius:50%; background:#1CE15F; flex:none"></span></div><div data-fstep="3" style="display:flex; align-items:center; gap:7px; background:rgba(255,255,255,.05); border-radius:10px; padding:7px"><span style="width:19px; height:19px; border-radius:50%; background:#4791FF; flex:none"></span><span style="display:flex; flex-direction:column; gap:3px; flex:1"><span style="height:5px; width:60%; background:rgba(255,255,255,.45); border-radius:9px"></span><span style="height:4px; width:50%; background:rgba(255,255,255,.18); border-radius:9px"></span></span><span style="width:6.5px; height:6.5px; border-radius:50%; background:#1CE15F; flex:none"></span></div><div data-fstep="3" style="display:flex; align-items:center; gap:7px; background:rgba(255,255,255,.05); border-radius:10px; padding:7px"><span style="width:19px; height:19px; border-radius:50%; background:#ECE42E; flex:none"></span><span style="display:flex; flex-direction:column; gap:3px; flex:1"><span style="height:5px; width:66%; background:rgba(255,255,255,.45); border-radius:9px"></span><span style="height:4px; width:38%; background:rgba(255,255,255,.18); border-radius:9px"></span></span><span style="width:6.5px; height:6.5px; border-radius:50%; background:#1CE15F; flex:none"></span></div></div><div data-fstep="4" style="align-self:flex-start; background:rgba(255,255,255,.09); color:#fff; font-size:7px; font-weight:600; padding:3.4px 8px; border-radius:99px"><span style="display:inline-block; width:5px; height:5px; border-radius:50%; background:#1CE15F; margin-right:4px"></span>4 online now</div><div data-fstep="5" data-tap data-dur="900" data-push="1" style="margin-top:auto; background:#1CE15F; color:#070707; font-size:9.5px; font-weight:600; text-align:center; padding:8.5px; border-radius:99px">Connect now</div></div><div data-fscreen="2"><div style="display:flex; justify-content:space-between; font-size:8px; font-weight:600; color:rgba(255,255,255,.45)"><span>9:41</span><span>●●●</span></div><div data-fstep="6" style="display:flex; justify-content:space-between; align-items:center"><span style="color:#fff; font-size:13px; font-weight:600">Session</span><span style="background:#1CE15F; color:#070707; font-size:7px; font-weight:600; padding:3.4px 8px; border-radius:99px">LIVE</span></div><div data-fstep="7" style="position:relative; flex:1; min-height:96px; border-radius:13px; background:linear-gradient(160deg,#141d16,#0B0B0B); overflow:hidden; display:flex; align-items:center; justify-content:center">
+                    <div data-flow aria-label="InnerAlly app flow" style="position:absolute; inset:0; background:#0D0D0D; overflow:hidden"><div data-fscreen="1"><div style="display:flex; justify-content:space-between; font-size:8px; font-weight:600; color:rgba(255,255,255,.45)"><span>9:41</span><span>●●●</span></div><div data-fstep="1"><div style="color:#fff; font-size:13px; font-weight:600; line-height:1.25">Talk to someone<br>in 90 seconds</div><div style="color:rgba(255,255,255,.5); font-size:8.5px; margin-top:2px">Anonymous · no sign up</div></div><div data-fstep="2" style="display:flex; gap:4px; flex-wrap:wrap"><span style="font-size:7px; font-weight:600; padding:3.4px 6.9px; border-radius:99px; background:#1CE15F; color:#070707">Anxiety</span><span style="font-size:7px; font-weight:600; padding:3.4px 6.9px; border-radius:99px; background:rgba(255,255,255,.09); color:rgba(255,255,255,.75)">Sleep</span><span style="font-size:7px; font-weight:600; padding:3.4px 6.9px; border-radius:99px; background:rgba(255,255,255,.09); color:rgba(255,255,255,.75)">Work</span></div><div data-fstep="3" style="display:flex; flex-direction:column; gap:5px"><div data-fstep="3" style="display:flex; align-items:center; gap:7px; background:rgba(255,255,255,.05); border-radius:10px; padding:7px"><span style="width:19px; height:19px; border-radius:50%; background:#1CE15F; flex:none"></span><span style="display:flex; flex-direction:column; gap:3px; flex:1"><span style="height:5px; width:72%; background:rgba(255,255,255,.45); border-radius:9px"></span><span style="height:4px; width:44%; background:rgba(255,255,255,.18); border-radius:9px"></span></span><span style="width:6.5px; height:6.5px; border-radius:50%; background:#1CE15F; flex:none"></span></div><div data-fstep="3" style="display:flex; align-items:center; gap:7px; background:rgba(255,255,255,.05); border-radius:10px; padding:7px"><span style="width:19px; height:19px; border-radius:50%; background:#4791FF; flex:none"></span><span style="display:flex; flex-direction:column; gap:3px; flex:1"><span style="height:5px; width:60%; background:rgba(255,255,255,.45); border-radius:9px"></span><span style="height:4px; width:50%; background:rgba(255,255,255,.18); border-radius:9px"></span></span><span style="width:6.5px; height:6.5px; border-radius:50%; background:#1CE15F; flex:none"></span></div><div data-fstep="3" style="display:flex; align-items:center; gap:7px; background:rgba(255,255,255,.05); border-radius:10px; padding:7px"><span style="width:19px; height:19px; border-radius:50%; background:#ECE42E; flex:none"></span><span style="display:flex; flex-direction:column; gap:3px; flex:1"><span style="height:5px; width:66%; background:rgba(255,255,255,.45); border-radius:9px"></span><span style="height:4px; width:38%; background:rgba(255,255,255,.18); border-radius:9px"></span></span><span style="width:6.5px; height:6.5px; border-radius:50%; background:#1CE15F; flex:none"></span></div></div><div data-fstep="4" style="align-self:flex-start; background:rgba(255,255,255,.09); color:#fff; font-size:7px; font-weight:600; padding:3.4px 8px; border-radius:99px"><span style="display:inline-block; width:5px; height:5px; border-radius:50%; background:#1CE15F; margin-right:4px"></span>4 online now</div><div data-fstep="5" data-tap data-dur="900" data-push="1" style="margin-top:auto; background:#1CE15F; color:#070707; font-size:9.5px; font-weight:600; text-align:center; padding:8.5px; border-radius:99px">Connect now</div></div><div data-fscreen="2"><div style="display:flex; justify-content:space-between; font-size:8px; font-weight:600; color:rgba(255,255,255,.45)"><span>9:41</span><span>●●●</span></div><div data-fstep="6" style="display:flex; justify-content:space-between; align-items:center"><span style="color:#fff; font-size:13px; font-weight:600">Therapist matched</span><span style="background:#1CE15F; color:#070707; font-size:7px; font-weight:600; padding:3.4px 8px; border-radius:99px">CERTIFIED</span></div><div data-fstep="7" style="position:relative; flex:1; min-height:96px; border-radius:13px; background:linear-gradient(160deg,#141d16,#0B0B0B); overflow:hidden; display:flex; align-items:center; justify-content:center">
         <span data-fpulse style="position:absolute; width:74px; height:74px; border-radius:50%; border:1px solid #1CE15F59"></span>
         <span data-fpulse style="position:absolute; width:74px; height:74px; border-radius:50%; border:1px solid #1CE15F59; animation-delay:.9s"></span>
         <span style="width:40px; height:40px; border-radius:50%; background:#1CE15F; color:#070707; display:flex; align-items:center; justify-content:center; font-size:13px; font-weight:600">DR</span>
-        <span style="position:absolute; left:8px; bottom:8px; background:rgba(7,7,7,.6); color:#fff; font-size:7px; font-weight:600; padding:3.4px 8px; border-radius:99px">Dr. Meera · 02:14</span>
+        <span style="position:absolute; left:8px; bottom:8px; background:rgba(7,7,7,.6); color:#fff; font-size:7px; font-weight:600; padding:3.4px 8px; border-radius:99px">Dr. Meera · available now</span>
         <span style="position:absolute; top:8px; right:8px; width:26px; height:34px; border-radius:6px; background:linear-gradient(160deg,#1e2a20,#101010); border:1px solid rgba(255,255,255,.14)"></span>
-      </div><div data-fstep="8" style="display:flex; align-items:flex-end; gap:2.5px; height:16px"><span data-fwave style="flex:1; height:38%; background:#1CE15F; border-radius:2px; transform-origin:bottom; animation-delay:0.00s"></span><span data-fwave style="flex:1; height:62%; background:#1CE15F; border-radius:2px; transform-origin:bottom; animation-delay:0.09s"></span><span data-fwave style="flex:1; height:84%; background:#1CE15F; border-radius:2px; transform-origin:bottom; animation-delay:0.18s"></span><span data-fwave style="flex:1; height:55%; background:#1CE15F; border-radius:2px; transform-origin:bottom; animation-delay:0.27s"></span><span data-fwave style="flex:1; height:90%; background:#1CE15F; border-radius:2px; transform-origin:bottom; animation-delay:0.36s"></span><span data-fwave style="flex:1; height:47%; background:#1CE15F; border-radius:2px; transform-origin:bottom; animation-delay:0.45s"></span><span data-fwave style="flex:1; height:70%; background:#1CE15F; border-radius:2px; transform-origin:bottom; animation-delay:0.54s"></span><span data-fwave style="flex:1; height:58%; background:#1CE15F; border-radius:2px; transform-origin:bottom; animation-delay:0.63s"></span><span data-fwave style="flex:1; height:82%; background:#1CE15F; border-radius:2px; transform-origin:bottom; animation-delay:0.72s"></span><span data-fwave style="flex:1; height:44%; background:#1CE15F; border-radius:2px; transform-origin:bottom; animation-delay:0.81s"></span><span data-fwave style="flex:1; height:66%; background:#1CE15F; border-radius:2px; transform-origin:bottom; animation-delay:0.90s"></span><span data-fwave style="flex:1; height:52%; background:#1CE15F; border-radius:2px; transform-origin:bottom; animation-delay:0.99s"></span></div><div data-fstep="9" style="align-self:flex-start; max-width:78%; background:rgba(255,255,255,.06); border-radius:10px 10px 10px 3px; padding:5.5px 7px"><span style="display:block; height:4px; width:64px; background:rgba(255,255,255,.4); border-radius:9px; margin-bottom:3px"></span><span style="display:block; height:4px; width:42px; background:rgba(255,255,255,.18); border-radius:9px"></span></div><div data-fstep="9" style="align-self:flex-end; max-width:70%; background:#1CE15F; border-radius:10px 10px 3px 10px; padding:5.5px 7px"><span style="display:block; height:4px; width:52px; background:rgba(7,7,7,.5); border-radius:9px"></span></div><div data-fstep="10" data-tap data-dur="900" data-push="2" style="margin-top:auto; background:#1CE15F; color:#070707; font-size:9.5px; font-weight:600; text-align:center; padding:8.5px; border-radius:99px">End session</div></div><div data-fscreen="3"><div style="display:flex; justify-content:space-between; font-size:8px; font-weight:600; color:rgba(255,255,255,.45)"><span>9:41</span><span>●●●</span></div><div data-fstep="11" style="margin:auto; display:flex; flex-direction:column; align-items:center; gap:8px; text-align:center; padding:0 8px"><span style="width:30px; height:30px; border-radius:50%; background:#1CE15F; color:#070707; display:flex; align-items:center; justify-content:center; font-size:14px; font-weight:600">✓</span><span style="color:#fff; font-size:10.5px; font-weight:600; line-height:1.3">Session complete</span><span data-fstep="11" data-num="90" data-num-prefix="" data-num-suffix="s" style="color:#1CE15F; font-size:21px; font-weight:600; line-height:1">0s</span><span style="color:rgba(255,255,255,.55); font-size:8.2px; line-height:1.45">Notes and next slot shared in chat</span></div></div><span data-fripple style="position:absolute; width:30px; height:30px; margin:-15px 0 0 -15px; border-radius:50%; background:rgba(255,255,255,.55); opacity:0; pointer-events:none"></span></div>
+      </div><div data-fstep="8" style="display:flex; align-items:flex-end; gap:2.5px; height:16px"><span data-fwave style="flex:1; height:38%; background:#1CE15F; border-radius:2px; transform-origin:bottom; animation-delay:0.00s"></span><span data-fwave style="flex:1; height:62%; background:#1CE15F; border-radius:2px; transform-origin:bottom; animation-delay:0.09s"></span><span data-fwave style="flex:1; height:84%; background:#1CE15F; border-radius:2px; transform-origin:bottom; animation-delay:0.18s"></span><span data-fwave style="flex:1; height:55%; background:#1CE15F; border-radius:2px; transform-origin:bottom; animation-delay:0.27s"></span><span data-fwave style="flex:1; height:90%; background:#1CE15F; border-radius:2px; transform-origin:bottom; animation-delay:0.36s"></span><span data-fwave style="flex:1; height:47%; background:#1CE15F; border-radius:2px; transform-origin:bottom; animation-delay:0.45s"></span><span data-fwave style="flex:1; height:70%; background:#1CE15F; border-radius:2px; transform-origin:bottom; animation-delay:0.54s"></span><span data-fwave style="flex:1; height:58%; background:#1CE15F; border-radius:2px; transform-origin:bottom; animation-delay:0.63s"></span><span data-fwave style="flex:1; height:82%; background:#1CE15F; border-radius:2px; transform-origin:bottom; animation-delay:0.72s"></span><span data-fwave style="flex:1; height:44%; background:#1CE15F; border-radius:2px; transform-origin:bottom; animation-delay:0.81s"></span><span data-fwave style="flex:1; height:66%; background:#1CE15F; border-radius:2px; transform-origin:bottom; animation-delay:0.90s"></span><span data-fwave style="flex:1; height:52%; background:#1CE15F; border-radius:2px; transform-origin:bottom; animation-delay:0.99s"></span></div><div data-fstep="9" style="align-self:flex-start; max-width:78%; background:rgba(255,255,255,.06); border-radius:10px 10px 10px 3px; padding:5.5px 7px"><span style="display:block; height:4px; width:64px; background:rgba(255,255,255,.4); border-radius:9px; margin-bottom:3px"></span><span style="display:block; height:4px; width:42px; background:rgba(255,255,255,.18); border-radius:9px"></span></div><div data-fstep="9" style="align-self:flex-end; max-width:70%; background:#1CE15F; border-radius:10px 10px 3px 10px; padding:5.5px 7px"><span style="display:block; height:4px; width:52px; background:rgba(7,7,7,.5); border-radius:9px"></span></div><div data-fstep="10" data-tap data-dur="900" data-push="2" style="margin-top:auto; background:#1CE15F; color:#070707; font-size:9.5px; font-weight:600; text-align:center; padding:8.5px; border-radius:99px">Start anonymous call</div></div><div data-fscreen="3"><div style="display:flex; justify-content:space-between; font-size:8px; font-weight:600; color:rgba(255,255,255,.45)"><span>9:41</span><span>●●●</span></div><div data-fstep="11" style="margin:auto; display:flex; flex-direction:column; align-items:center; gap:8px; text-align:center; padding:0 8px"><span style="width:30px; height:30px; border-radius:50%; background:#1CE15F; color:#070707; display:flex; align-items:center; justify-content:center; font-size:14px; font-weight:600">✓</span><span style="color:#fff; font-size:10.5px; font-weight:600; line-height:1.3">Connected anonymously</span><span data-fstep="11" style="color:#1CE15F; font-size:18px; font-weight:600; line-height:1">under 90s</span><span style="color:rgba(255,255,255,.55); font-size:8.2px; line-height:1.45">Chat or call with a certified therapist</span></div></div><span data-fripple style="position:absolute; width:30px; height:30px; margin:-15px 0 0 -15px; border-radius:50%; background:rgba(255,255,255,.55); opacity:0; pointer-events:none"></span></div>
                   </div>
                   <span style="position:absolute; top:13px; left:50%; transform:translateX(-50%); width:42px; height:5px; border-radius:99px; background:rgba(255,255,255,.18)"></span>
                 </div>
@@ -524,7 +599,7 @@
           <div style="display:flex; align-items:flex-start; justify-content:space-between; gap:16px">
             <div style="display:flex; flex-direction:column; gap:4px">
               <div style="font-size:26px; font-weight:600; line-height:1.15">CRM portfolio</div>
-              <div style="font-size:16px; font-weight:500; opacity:.7">VLCC, 240 stores</div>
+              <div style="font-size:16px; font-weight:500; opacity:.7">VLCC, ₹100Cr annual business</div>
             </div>
             <span style="font-size:26px; line-height:1">✦</span>
           </div>
@@ -538,7 +613,7 @@
               <span style="flex:1; height:6px; border-radius:999px; background:rgba(255,255,255,.16)"></span>
               <span style="width:26px; height:26px; border-radius:50%; background:#fff"></span>
             </div>
-            <div style="font-size:15px; font-weight:500; opacity:.75; text-wrap:pretty">Three teams and three dashboards folded into one revenue surface.</div>
+            <div style="font-size:15px; font-weight:500; opacity:.75; text-wrap:pretty">In-house CRM improved sales tracking, inventory and team productivity.</div>
           </div>
         </div>
 
@@ -561,8 +636,8 @@
           </div>
           <div style="display:flex; flex-direction:column; gap:6px">
             <div data-count="50" data-prefix="₹" data-suffix="Cr" style="font-size:clamp(40px,4.2vw,60px); font-weight:600; line-height:1; letter-spacing:-2px; white-space:nowrap; color:#ECE42E">₹50Cr</div>
-            <div style="font-size:18px; color:#fff; line-height:1.3">ARR across four products</div>
-            <div style="font-size:15px; color:#9A9A9A">on one pricing model</div>
+            <div style="font-size:18px; color:#fff; line-height:1.3">Annual revenue across four products</div>
+            <div style="font-size:15px; color:#9A9A9A">Ergon · DKYC · Signdrive · OnboardX</div>
           </div>
         </div>
 
@@ -618,17 +693,32 @@
       <div data-reveal id="caps-list" style="display:flex; flex-direction:column; gap:10px"></div>
     </div>
 
+    <div id="rail-wrap" data-mob="padding:30px 0; margin:80px 0 0; border-radius:24px" style="position:relative; border:1px solid rgba(255,255,255,.08); border-radius:32px; background:#0B0B0B; overflow:hidden; padding:40px 0; margin:120px 0 0">
+      <div data-mob="padding:0 20px 20px; align-items:flex-start" style="display:flex; align-items:baseline; justify-content:space-between; gap:16px; padding:0 34px 26px">
+        <span style="font-size:14px; color:#fff; font-weight:600">Product toolkit</span>
+        <span data-mob="display:none" style="font-size:14px; color:#9A9A9A">The tools support the work; the outcomes stay above.</span>
+      </div>
+
+      <div style="display:flex; flex-direction:column; gap:12px">
+        <div id="rail-a" style="display:flex; gap:12px; width:max-content; will-change:transform"></div>
+        <div id="rail-b" style="display:flex; gap:12px; width:max-content; will-change:transform"></div>
+      </div>
+
+      <div data-mob="width:24px" style="position:absolute; top:0; bottom:0; left:0; width:72px; background:linear-gradient(90deg,#0B0B0B 0%,rgba(11,11,11,0) 100%); pointer-events:none"></div>
+      <div data-mob="width:24px" style="position:absolute; top:0; bottom:0; right:0; width:72px; background:linear-gradient(270deg,#0B0B0B 0%,rgba(11,11,11,0) 100%); pointer-events:none"></div>
+    </div>
+
     <div id="talk" data-reveal data-mob="padding:80px 0 34px" style="padding:140px 0 44px">
       <div data-mob="padding:36px 24px; border-radius:30px" style="position:relative; background:#EB6BA8; color:#070707; border-radius:44px; padding:80px 60px; overflow:hidden">
         <div style="position:relative; display:flex; align-items:flex-end; justify-content:space-between; gap:40px; flex-wrap:wrap">
           <div style="display:flex; flex-direction:column; gap:16px">
             <span style="font-size:14px; font-weight:600">006 / Contact</span>
             <div data-mob="font-size:34px" style="font-size:clamp(38px,5.6vw,72px); font-weight:600; line-height:1.05">Hiring for a<br>senior PM role?<br>Let's talk.</div>
-            <div data-mob="font-size:16px" style="font-size:20px; font-weight:500">rachittiwari10@gmail.com &nbsp;·&nbsp; +91 95897 62453</div>
+            <div class="contact-details"><a href="mailto:rachittiwari10@gmail.com" data-track="contact_email">rachittiwari10@gmail.com</a><a href="tel:+919589762453" data-track="contact_phone">+91 95897 62453</a></div>
           </div>
           <div data-mob="width:100%" style="display:flex; gap:12px; flex-wrap:wrap">
-            <a href="mailto:rachittiwari10@gmail.com" data-flip class="hv-glow" data-mob="flex:1; text-align:center; padding:16px 24px" style="background:#070707; color:#fff; font-size:16px; font-weight:600; padding:18px 36px; border-radius:999px; transition:filter .2s ease">Email me</a>
-            <a href="https://www.linkedin.com/in/namesrachit/" data-flip class="hv-dim" data-mob="flex:1; text-align:center; padding:16px 24px" style="background:#fff; color:#070707; font-size:16px; font-weight:500; padding:18px 36px; border-radius:999px; transition:filter .2s ease">LinkedIn</a>
+            <a href="mailto:rachittiwari10@gmail.com" data-flip class="hv-glow" data-track="contact_email" data-mob="flex:1; text-align:center; padding:16px 24px" style="background:#070707; color:#fff; font-size:16px; font-weight:600; padding:18px 36px; border-radius:999px; transition:filter .2s ease">Email me</a>
+            <a href="https://www.linkedin.com/in/namesrachit/" data-flip class="hv-dim" data-track="linkedin_click" data-mob="flex:1; text-align:center; padding:16px 24px" style="background:#fff; color:#070707; font-size:16px; font-weight:500; padding:18px 36px; border-radius:999px; transition:filter .2s ease">LinkedIn</a>
           </div>
         </div>
       </div>
@@ -649,6 +739,22 @@
   var clamp = function (v, a, b) { return Math.max(a, Math.min(b, v)); };
   var $ = function (id) { return document.getElementById(id); };
 
+  function portfolioTrack(name, props) {
+    var details = props || {};
+    var payload = Object.assign({ event: name }, details);
+    window.dataLayer = window.dataLayer || [];
+    window.dataLayer.push(payload);
+    if (typeof window.gtag === 'function') window.gtag('event', name, details);
+    if (typeof window.plausible === 'function') window.plausible(name, { props: details });
+    document.dispatchEvent(new CustomEvent('portfolio:track', { detail: payload }));
+  }
+  window.portfolioTrack = portfolioTrack;
+  document.querySelectorAll('[data-track]').forEach(function (el) {
+    el.addEventListener('click', function () {
+      portfolioTrack(el.dataset.track, { href: el.getAttribute('href') || '' });
+    });
+  });
+
   var sc = $('scroll'), loader = $('loader'), loadNum = $('load-num'), loadBar = $('load-bar'),
       progress = $('progress'), bar = $('bar'), nav = $('nav'), hero = $('hero'),
       railWrap = $('rail-wrap'), railA = $('rail-a'), railB = $('rail-b');
@@ -660,27 +766,19 @@
   var si = function (slug) { return SI[slug] || ''; };
   var TOOLS_A = [
     { name: 'Claude Code', icon: si('claude') },
-    { name: 'Hermes', mono: 'H' },
-    { name: 'OpenClaw', mono: 'OC' },
-    { name: 'Cursor', icon: si('cursor') },
     { name: 'OpenAI', mono: 'AI' },
     { name: 'Figma', icon: si('figma') },
-    { name: 'Notion', icon: si('notion') },
-    { name: 'Linear', icon: si('linear') },
     { name: 'Miro', icon: si('miro') },
-    { name: 'Slack', mono: 'S' }
+    { name: 'GitHub', icon: si('github') },
+    { name: 'Jira', icon: si('jira') }
   ];
   var TOOLS_B = [
-    { name: 'Jira', icon: si('jira') },
     { name: 'Amplitude', mono: 'A' },
     { name: 'Mixpanel', icon: si('mixpanel') },
     { name: 'Looker', icon: si('looker') },
     { name: 'SQL', icon: si('postgresql') },
     { name: 'Postman', icon: si('postman') },
-    { name: 'GitHub', icon: si('github') },
-    { name: 'Confluence', icon: si('confluence') },
-    { name: 'Google Analytics', icon: si('googleanalytics') },
-    { name: 'LangSmith', icon: si('langchain') }
+    { name: 'Confluence', icon: si('confluence') }
   ];
   var CAPS = [
     { n: '01', label: 'Product strategy', aside: 'positioning to roadmap', items: ['Positioning and narrative', 'Roadmap planning', 'Pricing and packaging'] },
@@ -1086,12 +1184,13 @@
     return els;
   }
 
-  // ---- reduced motion: lay the pills out on the floor, never run the engine ----
-  if (reduce) {
-    var count = (host.clientWidth && host.clientWidth < 560) ? 6 : PILLS.length;
+  // ---- compact/reduced motion: keep jokes below the content, never obstruct it ----
+  var compactPile = host.clientWidth && host.clientWidth < 560;
+  if (reduce || compactPile) {
+    var count = compactPile ? 4 : PILLS.length;
     var els = build(count);
     requestAnimationFrame(function () {
-      var W = host.clientWidth, H = host.clientHeight, pad = 14, gap = 10, rowH = 50;
+      var W = host.clientWidth, H = host.clientHeight, pad = 14, gap = 10, rowH = compactPile ? 44 : 50;
       var rows = [[]], x = pad;
       els.forEach(function (el) {
         var w = el.offsetWidth;
@@ -1170,7 +1269,6 @@
         { chamfer: { radius: h / 2 }, restitution: 0.66, friction: 0.2,
           frictionAir: 0.008, density: 0.0013, angle: (Math.random() - 0.5) * 1.4 });
       bodies.push(body);
-      el.style.visibility = 'visible';
     });
     M.Composite.add(engine.world, bodies);
 
@@ -1241,6 +1339,7 @@
           M.Body.setAngle(b, (Math.random() - 0.5) * 1.4);
         }
         var s = sizes[i];
+        nodes[i].style.visibility = (b.position.y - s[1] / 2 >= 86) ? 'visible' : 'hidden';
         nodes[i].style.transform = 'translate3d(' + (b.position.x - s[0] / 2) + 'px,' +
           (b.position.y - s[1] / 2) + 'px,0) rotate(' + b.angle + 'rad)';
       });
@@ -1520,16 +1619,29 @@
   back.className = 'case-back';
   document.body.appendChild(back);
   var esc = function (s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); };
+  var baseTitle = document.title;
+  var activeKey = '';
+  var lastFocus = null;
+  var pageScroller = document.getElementById('scroll');
+
+  function caseKeyFromHash() {
+    var match = location.hash.match(/^#case=([a-z0-9-]+)$/i);
+    return match && CASES[match[1].toLowerCase()] ? match[1].toLowerCase() : '';
+  }
 
   function openCase(key) {
     var c = CASES[key];
     if (!c) return;
+    if (activeKey === key && back.classList.contains('on')) return;
+    if (!back.classList.contains('on')) lastFocus = document.activeElement;
+    activeKey = key;
     back.innerHTML =
       '<div class="case-card" role="dialog" aria-modal="true" aria-label="' + esc(c.name) + ' case study" tabindex="-1">' +
       '<div class="case-top"><span class="case-who">' +
       '<span class="case-badge" style="background:' + c.accent + '">' + esc(c.badge) + '</span>' +
       esc(c.name) + '<span class="case-sub">' + esc(c.sub) + '</span></span>' +
-      '<button type="button" class="case-x" aria-label="Close">✕</button></div>' +
+      '<span class="case-actions"><button type="button" class="case-copy">Copy link</button>' +
+      '<button type="button" class="case-x" aria-label="Close case study">✕</button></span></div>' +
       '<h3 class="case-h">' + esc(c.title) + '</h3>' +
       '<div class="case-body">' + c.body.map(function (s) {
         return '<h4>' + esc(s[0]) + '</h4><p>' + esc(s[1]) + '</p>';
@@ -1539,21 +1651,101 @@
       }).join('') + '</div></div>';
     back.classList.add('on');
     document.documentElement.style.overflow = 'hidden';
-    back.querySelector('.case-x').addEventListener('click', closeCase);
+    if (pageScroller) pageScroller.style.overflowY = 'hidden';
+    document.title = c.name + ' case study — Rachit Tiwari';
+    back.querySelector('.case-x').addEventListener('click', requestClose);
+    back.querySelector('.case-copy').addEventListener('click', copyCaseLink);
     back.querySelector('.case-card').focus();
+    if (window.portfolioTrack) window.portfolioTrack('case_open', { case: key });
   }
-  function closeCase() {
+  function hideCase(restoreFocus) {
+    if (!back.classList.contains('on')) return;
     back.classList.remove('on');
     back.innerHTML = '';
     document.documentElement.style.overflow = '';
+    if (pageScroller) pageScroller.style.overflowY = 'auto';
+    document.title = baseTitle;
+    activeKey = '';
+    if (restoreFocus && lastFocus && document.contains(lastFocus)) lastFocus.focus();
+    lastFocus = null;
   }
-  back.addEventListener('click', function (e) { if (e.target === back) closeCase(); });
+  function requestClose() {
+    if (history.state && history.state.portfolioCase && caseKeyFromHash()) {
+      history.back();
+    } else {
+      history.replaceState(history.state || {}, '', location.pathname + location.search);
+      hideCase(true);
+    }
+  }
+  function openWithHistory(key) {
+    if (!CASES[key]) return;
+    if (caseKeyFromHash() === key) { openCase(key); return; }
+    history.pushState({ portfolioCase: true, case: key }, '', '#case=' + key);
+    openCase(key);
+  }
+  function syncCaseFromLocation() {
+    var key = caseKeyFromHash();
+    if (key) openCase(key); else hideCase(true);
+  }
+  function copyCaseLink() {
+    var button = back.querySelector('.case-copy');
+    if (!button || !activeKey) return;
+    var url = new URL(location.href);
+    url.hash = 'case=' + activeKey;
+    function copied() {
+      button.textContent = 'Link copied';
+      if (window.portfolioTrack) window.portfolioTrack('case_link_copy', { case: activeKey });
+      setTimeout(function () { if (button && button.isConnected) button.textContent = 'Copy link'; }, 1600);
+    }
+    var write = navigator.clipboard && window.isSecureContext ? navigator.clipboard.writeText(url.href) : null;
+    if (write) {
+      write.then(copied).catch(function () { fallbackCopy(url.href, copied); });
+    } else fallbackCopy(url.href, copied);
+  }
+  function fallbackCopy(value, done) {
+    var field = document.createElement('textarea');
+    field.value = value;
+    field.setAttribute('readonly', '');
+    field.style.cssText = 'position:fixed;left:-9999px;top:0';
+    document.body.appendChild(field);
+    field.select();
+    try { document.execCommand('copy'); } catch (err) { void err; }
+    field.remove();
+    done();
+  }
+  back.addEventListener('click', function (e) { if (e.target === back) requestClose(); });
   document.addEventListener('keydown', function (e) {
-    if (e.key === 'Escape' && back.classList.contains('on')) closeCase();
+    if (!back.classList.contains('on')) return;
+    if (e.key === 'Escape') { requestClose(); return; }
+    if (e.key !== 'Tab') return;
+    var focusable = Array.prototype.slice.call(back.querySelectorAll('button,[href],[tabindex]:not([tabindex="-1"])'));
+    if (!focusable.length) { e.preventDefault(); return; }
+    var first = focusable[0], last = focusable[focusable.length - 1];
+    if (e.shiftKey && (document.activeElement === first || document.activeElement.classList.contains('case-card'))) { e.preventDefault(); last.focus(); }
+    else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
   });
   document.querySelectorAll('[data-case]').forEach(function (card) {
-    card.addEventListener('click', function () { openCase(card.getAttribute('data-case')); });
+    var key = card.getAttribute('data-case');
+    card.setAttribute('role', 'button');
+    card.setAttribute('tabindex', '0');
+    card.setAttribute('aria-haspopup', 'dialog');
+    card.setAttribute('aria-label', 'Open ' + CASES[key].name + ' case study');
+    card.addEventListener('click', function () { openWithHistory(key); });
+    card.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openWithHistory(key); }
+    });
   });
+  document.addEventListener('click', function (e) {
+    var anchor = e.target.closest && e.target.closest('a[href^="#case="]');
+    if (!anchor) return;
+    var key = anchor.getAttribute('href').slice(6).toLowerCase();
+    if (!CASES[key]) return;
+    e.preventDefault();
+    openWithHistory(key);
+  });
+  window.addEventListener('popstate', syncCaseFromLocation);
+  window.addEventListener('hashchange', syncCaseFromLocation);
+  syncCaseFromLocation();
 })();
 
 /* hobby-projects disclosure: close on outside click / Escape (enhancement —
