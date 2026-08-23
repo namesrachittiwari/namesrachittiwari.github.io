@@ -764,7 +764,7 @@
         </div>
       </div>
       <div data-mob="flex-direction:column; gap:6px; padding:22px 4px 0" style="display:flex; justify-content:space-between; font-size:14px; color:#9A9A9A; padding:30px 10px 0">
-        <span>© 2026 Rachit Tiwari <span style="opacity:.45; font-size:12px">· b22</span></span><span>Bangalore, India</span><span>Open to new roles</span>
+        <span>© 2026 Rachit Tiwari <span style="opacity:.45; font-size:12px">· b23</span></span><span>Bangalore, India</span><span>Open to new roles</span>
       </div>
     </div>
   </div>
@@ -1255,10 +1255,10 @@
     return els;
   }
 
-  // ---- compact/reduced motion: keep jokes below the content, never obstruct it ----
-  var compactPile = host.clientWidth && host.clientWidth < 560;
-  if (reduce || compactPile) {
-    var count = compactPile ? 4 : PILLS.length;
+  // ---- reduced motion: keep jokes below the content, never run the engine ----
+  if (reduce) {
+    var compactPile = host.clientWidth && host.clientWidth < 560;
+    var count = compactPile ? 6 : PILLS.length;
     var els = build(count);
     requestAnimationFrame(function () {
       var W = host.clientWidth, H = host.clientHeight, pad = 14, gap = 10, rowH = compactPile ? 44 : 50;
@@ -1283,7 +1283,7 @@
 
   if (!window.Matter) return;
   var M = window.Matter;
-  var raf = null, bodies = [], nodes = [], sizes = [], engine = null, H = 0, W = 0;
+  var raf = null, animationActive = false, bodies = [], nodes = [], sizes = [], engine = null, H = 0, W = 0;
 
   // ---- cursor field ----
   var pxN = 0, pyN = 0, cx = 0, cy = 0, act = 0, actTarget = 0;
@@ -1340,14 +1340,14 @@
         { chamfer: { radius: h / 2 }, restitution: 0.66, friction: 0.2,
           frictionAir: 0.008, density: 0.0013, angle: (Math.random() - 0.5) * 1.4 });
       bodies.push(body);
+      el.style.visibility = 'visible';
     });
     M.Composite.add(engine.world, bodies);
 
     var nextBump = performance.now() + 900 + Math.random() * 1500;
 
     function frame(now) {
-      raf = requestAnimationFrame(frame);
-      if (scroller && scroller.scrollTop > scroller.clientHeight * 1.25) return;
+      if (!animationActive) { raf = null; return; }
 
       // cursor field + ambient float
       cx += (pxN - cx) * 0.085;
@@ -1414,8 +1414,20 @@
         nodes[i].style.transform = 'translate3d(' + (b.position.x - s[0] / 2) + 'px,' +
           (b.position.y - s[1] / 2) + 'px,0) rotate(' + b.angle + 'rad)';
       });
+      raf = animationActive ? requestAnimationFrame(frame) : null;
     }
-    raf = requestAnimationFrame(frame);
+
+    function syncAnimation() {
+      var nearHero = !scroller || scroller.scrollTop <= scroller.clientHeight * 1.25;
+      var shouldRun = !document.hidden && nearHero;
+      if (shouldRun === animationActive) return;
+      animationActive = shouldRun;
+      if (animationActive && !raf) raf = requestAnimationFrame(frame);
+      else if (!animationActive && raf) { cancelAnimationFrame(raf); raf = null; }
+    }
+    if (scroller) scroller.addEventListener('scroll', syncAnimation, { passive: true });
+    document.addEventListener('visibilitychange', syncAnimation);
+    syncAnimation();
   }
 
   function boot() { setTimeout(start, 1900); }
