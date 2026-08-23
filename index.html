@@ -7,7 +7,32 @@
 <meta name="description" content="Senior Product Manager with 7+ years building AI, enterprise SaaS and 0-to-1 products. +25% per-store sales, ₹50Cr annual SaaS revenue and 300+ monthly sessions.">
 <link rel="canonical" href="https://rachittiwari.com/">
 <meta name="theme-color" content="#070707">
-<meta name="color-scheme" content="dark">
+<meta name="darkreader-lock">
+<script>
+/* Keep the authored palette intact when a mobile dark-theme extension injects
+   a fallback/filter stylesheet before it notices the opt-out above. */
+(function () {
+  var selector = 'style.darkreader, link.darkreader';
+  function cleanInjectedTheme() {
+    document.querySelectorAll(selector).forEach(function (el) { el.remove(); });
+    var root = document.documentElement;
+    root.removeAttribute('data-darkreader-mode');
+    root.removeAttribute('data-darkreader-scheme');
+    root.style.setProperty('filter', 'none', 'important');
+    root.style.setProperty('-webkit-filter', 'none', 'important');
+    if (document.body) {
+      document.body.style.setProperty('filter', 'none', 'important');
+      document.body.style.setProperty('-webkit-filter', 'none', 'important');
+    }
+  }
+  cleanInjectedTheme();
+  var themeObserver = new MutationObserver(cleanInjectedTheme);
+  themeObserver.observe(document.head, { childList: true });
+  var attributeObserver = new MutationObserver(cleanInjectedTheme);
+  attributeObserver.observe(document.documentElement, { attributes: true, attributeFilter: ['data-darkreader-mode', 'data-darkreader-scheme'] });
+  document.addEventListener('DOMContentLoaded', cleanInjectedTheme, { once: true });
+})();
+</script>
 <meta property="og:title" content="Rachit Tiwari — Senior Product Manager">
 <meta property="og:description" content="AI, enterprise SaaS and 0-to-1 products with measurable outcomes: +25% sales, ₹50Cr annual SaaS revenue and 300+ monthly sessions.">
 <meta property="og:url" content="https://rachittiwari.com/">
@@ -28,9 +53,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
-  html { scroll-behavior: smooth; color-scheme: dark; }
-  @media (prefers-color-scheme: dark) { html { color-scheme: dark; background: #070707; } }
-  @media (prefers-color-scheme: light) { html { color-scheme: dark; background: #070707; } }
+  html { scroll-behavior: smooth; }
   body { margin: 0; background: #070707; color: #fff; font-family: 'Poppins', system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
   a { color: #EB6BA8; text-decoration: none; }
   a:hover { color: #fff; }
@@ -109,11 +132,13 @@
   .more-menu__label { padding: 7px 14px 5px; color: #5c5c5c; font-size: 10px; font-weight: 600; letter-spacing: .11em; text-transform: uppercase; }
   .more-item__dot { width: 8px; height: 8px; flex: none; border-radius: 50%; background: #EB6BA8; }
   @media (max-width:820px) {
-    #scroll { scroll-behavior: auto !important; }
+    #scroll { -webkit-overflow-scrolling: touch; touch-action: pan-y; }
+    [data-card-shell] { position: relative !important; top: auto !important; }
     .more-menu { position: fixed; top: 66px; left: 20px; right: 20px; width: auto; }
     .more-mobile-nav { display: block; padding-bottom: 7px; margin-bottom: 7px; border-bottom: 1px solid rgba(255,255,255,.09); }
   }
-  html.is-compact #scroll { scroll-behavior: auto !important; }
+  html.is-compact #scroll { -webkit-overflow-scrolling: touch; touch-action: pan-y; }
+  html.is-compact [data-card-shell] { position: relative !important; top: auto !important; }
   html.is-compact .more-menu { position: fixed; top: 66px; left: 20px; right: 20px; width: auto; }
   html.is-compact .more-mobile-nav { display: block; padding-bottom: 7px; margin-bottom: 7px; border-bottom: 1px solid rgba(255,255,255,.09); }
   @media (max-width:820px) {
@@ -539,7 +564,7 @@
       </div>
 
       <div data-mob="padding-bottom:60px" style="display:flex; flex-direction:column; gap:26px; padding-bottom:120px">
-        <div data-mob="top:66px" style="position:sticky; top:110px">
+        <div data-card-shell data-mob="top:66px" style="position:sticky; top:110px">
           <div data-stack data-case="fieldassist" data-mob="padding:20px 16px; border-radius:24px; min-height:0; gap:12px" style="background:#4791FF; color:#070707; border-radius:44px; padding:44px 52px; min-height:340px; display:flex; flex-direction:column; justify-content:space-between; gap:24px">
             <div data-mob="flex-direction:column; align-items:flex-start; gap:4px; font-size:13px" style="display:flex; justify-content:space-between; align-items:center; gap:16px; font-size:15px; font-weight:600"><span style="display:flex; align-items:center; gap:10px"><span style="width:24px; height:24px; border-radius:7px; background:rgba(7,7,7,.15); color:#070707; display:flex; align-items:center; justify-content:center; font-size:10px; font-weight:600; flex:none">FA</span>FieldAssist</span><span style="display:flex; align-items:center; gap:12px; flex-wrap:wrap"><span>Aug 2024 to Jan 2025, enterprise SaaS</span><span class="cs-pill">Case study →</span></span></div>
             <div data-mob="flex-direction:column-reverse; align-items:stretch; gap:16px" style="display:flex; align-items:center; gap:52px">
@@ -564,7 +589,7 @@
             </div>
           </div>
         </div>
-        <div data-mob="top:66px" style="position:sticky; top:124px">
+        <div data-card-shell data-mob="top:66px" style="position:sticky; top:124px">
           <div data-stack data-case="vlcc" data-mob="padding:20px 16px; border-radius:24px; min-height:0; gap:12px" style="background:#ECE42E; color:#070707; border-radius:44px; padding:44px 52px; min-height:340px; display:flex; flex-direction:column; justify-content:space-between; gap:24px">
             <div data-mob="flex-direction:column; align-items:flex-start; gap:4px; font-size:13px" style="display:flex; justify-content:space-between; align-items:center; gap:16px; font-size:15px; font-weight:600"><span style="display:flex; align-items:center; gap:10px"><span style="width:24px; height:24px; border-radius:7px; background:rgba(7,7,7,.15); color:#070707; display:flex; align-items:center; justify-content:center; font-size:10px; font-weight:600; flex:none">V</span>VLCC</span><span style="display:flex; align-items:center; gap:12px; flex-wrap:wrap"><span>Jan to Aug 2024, consumer products &amp; AI</span><span class="cs-pill">Case study →</span></span></div>
             <div data-mob="flex-direction:column-reverse; align-items:stretch; gap:16px" style="display:flex; align-items:center; gap:52px">
@@ -584,7 +609,7 @@
             </div>
           </div>
         </div>
-        <div data-mob="top:66px" style="position:sticky; top:138px">
+        <div data-card-shell data-mob="top:66px" style="position:sticky; top:138px">
           <div data-stack data-case="authbridge" data-mob="padding:20px 16px; border-radius:24px; min-height:0; gap:12px" style="background:#4791FF; color:#070707; border-radius:44px; padding:44px 52px; min-height:340px; display:flex; flex-direction:column; justify-content:space-between; gap:24px">
             <div data-mob="flex-direction:column; align-items:flex-start; gap:4px; font-size:13px" style="display:flex; justify-content:space-between; align-items:center; gap:16px; font-size:15px; font-weight:600"><span style="display:flex; align-items:center; gap:10px"><span style="width:24px; height:24px; border-radius:7px; background:rgba(7,7,7,.15); color:#070707; display:flex; align-items:center; justify-content:center; font-size:10px; font-weight:600; flex:none">AB</span>AuthBridge</span><span style="display:flex; align-items:center; gap:12px; flex-wrap:wrap"><span>Aug 2022 to Jan 2024, B2B SaaS</span><span class="cs-pill">Case study →</span></span></div>
             <div data-mob="flex-direction:column-reverse; align-items:stretch; gap:16px" style="display:flex; align-items:center; gap:52px">
@@ -604,7 +629,7 @@
             </div>
           </div>
         </div>
-        <div data-mob="top:66px" style="position:sticky; top:152px">
+        <div data-card-shell data-mob="top:66px" style="position:sticky; top:152px">
           <div data-stack data-case="amazon" data-mob="padding:20px 16px; border-radius:24px; min-height:0; gap:12px" style="background:#EB6BA8; color:#070707; border-radius:44px; padding:44px 52px; min-height:340px; display:flex; flex-direction:column; justify-content:space-between; gap:24px">
             <div data-mob="flex-direction:column; align-items:flex-start; gap:4px; font-size:13px" style="display:flex; justify-content:space-between; align-items:center; gap:16px; font-size:15px; font-weight:600"><span style="display:flex; align-items:center; gap:10px"><span style="width:24px; height:24px; border-radius:7px; background:rgba(7,7,7,.15); color:#070707; display:flex; align-items:center; justify-content:center; font-size:10px; font-weight:600; flex:none">A</span>Amazon</span><span style="display:flex; align-items:center; gap:12px; flex-wrap:wrap"><span>Jan 2019 to Feb 2020, program management</span><span class="cs-pill">Case study →</span></span></div>
             <div data-mob="flex-direction:column-reverse; align-items:stretch; gap:16px" style="display:flex; align-items:center; gap:52px">
@@ -619,7 +644,7 @@
             </div>
           </div>
         </div>
-        <div data-mob="top:66px" style="position:sticky; top:166px">
+        <div data-card-shell data-mob="top:66px" style="position:sticky; top:166px">
           <div data-stack data-case="jiomart" data-mob="padding:20px 16px; border-radius:24px; min-height:0; gap:12px" style="background:#ECE42E; color:#070707; border-radius:44px; padding:44px 52px; min-height:340px; display:flex; flex-direction:column; justify-content:space-between; gap:24px">
             <div data-mob="flex-direction:column; align-items:flex-start; gap:4px; font-size:13px" style="display:flex; justify-content:space-between; align-items:center; gap:16px; font-size:15px; font-weight:600"><span style="display:flex; align-items:center; gap:10px"><span style="width:24px; height:24px; border-radius:7px; background:rgba(7,7,7,.15); color:#070707; display:flex; align-items:center; justify-content:center; font-size:10px; font-weight:600; flex:none">JM</span>Jio Mart</span><span style="display:flex; align-items:center; gap:12px; flex-wrap:wrap"><span>Nov 2020 to Dec 2021, program management</span><span class="cs-pill">Case study →</span></span></div>
             <div data-mob="flex-direction:column-reverse; align-items:stretch; gap:16px" style="display:flex; align-items:center; gap:52px">
@@ -647,7 +672,7 @@
       </div>
 
       <div data-mob="padding-bottom:80px" style="display:flex; flex-direction:column; gap:26px; padding-bottom:140px">
-        <div data-mob="top:66px" style="position:sticky; top:110px">
+        <div data-card-shell data-mob="top:66px" style="position:sticky; top:110px">
           <div data-stack data-case="innerally" data-mob="padding:20px 16px; border-radius:24px; min-height:0; gap:12px" style="background:#1CE15F; color:#070707; border-radius:44px; padding:44px 52px; min-height:340px; display:flex; flex-direction:column; justify-content:space-between; gap:24px">
             <div data-mob="flex-direction:column; align-items:flex-start; gap:4px; font-size:13px" style="display:flex; justify-content:space-between; align-items:center; gap:16px; font-size:15px; font-weight:600"><span style="display:flex; align-items:center; gap:10px"><span style="width:24px; height:24px; border-radius:7px; background:rgba(7,7,7,.15); color:#070707; display:flex; align-items:center; justify-content:center; font-size:10px; font-weight:600; flex:none">IA</span>InnerAlly</span><span style="display:flex; align-items:center; gap:12px; flex-wrap:wrap"><span>Feb 2025 to present, 0-to-1</span><span class="cs-pill">Case study →</span></span></div>
             <div data-mob="flex-direction:column-reverse; align-items:stretch; gap:16px" style="display:flex; align-items:center; gap:52px">
@@ -673,7 +698,7 @@
             </div>
           </div>
         </div>
-        <div data-mob="top:66px" style="position:sticky; top:126px">
+        <div data-card-shell data-mob="top:66px" style="position:sticky; top:126px">
           <div data-stack data-case="massoi" data-mob="padding:20px 16px; border-radius:24px; min-height:0; gap:12px" style="background:#F4F4F4; color:#070707; border-radius:44px; padding:44px 52px; min-height:340px; display:flex; flex-direction:column; justify-content:space-between; gap:24px">
             <div data-mob="flex-direction:column; align-items:flex-start; gap:4px; font-size:13px" style="display:flex; justify-content:space-between; align-items:center; gap:16px; font-size:15px; font-weight:600"><span style="display:flex; align-items:center; gap:10px"><span style="width:24px; height:24px; border-radius:7px; background:rgba(7,7,7,.15); color:#070707; display:flex; align-items:center; justify-content:center; font-size:10px; font-weight:600; flex:none">M</span>Massoi</span><span style="display:flex; align-items:center; gap:12px; flex-wrap:wrap"><span>Sep 2021 to Aug 2022, founder</span><span class="cs-pill">Case study →</span></span></div>
             <div data-mob="flex-direction:column-reverse; align-items:stretch; gap:16px" style="display:flex; align-items:center; gap:52px">
@@ -739,7 +764,7 @@
         </div>
       </div>
       <div data-mob="flex-direction:column; gap:6px; padding:22px 4px 0" style="display:flex; justify-content:space-between; font-size:14px; color:#9A9A9A; padding:30px 10px 0">
-        <span>© 2026 Rachit Tiwari <span style="opacity:.45; font-size:12px">· b21</span></span><span>Bangalore, India</span><span>Open to new roles</span>
+        <span>© 2026 Rachit Tiwari <span style="opacity:.45; font-size:12px">· b22</span></span><span>Bangalore, India</span><span>Open to new roles</span>
       </div>
     </div>
   </div>
@@ -1026,7 +1051,7 @@
   var stacks = Array.prototype.slice.call(sc.querySelectorAll('[data-stack]'));
   stacks.forEach(function (el) {
     el.style.transition = 'transform .45s ' + EASE + ', filter .4s ' + EASE;
-    el.style.willChange = 'transform';
+    el.style.willChange = isMob() ? 'auto' : 'transform';
   });
   // ---- app screen videos: load near the viewport, play only while on screen ----
   var screenVids = Array.prototype.slice.call(sc.querySelectorAll('video[data-screen-video]'));
@@ -1077,6 +1102,7 @@
 
   // ---- tool rails: drift on their own, nudged by scroll, smoothed with a lerp ----
   var driftA = 0, driftB = 0, scrollA = 0, scrollB = 0, easedA = 0, easedB = 0, lastT = performance.now();
+  var railRaf = 0, railActive = false;
   var wrap = function (x, w) { while (x <= -w) x += w; while (x > 0) x -= w; return x; };
   var frame = function (now) {
     var dt = Math.min(64, now - lastT) / 1000;
@@ -1095,10 +1121,20 @@
       driftB = wrap(driftB, wB);
       railB.style.transform = 'translate3d(' + (driftB + easedB) + 'px,0,0)';
     }
-    requestAnimationFrame(frame);
+    railRaf = railActive ? requestAnimationFrame(frame) : 0;
   };
   var setRails = function (p) { scrollA = -p * 320; scrollB = p * 320; };
-  requestAnimationFrame(frame);
+  var setRailActive = function (active) {
+    if (railActive === active) return;
+    railActive = active;
+    if (active && !railRaf) {
+      lastT = performance.now();
+      railRaf = requestAnimationFrame(frame);
+    } else if (!active && railRaf) {
+      cancelAnimationFrame(railRaf);
+      railRaf = 0;
+    }
+  };
 
   function onScroll() {
     var vh = sc.clientHeight;
@@ -1119,11 +1155,13 @@
 
     if (railWrap) {
       var r = railWrap.getBoundingClientRect();
-      setRails(clamp((vh - r.top) / (vh + r.height), 0, 1) * 2 - 1);
+      var railSeen = r.bottom > -120 && r.top < vh + 120;
+      setRailActive(!reduceMotion && railSeen);
+      if (railSeen) setRails(clamp((vh - r.top) / (vh + r.height), 0, 1) * 2 - 1);
     }
 
-    // stacked work cards: each card settles back and dims as the next slides over it
-    // (desktop only — on phones each card simply covers the previous one)
+    // Desktop keeps the stacked depth effect. Mobile cards stay in normal flow
+    // so every role and founder story remains visible while scrolling.
     if (!isMob()) stacks.forEach(function (el, i) {
       var rc = el.getBoundingClientRect();
       var over = clamp((vh - rc.bottom) / (vh * 0.75), 0, 1);
@@ -1392,6 +1430,17 @@
   var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   var DESIGN_W = 171;
   var flows = Array.prototype.slice.call(document.querySelectorAll('[data-flow]'));
+  var visibilityChecks = [];
+  var visibilityTimer = 0;
+
+  function runVisibilityChecks() {
+    visibilityTimer = 0;
+    visibilityChecks.forEach(function (check) { check(); });
+  }
+  function scheduleVisibilityChecks() {
+    clearTimeout(visibilityTimer);
+    visibilityTimer = setTimeout(runVisibilityChecks, 90);
+  }
 
   function fitFlows() {
     flows.forEach(function (flow) {
@@ -1499,19 +1548,22 @@
       return;
     }
     var gateEl = flow.parentNode;
-    function gate() {
-      var vh = window.innerHeight, r = gateEl.getBoundingClientRect();
-      if (!r.height) return;
-      var overlap = Math.min(r.bottom, vh) - Math.max(r.top, 0);
-      var seen = overlap > Math.min(r.height * 0.45, vh * 0.3);
+    function setVisible(seen) {
       if (seen) {
         if (!live) { live = true; flow.classList.add('fs-live'); run(); }
       } else if (live) {
         live = false; flow.classList.remove('fs-live'); stop(); reset();
       }
     }
-    gate();
-    setInterval(gate, 380);
+    function gate() {
+      if (document.hidden) { setVisible(false); return; }
+      var vh = window.innerHeight, r = gateEl.getBoundingClientRect();
+      if (!r.height) return;
+      var overlap = Math.min(r.bottom, vh) - Math.max(r.top, 0);
+      var seen = overlap > Math.min(r.height * 0.45, vh * 0.3);
+      setVisible(seen);
+    }
+    visibilityChecks.push(gate);
   });
 
   /* ---- dashboard panels ---- */
@@ -1563,6 +1615,10 @@
       return;
     }
     function gate() {
+      if (document.hidden) {
+        if (live) { live = false; rest(); }
+        return;
+      }
       var vh = window.innerHeight, r = dash.getBoundingClientRect();
       if (!r.height) return;
       var overlap = Math.min(r.bottom, vh) - Math.max(r.top, 0);
@@ -1570,9 +1626,14 @@
       if (seen) { if (!live) { live = true; play(); } }
       else if (live) { live = false; rest(); }
     }
-    gate();
-    setInterval(gate, 380);
+    visibilityChecks.push(gate);
   });
+
+  var flowScroller = document.getElementById('scroll');
+  if (flowScroller) flowScroller.addEventListener('scroll', scheduleVisibilityChecks, { passive: true });
+  window.addEventListener('resize', scheduleVisibilityChecks);
+  document.addEventListener('visibilitychange', scheduleVisibilityChecks);
+  scheduleVisibilityChecks();
 })();
 
 /* work case studies: click a #work card → overlay. Content is here so a new
@@ -1820,7 +1881,8 @@
            before mobile Safari performs its default hash scroll. */
         setTimeout(function () {
           more.open = false;
-          target.scrollIntoView({ behavior: 'auto', block: 'start' });
+          var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+          target.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'start' });
         }, 0);
         return;
       }
