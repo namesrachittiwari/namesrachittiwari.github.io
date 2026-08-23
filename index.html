@@ -7,9 +7,9 @@
 <meta name="description" content="Senior Product Manager with 7+ years building AI, enterprise SaaS and 0-to-1 products. +25% per-store sales, ₹50Cr annual SaaS revenue and 300+ monthly sessions.">
 <link rel="canonical" href="https://rachittiwari.com/">
 <meta name="theme-color" content="#070707">
-<!-- The palette is fully authored. Keep mobile webviews from auto-darkening it again. -->
-<meta name="color-scheme" content="only light">
-<meta name="supported-color-schemes" content="light">
+<!-- The palette is fully authored and dark. Do not let embedded webviews reinterpret it. -->
+<meta name="color-scheme" content="dark">
+<meta name="supported-color-schemes" content="dark">
 <meta property="og:title" content="Rachit Tiwari — Senior Product Manager">
 <meta property="og:description" content="AI, enterprise SaaS and 0-to-1 products with measurable outcomes: +25% sales, ₹50Cr annual SaaS revenue and 300+ monthly sessions.">
 <meta property="og:url" content="https://rachittiwari.com/">
@@ -30,9 +30,22 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
-  :root { color-scheme: only light; background: #070707; }
-  html { scroll-behavior: smooth; background: #070707; }
-  body { margin: 0; background: #070707; color: #fff; font-family: 'Poppins', system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+  :root { color-scheme: dark only; background: #070707; -apple-color-filter: none !important; }
+  html { scroll-behavior: smooth; background: #070707; -apple-color-filter: none !important; }
+  body { margin: 0; background: #070707; color: #fff; font-family: 'Poppins', system-ui, sans-serif; -webkit-font-smoothing: antialiased; -apple-color-filter: none !important; }
+  /* iOS in-app webviews can run a second colour pass after CSS is resolved.
+     Paint brand surfaces as images and pin text fill so that pass cannot
+     remap pink/white/black while normal browser rendering stays identical. */
+  [data-paint="pink"], [style*="background:#EB6BA8"] { background-color:#EB6BA8 !important; background-image:linear-gradient(#EB6BA8,#EB6BA8) !important; }
+  [data-paint="green"], [style*="background:#1CE15F"] { background-color:#1CE15F !important; background-image:linear-gradient(#1CE15F,#1CE15F) !important; }
+  [data-paint="blue"], [style*="background:#4791FF"] { background-color:#4791FF !important; background-image:linear-gradient(#4791FF,#4791FF) !important; }
+  [data-paint="yellow"], [style*="background:#ECE42E"] { background-color:#ECE42E !important; background-image:linear-gradient(#ECE42E,#ECE42E) !important; }
+  [data-paint="soft"], [style*="background:#F4F4F4"] { background-color:#F4F4F4 !important; background-image:linear-gradient(#F4F4F4,#F4F4F4) !important; }
+  [data-paint="white"], [style*="background:#fff"] { background-color:#fff !important; background-image:linear-gradient(#fff,#fff) !important; }
+  [data-paint="black"] { background-color:#070707 !important; background-image:linear-gradient(#070707,#070707) !important; }
+  [data-ink="dark"], [style*="color:#070707"] { color:#070707 !important; -webkit-text-fill-color:#070707 !important; }
+  [data-ink="light"], [style*="color:#fff"] { color:#fff !important; -webkit-text-fill-color:#fff !important; }
+  [data-ink="muted"], [style*="color:#9A9A9A"] { color:#9A9A9A !important; -webkit-text-fill-color:#9A9A9A !important; }
   a { color: #EB6BA8; text-decoration: none; }
   a:hover { color: #fff; }
   #case-index, #work, #ventures, #numbers, #caps, #talk { scroll-margin-top: 90px; }
@@ -339,7 +352,7 @@
     </div>
   </div>
 
-  <div id="progress" style="position:fixed; top:0; left:0; right:0; height:3px; background:#EB6BA8; transform-origin:left center; transform:scaleX(0); z-index:60"></div>
+  <div id="progress" data-paint="pink" style="position:fixed; top:0; left:0; right:0; height:3px; background:#EB6BA8; transform-origin:left center; transform:scaleX(0); z-index:60"></div>
 
   <div id="bar" style="position:sticky; top:0; z-index:50; transition:background .3s ease">
     <div data-mob="padding:14px 20px" style="max-width:1360px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; gap:12px; padding:18px 44px">
@@ -378,7 +391,7 @@
             </a>
           </div>
         </details>
-        <a href="#talk" data-flip class="hv-invert" data-mob="padding:11px 20px; font-size:15px; margin-left:0" style="background:#fff; color:#070707; font-size:16px; font-weight:600; padding:12px 26px; border-radius:999px; margin-left:8px">Get in touch</a>
+        <a href="#talk" data-flip data-paint="white" data-ink="dark" class="hv-invert" data-mob="padding:11px 20px; font-size:15px; margin-left:0" style="background:#fff; color:#070707; font-size:16px; font-weight:600; padding:12px 26px; border-radius:999px; margin-left:8px">Get in touch</a>
       </div>
     </div>
   </div>
@@ -425,7 +438,7 @@
       </div>
       <div data-mob="grid-template-columns:1fr; grid-auto-rows:auto; gap:14px" style="display:grid; grid-template-columns:repeat(12,1fr); grid-auto-rows:minmax(180px,auto); gap:18px">
 
-        <div data-reveal data-mob="grid-column:auto; grid-row:auto; padding:26px 22px; border-radius:28px" style="grid-column:span 5; grid-row:span 2; background:#1CE15F; color:#070707; border-radius:32px; padding:34px; display:flex; flex-direction:column; gap:26px">
+        <div data-reveal data-paint="green" data-ink="dark" data-mob="grid-column:auto; grid-row:auto; padding:26px 22px; border-radius:28px" style="grid-column:span 5; grid-row:span 2; background:#1CE15F; color:#070707; border-radius:32px; padding:34px; display:flex; flex-direction:column; gap:26px">
           <div style="display:flex; align-items:flex-start; justify-content:space-between; gap:16px">
             <div style="display:flex; flex-direction:column; gap:4px">
               <div style="font-size:26px; font-weight:600; line-height:1.15">CRM portfolio</div>
@@ -447,7 +460,7 @@
           </div>
         </div>
 
-        <div data-reveal data-mob="grid-column:auto; padding:24px 22px; border-radius:28px" style="grid-column:span 4; background:#4791FF; color:#070707; border-radius:32px; padding:30px; display:flex; flex-direction:column; justify-content:space-between; gap:18px">
+        <div data-reveal data-paint="blue" data-ink="dark" data-mob="grid-column:auto; padding:24px 22px; border-radius:28px" style="grid-column:span 4; background:#4791FF; color:#070707; border-radius:32px; padding:30px; display:flex; flex-direction:column; justify-content:space-between; gap:18px">
           <div style="display:flex; align-items:flex-start; justify-content:space-between; gap:12px">
             <div style="font-size:22px; font-weight:600; line-height:1.2">Daily shipments<br><span style="font-size:15px; font-weight:500; opacity:.7">Amazon, three regions</span></div>
             <span aria-hidden="true" style="font-size:22px">✦</span>
@@ -471,7 +484,7 @@
           </div>
         </div>
 
-        <div data-reveal data-mob="grid-column:auto; padding:24px 22px; border-radius:28px" style="grid-column:span 4; background:#EB6BA8; color:#070707; border-radius:32px; padding:30px; display:flex; flex-direction:column; justify-content:space-between; gap:18px">
+        <div data-reveal data-paint="pink" data-ink="dark" data-mob="grid-column:auto; padding:24px 22px; border-radius:28px" style="grid-column:span 4; background:#EB6BA8; color:#070707; border-radius:32px; padding:30px; display:flex; flex-direction:column; justify-content:space-between; gap:18px">
           <div style="display:flex; align-items:flex-start; justify-content:space-between; gap:12px">
             <div style="font-size:22px; font-weight:600; line-height:1.2">Per-store sales lift<br><span style="font-size:15px; font-weight:500; opacity:.7">AI skin analyzer, in store</span></div>
             <span aria-hidden="true" style="font-size:22px">✦</span>
@@ -547,7 +560,7 @@
 
       <div data-mob="padding-bottom:60px" style="display:flex; flex-direction:column; gap:26px; padding-bottom:120px">
         <div data-mob="top:66px" style="position:sticky; top:110px">
-          <div data-stack data-case="fieldassist" data-mob="padding:20px 16px; border-radius:24px; min-height:0; gap:12px" style="background:#4791FF; color:#070707; border-radius:44px; padding:44px 52px; min-height:340px; display:flex; flex-direction:column; justify-content:space-between; gap:24px">
+          <div data-stack data-case="fieldassist" data-paint="blue" data-ink="dark" data-mob="padding:20px 16px; border-radius:24px; min-height:0; gap:12px" style="background:#4791FF; color:#070707; border-radius:44px; padding:44px 52px; min-height:340px; display:flex; flex-direction:column; justify-content:space-between; gap:24px">
             <div data-mob="flex-direction:column; align-items:flex-start; gap:4px; font-size:13px" style="display:flex; justify-content:space-between; align-items:center; gap:16px; font-size:15px; font-weight:600"><span style="display:flex; align-items:center; gap:10px"><span style="width:24px; height:24px; border-radius:7px; background:rgba(7,7,7,.15); color:#070707; display:flex; align-items:center; justify-content:center; font-size:10px; font-weight:600; flex:none">FA</span>FieldAssist</span><span style="display:flex; align-items:center; gap:12px; flex-wrap:wrap"><span>Aug 2024 to Jan 2025, enterprise SaaS</span><span class="cs-pill">Case study →</span></span></div>
             <div data-mob="flex-direction:column-reverse; align-items:stretch; gap:16px" style="display:flex; align-items:center; gap:52px">
               <div data-mob="align-self:center" style="flex:none">
@@ -572,7 +585,7 @@
           </div>
         </div>
         <div data-mob="top:66px" style="position:sticky; top:124px">
-          <div data-stack data-case="vlcc" data-mob="padding:20px 16px; border-radius:24px; min-height:0; gap:12px" style="background:#ECE42E; color:#070707; border-radius:44px; padding:44px 52px; min-height:340px; display:flex; flex-direction:column; justify-content:space-between; gap:24px">
+          <div data-stack data-case="vlcc" data-paint="yellow" data-ink="dark" data-mob="padding:20px 16px; border-radius:24px; min-height:0; gap:12px" style="background:#ECE42E; color:#070707; border-radius:44px; padding:44px 52px; min-height:340px; display:flex; flex-direction:column; justify-content:space-between; gap:24px">
             <div data-mob="flex-direction:column; align-items:flex-start; gap:4px; font-size:13px" style="display:flex; justify-content:space-between; align-items:center; gap:16px; font-size:15px; font-weight:600"><span style="display:flex; align-items:center; gap:10px"><span style="width:24px; height:24px; border-radius:7px; background:rgba(7,7,7,.15); color:#070707; display:flex; align-items:center; justify-content:center; font-size:10px; font-weight:600; flex:none">V</span>VLCC</span><span style="display:flex; align-items:center; gap:12px; flex-wrap:wrap"><span>Jan to Aug 2024, consumer products &amp; AI</span><span class="cs-pill">Case study →</span></span></div>
             <div data-mob="flex-direction:column-reverse; align-items:stretch; gap:16px" style="display:flex; align-items:center; gap:52px">
               <div data-mob="align-self:center" style="flex:none">
@@ -592,7 +605,7 @@
           </div>
         </div>
         <div data-mob="top:66px" style="position:sticky; top:138px">
-          <div data-stack data-case="authbridge" data-mob="padding:20px 16px; border-radius:24px; min-height:0; gap:12px" style="background:#4791FF; color:#070707; border-radius:44px; padding:44px 52px; min-height:340px; display:flex; flex-direction:column; justify-content:space-between; gap:24px">
+          <div data-stack data-case="authbridge" data-paint="blue" data-ink="dark" data-mob="padding:20px 16px; border-radius:24px; min-height:0; gap:12px" style="background:#4791FF; color:#070707; border-radius:44px; padding:44px 52px; min-height:340px; display:flex; flex-direction:column; justify-content:space-between; gap:24px">
             <div data-mob="flex-direction:column; align-items:flex-start; gap:4px; font-size:13px" style="display:flex; justify-content:space-between; align-items:center; gap:16px; font-size:15px; font-weight:600"><span style="display:flex; align-items:center; gap:10px"><span style="width:24px; height:24px; border-radius:7px; background:rgba(7,7,7,.15); color:#070707; display:flex; align-items:center; justify-content:center; font-size:10px; font-weight:600; flex:none">AB</span>AuthBridge</span><span style="display:flex; align-items:center; gap:12px; flex-wrap:wrap"><span>Aug 2022 to Jan 2024, B2B SaaS</span><span class="cs-pill">Case study →</span></span></div>
             <div data-mob="flex-direction:column-reverse; align-items:stretch; gap:16px" style="display:flex; align-items:center; gap:52px">
               <div data-mob="align-self:center" style="flex:none">
@@ -612,7 +625,7 @@
           </div>
         </div>
         <div data-mob="top:66px" style="position:sticky; top:152px">
-          <div data-stack data-case="amazon" data-mob="padding:20px 16px; border-radius:24px; min-height:0; gap:12px" style="background:#EB6BA8; color:#070707; border-radius:44px; padding:44px 52px; min-height:340px; display:flex; flex-direction:column; justify-content:space-between; gap:24px">
+          <div data-stack data-case="amazon" data-paint="pink" data-ink="dark" data-mob="padding:20px 16px; border-radius:24px; min-height:0; gap:12px" style="background:#EB6BA8; color:#070707; border-radius:44px; padding:44px 52px; min-height:340px; display:flex; flex-direction:column; justify-content:space-between; gap:24px">
             <div data-mob="flex-direction:column; align-items:flex-start; gap:4px; font-size:13px" style="display:flex; justify-content:space-between; align-items:center; gap:16px; font-size:15px; font-weight:600"><span style="display:flex; align-items:center; gap:10px"><span style="width:24px; height:24px; border-radius:7px; background:rgba(7,7,7,.15); color:#070707; display:flex; align-items:center; justify-content:center; font-size:10px; font-weight:600; flex:none">A</span>Amazon</span><span style="display:flex; align-items:center; gap:12px; flex-wrap:wrap"><span>Jan 2019 to Feb 2020, program management</span><span class="cs-pill">Case study →</span></span></div>
             <div data-mob="flex-direction:column-reverse; align-items:stretch; gap:16px" style="display:flex; align-items:center; gap:52px">
               <div data-mob="align-self:center" style="flex:none">
@@ -627,7 +640,7 @@
           </div>
         </div>
         <div data-mob="top:66px" style="position:sticky; top:166px">
-          <div data-stack data-case="jiomart" data-mob="padding:20px 16px; border-radius:24px; min-height:0; gap:12px" style="background:#ECE42E; color:#070707; border-radius:44px; padding:44px 52px; min-height:340px; display:flex; flex-direction:column; justify-content:space-between; gap:24px">
+          <div data-stack data-case="jiomart" data-paint="yellow" data-ink="dark" data-mob="padding:20px 16px; border-radius:24px; min-height:0; gap:12px" style="background:#ECE42E; color:#070707; border-radius:44px; padding:44px 52px; min-height:340px; display:flex; flex-direction:column; justify-content:space-between; gap:24px">
             <div data-mob="flex-direction:column; align-items:flex-start; gap:4px; font-size:13px" style="display:flex; justify-content:space-between; align-items:center; gap:16px; font-size:15px; font-weight:600"><span style="display:flex; align-items:center; gap:10px"><span style="width:24px; height:24px; border-radius:7px; background:rgba(7,7,7,.15); color:#070707; display:flex; align-items:center; justify-content:center; font-size:10px; font-weight:600; flex:none">JM</span>Jio Mart</span><span style="display:flex; align-items:center; gap:12px; flex-wrap:wrap"><span>Nov 2020 to Dec 2021, program management</span><span class="cs-pill">Case study →</span></span></div>
             <div data-mob="flex-direction:column-reverse; align-items:stretch; gap:16px" style="display:flex; align-items:center; gap:52px">
               <div data-mob="align-self:center" style="flex:none">
@@ -655,7 +668,7 @@
 
       <div data-mob="padding-bottom:80px" style="display:flex; flex-direction:column; gap:26px; padding-bottom:140px">
         <div data-mob="top:66px" style="position:sticky; top:110px">
-          <div data-stack data-case="innerally" data-mob="padding:20px 16px; border-radius:24px; min-height:0; gap:12px" style="background:#1CE15F; color:#070707; border-radius:44px; padding:44px 52px; min-height:340px; display:flex; flex-direction:column; justify-content:space-between; gap:24px">
+          <div data-stack data-case="innerally" data-paint="green" data-ink="dark" data-mob="padding:20px 16px; border-radius:24px; min-height:0; gap:12px" style="background:#1CE15F; color:#070707; border-radius:44px; padding:44px 52px; min-height:340px; display:flex; flex-direction:column; justify-content:space-between; gap:24px">
             <div data-mob="flex-direction:column; align-items:flex-start; gap:4px; font-size:13px" style="display:flex; justify-content:space-between; align-items:center; gap:16px; font-size:15px; font-weight:600"><span style="display:flex; align-items:center; gap:10px"><span style="width:24px; height:24px; border-radius:7px; background:rgba(7,7,7,.15); color:#070707; display:flex; align-items:center; justify-content:center; font-size:10px; font-weight:600; flex:none">IA</span>InnerAlly</span><span style="display:flex; align-items:center; gap:12px; flex-wrap:wrap"><span>Feb 2025 to present, 0-to-1</span><span class="cs-pill">Case study →</span></span></div>
             <div data-mob="flex-direction:column-reverse; align-items:stretch; gap:16px" style="display:flex; align-items:center; gap:52px">
               <div data-mob="align-self:center" style="flex:none">
@@ -681,7 +694,7 @@
           </div>
         </div>
         <div data-mob="top:66px" style="position:sticky; top:126px">
-          <div data-stack data-case="massoi" data-mob="padding:20px 16px; border-radius:24px; min-height:0; gap:12px" style="background:#F4F4F4; color:#070707; border-radius:44px; padding:44px 52px; min-height:340px; display:flex; flex-direction:column; justify-content:space-between; gap:24px">
+          <div data-stack data-case="massoi" data-paint="soft" data-ink="dark" data-mob="padding:20px 16px; border-radius:24px; min-height:0; gap:12px" style="background:#F4F4F4; color:#070707; border-radius:44px; padding:44px 52px; min-height:340px; display:flex; flex-direction:column; justify-content:space-between; gap:24px">
             <div data-mob="flex-direction:column; align-items:flex-start; gap:4px; font-size:13px" style="display:flex; justify-content:space-between; align-items:center; gap:16px; font-size:15px; font-weight:600"><span style="display:flex; align-items:center; gap:10px"><span style="width:24px; height:24px; border-radius:7px; background:rgba(7,7,7,.15); color:#070707; display:flex; align-items:center; justify-content:center; font-size:10px; font-weight:600; flex:none">M</span>Massoi</span><span style="display:flex; align-items:center; gap:12px; flex-wrap:wrap"><span>Sep 2021 to Aug 2022, founder</span><span class="cs-pill">Case study →</span></span></div>
             <div data-mob="flex-direction:column-reverse; align-items:stretch; gap:16px" style="display:flex; align-items:center; gap:52px">
               <div data-mob="align-self:center" style="flex:none">
@@ -732,7 +745,7 @@
     </div>
 
     <div id="talk" data-reveal data-mob="padding:80px 0 34px" style="padding:140px 0 44px">
-      <div data-mob="padding:36px 24px; border-radius:30px" style="position:relative; background:#EB6BA8; color:#070707; border-radius:44px; padding:80px 60px; overflow:hidden">
+      <div data-paint="pink" data-ink="dark" data-mob="padding:36px 24px; border-radius:30px" style="position:relative; background:#EB6BA8; color:#070707; border-radius:44px; padding:80px 60px; overflow:hidden">
         <div style="position:relative; display:flex; align-items:flex-end; justify-content:space-between; gap:40px; flex-wrap:wrap">
           <div style="display:flex; flex-direction:column; gap:16px">
             <span style="font-size:14px; font-weight:600">006 / Contact</span>
@@ -740,13 +753,13 @@
             <div class="contact-details"><a href="mailto:rachittiwari10@gmail.com" data-track="contact_email">rachittiwari10@gmail.com</a><a href="tel:+919589762453" data-track="contact_phone">+91 95897 62453</a></div>
           </div>
           <div data-mob="width:100%" style="display:flex; gap:12px; flex-wrap:wrap">
-            <a href="mailto:rachittiwari10@gmail.com" data-flip class="hv-glow" data-track="contact_email" data-mob="flex:1; text-align:center; padding:16px 24px" style="background:#070707; color:#fff; font-size:16px; font-weight:600; padding:18px 36px; border-radius:999px; transition:filter .2s ease">Email me</a>
-            <a href="https://www.linkedin.com/in/namesrachit/" data-flip class="hv-dim" data-track="linkedin_click" data-mob="flex:1; text-align:center; padding:16px 24px" style="background:#fff; color:#070707; font-size:16px; font-weight:500; padding:18px 36px; border-radius:999px; transition:filter .2s ease">LinkedIn</a>
+            <a href="mailto:rachittiwari10@gmail.com" data-flip data-paint="black" data-ink="light" class="hv-glow" data-track="contact_email" data-mob="flex:1; text-align:center; padding:16px 24px" style="background:#070707; color:#fff; font-size:16px; font-weight:600; padding:18px 36px; border-radius:999px; transition:filter .2s ease">Email me</a>
+            <a href="https://www.linkedin.com/in/namesrachit/" data-flip data-paint="white" data-ink="dark" class="hv-dim" data-track="linkedin_click" data-mob="flex:1; text-align:center; padding:16px 24px" style="background:#fff; color:#070707; font-size:16px; font-weight:500; padding:18px 36px; border-radius:999px; transition:filter .2s ease">LinkedIn</a>
           </div>
         </div>
       </div>
       <div data-mob="flex-direction:column; gap:6px; padding:22px 4px 0" style="display:flex; justify-content:space-between; font-size:14px; color:#9A9A9A; padding:30px 10px 0">
-        <span>© 2026 Rachit Tiwari <span style="opacity:.45; font-size:12px">· b18</span></span><span>Bangalore, India</span><span>Open to new roles</span>
+        <span>© 2026 Rachit Tiwari <span style="opacity:.45; font-size:12px">· b19</span></span><span>Bangalore, India</span><span>Open to new roles</span>
       </div>
     </div>
   </div>
