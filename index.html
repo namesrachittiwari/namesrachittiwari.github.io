@@ -163,7 +163,7 @@
   .case-actions { display:flex; align-items:center; gap:8px; flex:none; }
   .case-copy { min-height:38px; border:1px solid rgba(255,255,255,.14); border-radius:999px; padding:0 14px; background:transparent; color:#fff; font:500 12px/1 'Poppins',system-ui,sans-serif; cursor:pointer; transition:background .2s ease,border-color .2s ease; }
   .case-copy:hover { background:#212121; border-color:rgba(255,255,255,.22); }
-  [data-case]:focus-visible, .case-index__item:focus-visible, .proof-item:focus-visible, .hero-current:focus-visible, .case-copy:focus-visible, .case-x:focus-visible { outline:2px solid #fff; outline-offset:4px; }
+  [data-case]:focus-visible, .case-index__item:focus-visible, .hero-current:focus-visible, .case-copy:focus-visible, .case-x:focus-visible { outline:2px solid #fff; outline-offset:4px; }
   @media (max-width:520px) {
     .case-actions { align-items:flex-end; flex-direction:column-reverse; }
     .case-copy { min-height:34px; padding:0 11px; font-size:11px; }
@@ -233,14 +233,7 @@
     .glow-ring::before, .glow-ring::after { animation:none }
   }
 
-  /* ---- recruiter proof strip + quick case index ---- */
-  .proof-shell { max-width:1360px; margin:0 auto; padding:28px 44px 0 }
-  .proof-strip { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); overflow:hidden; background:#0B0B0B; border:1px solid rgba(255,255,255,.09); border-radius:28px }
-  .proof-item { min-width:0; padding:22px 26px; color:#fff; border-right:1px solid rgba(255,255,255,.09); transition:background .2s cubic-bezier(.16,1,.3,1) }
-  .proof-item:last-child { border-right:0 }
-  .proof-item:hover { color:#fff; background:#141414 }
-  .proof-value { display:block; color:#EB6BA8; font-size:clamp(24px,2.6vw,36px); font-weight:600; line-height:1.05; letter-spacing:-1px }
-  .proof-label { display:block; margin-top:6px; color:#9A9A9A; font-size:13px; line-height:1.4 }
+  /* ---- quick case index ---- */
   .case-index { padding:0 0 110px }
   .case-index__head { display:flex; align-items:flex-end; justify-content:space-between; gap:24px; margin-bottom:22px }
   .case-index__grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px }
@@ -256,12 +249,6 @@
   .contact-details a:hover { color:#070707; text-decoration-color:#070707 }
   @media (max-width:820px) {
     .hero-current { font-size:12.5px; line-height:1.35; padding:9px 13px; border-radius:16px }
-    .proof-shell { padding:18px 20px 0 }
-    .proof-strip { grid-template-columns:repeat(2,minmax(0,1fr)); border-radius:22px }
-    .proof-item { padding:18px 16px; border-right:1px solid rgba(255,255,255,.09); border-bottom:1px solid rgba(255,255,255,.09) }
-    .proof-item:nth-child(2) { border-right:0 }
-    .proof-item:nth-child(n+3) { border-bottom:0 }
-    .proof-value { font-size:26px }
     .case-index { padding:0 0 70px }
     .case-index__head { align-items:flex-start; flex-direction:column; gap:8px }
     .case-index__grid { grid-template-columns:1fr }
@@ -275,17 +262,23 @@
 
 
   /* ---- app flow screens ---- */
-  [data-fscreen]{position:absolute;inset:0;display:flex;flex-direction:column;gap:7px;padding:19px 11px 11px;background:#0D0D0D;transition:transform .44s cubic-bezier(.16,1,.3,1),opacity .44s cubic-bezier(.16,1,.3,1)}
+  [data-flow]::before{content:'';position:absolute;left:12px;bottom:5px;z-index:12;width:calc((100% - 24px)/3);height:2px;border-radius:99px;background:rgba(255,255,255,.42);transition:width .55s cubic-bezier(.16,1,.3,1);pointer-events:none}
+  [data-flow].fs-push::before{width:calc((100% - 24px)*.66)}
+  [data-flow].fs-push2::before{width:calc(100% - 24px)}
+  [data-fscreen]{position:absolute;inset:0;display:flex;flex-direction:column;gap:7px;padding:19px 11px 11px;background:#0D0D0D;box-shadow:-12px 0 30px rgba(0,0,0,.28);will-change:transform,opacity;transition:transform .52s cubic-bezier(.16,1,.3,1),opacity .52s cubic-bezier(.16,1,.3,1)}
   [data-fscreen="2"],[data-fscreen="3"]{transform:translateX(100%)}
-  [data-flow].fs-push [data-fscreen="1"]{transform:translateX(-14%);opacity:.3}
+  [data-flow].fs-push [data-fscreen="1"]{transform:translateX(-20%) scale(.98);opacity:.24}
   [data-flow].fs-push [data-fscreen="2"]{transform:none}
-  [data-flow].fs-push2 [data-fscreen="2"]{transform:translateX(-14%);opacity:.3}
+  [data-flow].fs-push2 [data-fscreen="2"]{transform:translateX(-20%) scale(.98);opacity:.24}
   [data-flow].fs-push2 [data-fscreen="3"]{transform:none}
-  [data-fstep]{opacity:0;transform:translateY(7px);transition:opacity .34s cubic-bezier(.16,1,.3,1),transform .34s cubic-bezier(.16,1,.3,1),width .5s cubic-bezier(.16,1,.3,1),left 1.1s cubic-bezier(.16,1,.3,1),background .35s,color .35s}
-  [data-fstep].fs-in{opacity:1;transform:none}
-  [data-fstep] [data-fstep]{opacity:1;transform:none}
-  [data-fripple].fs-tapping{animation:fs-tap .62s ease-out}
-  @keyframes fs-tap{0%{transform:scale(.3);opacity:.55}100%{transform:scale(1.9);opacity:0}}
+  [data-fstep]{opacity:0;transform:translateY(9px);filter:blur(1.5px);transition:opacity .38s cubic-bezier(.16,1,.3,1),transform .46s cubic-bezier(.16,1,.3,1),filter .38s ease,width .7s cubic-bezier(.16,1,.3,1),left 1.25s cubic-bezier(.16,1,.3,1),background .35s,color .35s}
+  [data-fstep].fs-in{opacity:1;transform:none;filter:none}
+  [data-fstep] [data-fstep]{opacity:1;transform:none;filter:none}
+  [data-tap].fs-press{animation:fs-press .58s cubic-bezier(.16,1,.3,1)}
+  [data-fripple]{z-index:20;box-shadow:0 0 0 1px rgba(255,255,255,.82),0 4px 14px rgba(0,0,0,.42)}
+  [data-fripple].fs-tapping{animation:fs-tap .72s cubic-bezier(.16,1,.3,1)}
+  @keyframes fs-press{0%,100%{transform:scale(1)}42%{transform:scale(.95);filter:brightness(1.12)}}
+  @keyframes fs-tap{0%{transform:scale(.2);opacity:0}20%{transform:scale(.46);opacity:.95}48%{transform:scale(.34);opacity:1}100%{transform:scale(2.15);opacity:0}}
   @keyframes fs-scan{0%{top:14%}100%{top:80%}}
   @keyframes fs-pulse{0%{transform:scale(.62);opacity:.75}100%{transform:scale(1.5);opacity:0}}
   @keyframes fs-wave{0%,100%{transform:scaleY(.35)}50%{transform:scaleY(1)}}
@@ -293,6 +286,7 @@
   [data-flow].fs-live [data-fscan]{animation:fs-scan 2.1s cubic-bezier(.16,1,.3,1) infinite alternate}
   [data-flow].fs-live [data-fpulse]{animation:fs-pulse 1.8s ease-out infinite}
   [data-flow].fs-live [data-fwave]{animation:fs-wave .9s ease-in-out infinite}
+  @media (prefers-reduced-motion:reduce){[data-flow]::before{width:calc(100% - 24px);transition:none}[data-fscreen],[data-fstep]{transition:none;filter:none}[data-tap].fs-press,[data-fripple].fs-tapping{animation:none}}
 </style>
 <noscript><style>#loader { display: none !important; }</style></noscript>
 </head>
@@ -384,27 +378,112 @@
     </div>
   </section>
 
-  <div class="proof-shell" aria-label="Selected product outcomes">
-    <div class="proof-strip">
-      <a class="proof-item" href="#case=vlcc"><span class="proof-value">+25%</span><span class="proof-label">per-store sales · VLCC AI</span></a>
-      <a class="proof-item" href="#case=authbridge"><span class="proof-value">₹50Cr</span><span class="proof-label">annual SaaS revenue · AuthBridge</span></a>
-      <a class="proof-item" href="#case=amazon"><span class="proof-value">100K</span><span class="proof-label">shipments per day · Amazon</span></a>
-      <a class="proof-item" href="#case=innerally"><span class="proof-value">300+</span><span class="proof-label">sessions per month · InnerAlly</span></a>
-    </div>
-  </div>
-
   <div data-mob="padding:0 20px" style="max-width:1360px; margin:0 auto; padding:0 44px">
 
+    <div id="numbers" data-mob="padding:44px 0 0" style="padding:64px 0 0">
+      <div data-reveal style="display:flex; flex-direction:column; gap:8px; margin-bottom:38px">
+        <span style="font-size:14px; color:#9A9A9A">001 / Impact</span>
+        <h2 style="margin:0; font-size:clamp(32px,4.4vw,60px); font-weight:600; line-height:1.1">The numbers.</h2>
+      </div>
+      <div data-mob="grid-template-columns:1fr; grid-auto-rows:auto; gap:14px" style="display:grid; grid-template-columns:repeat(12,1fr); grid-auto-rows:minmax(180px,auto); gap:18px">
+
+        <div data-reveal data-mob="grid-column:auto; grid-row:auto; padding:26px 22px; border-radius:28px" style="grid-column:span 5; grid-row:span 2; background:#1CE15F; color:#070707; border-radius:32px; padding:34px; display:flex; flex-direction:column; gap:26px">
+          <div style="display:flex; align-items:flex-start; justify-content:space-between; gap:16px">
+            <div style="display:flex; flex-direction:column; gap:4px">
+              <div style="font-size:26px; font-weight:600; line-height:1.15">CRM portfolio</div>
+              <div style="font-size:16px; font-weight:500; opacity:.7">VLCC, ₹100Cr annual business</div>
+            </div>
+            <span aria-hidden="true" style="font-size:26px; line-height:1">✦</span>
+          </div>
+          <div data-count="100" data-prefix="₹" data-suffix="Cr" data-mob="font-size:64px" style="font-size:clamp(56px,6.4vw,100px); font-weight:600; line-height:.9; letter-spacing:-3px; white-space:nowrap">₹100Cr</div>
+          <div style="display:flex; flex-direction:column; gap:10px; margin-top:auto">
+            <div style="display:flex; align-items:center; justify-content:space-between; font-size:14px; font-weight:600; opacity:.75"><span>Loyalty</span><span>Offers</span><span>Skin analyzer</span></div>
+            <div style="height:44px; background:#070707; border-radius:999px; display:flex; align-items:center; padding:0 8px; gap:8px">
+              <span style="width:26px; height:26px; border-radius:50%; background:#1CE15F"></span>
+              <span style="flex:1; height:6px; border-radius:999px; background:rgba(255,255,255,.16)"></span>
+              <span style="width:26px; height:26px; border-radius:50%; background:#fff"></span>
+              <span style="flex:1; height:6px; border-radius:999px; background:rgba(255,255,255,.16)"></span>
+              <span style="width:26px; height:26px; border-radius:50%; background:#fff"></span>
+            </div>
+            <div style="font-size:15px; font-weight:500; opacity:.75; text-wrap:pretty">The in-house CRM improved sales tracking, inventory visibility and team productivity.</div>
+          </div>
+        </div>
+
+        <div data-reveal data-mob="grid-column:auto; padding:24px 22px; border-radius:28px" style="grid-column:span 4; background:#4791FF; color:#070707; border-radius:32px; padding:30px; display:flex; flex-direction:column; justify-content:space-between; gap:18px">
+          <div style="display:flex; align-items:flex-start; justify-content:space-between; gap:12px">
+            <div style="font-size:22px; font-weight:600; line-height:1.2">Daily shipments<br><span style="font-size:15px; font-weight:500; opacity:.7">Amazon, three regions</span></div>
+            <span aria-hidden="true" style="font-size:22px">✦</span>
+          </div>
+          <div style="display:flex; align-items:flex-end; justify-content:space-between; gap:14px">
+            <div data-count="100" data-suffix="K" style="font-size:clamp(44px,4.6vw,66px); font-weight:600; line-height:1; letter-spacing:-2px; white-space:nowrap">100K</div>
+            <svg data-spark viewBox="0 0 120 44" preserveAspectRatio="none" aria-hidden="true" style="width:100%; max-width:120px; min-width:0; height:44px; flex:1 1 60px">
+              <polyline points="0,36 20,30 40,33 60,18 80,22 100,9 120,4" fill="none" stroke="#070707" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"></polyline>
+            </svg>
+          </div>
+        </div>
+
+        <div data-reveal class="hv-card-yellow" data-mob="grid-column:auto; padding:24px 22px; border-radius:28px" style="grid-column:span 3; background:#0B0B0B; border:1px solid rgba(255,255,255,.1); border-radius:32px; padding:30px; display:flex; flex-direction:column; justify-content:space-between; gap:18px; transition:border-color .25s ease, background .25s ease">
+          <div style="display:flex; align-items:center; gap:10px; font-size:14px; color:#9A9A9A">
+            <span aria-hidden="true" style="width:8px; height:8px; border-radius:50%; background:#ECE42E"></span>AuthBridge
+          </div>
+          <div style="display:flex; flex-direction:column; gap:6px">
+            <div data-count="50" data-prefix="₹" data-suffix="Cr" style="font-size:clamp(40px,4.2vw,60px); font-weight:600; line-height:1; letter-spacing:-2px; white-space:nowrap; color:#ECE42E">₹50Cr</div>
+            <div style="font-size:18px; color:#fff; line-height:1.3">Annual revenue across four products</div>
+            <div style="font-size:15px; color:#9A9A9A">Ergon · DKYC · Signdrive · OnboardX</div>
+          </div>
+        </div>
+
+        <div data-reveal data-mob="grid-column:auto; padding:24px 22px; border-radius:28px" style="grid-column:span 4; background:#EB6BA8; color:#070707; border-radius:32px; padding:30px; display:flex; flex-direction:column; justify-content:space-between; gap:18px">
+          <div style="display:flex; align-items:flex-start; justify-content:space-between; gap:12px">
+            <div style="font-size:22px; font-weight:600; line-height:1.2">Per-store sales lift<br><span style="font-size:15px; font-weight:500; opacity:.7">AI skin analyzer, in store</span></div>
+            <span aria-hidden="true" style="font-size:22px">✦</span>
+          </div>
+          <div style="display:flex; align-items:flex-end; gap:18px">
+            <div data-count="25" data-prefix="+" data-suffix="%" style="font-size:clamp(48px,5vw,74px); font-weight:600; line-height:.95; letter-spacing:-2.5px; white-space:nowrap">+25%</div>
+            <div style="flex:1; display:flex; align-items:flex-end; gap:6px; height:52px" aria-hidden="true">
+              <span data-bar="34" style="flex:1; height:34%; background:rgba(7,7,7,.35); border-radius:6px"></span>
+              <span data-bar="52" style="flex:1; height:52%; background:rgba(7,7,7,.45); border-radius:6px"></span>
+              <span data-bar="46" style="flex:1; height:46%; background:rgba(7,7,7,.35); border-radius:6px"></span>
+              <span data-bar="74" style="flex:1; height:74%; background:rgba(7,7,7,.6); border-radius:6px"></span>
+              <span data-bar="100" style="flex:1; height:100%; background:#070707; border-radius:6px"></span>
+            </div>
+          </div>
+        </div>
+
+        <div data-reveal class="hv-card-green" data-mob="grid-column:auto; padding:24px 22px; border-radius:28px" style="grid-column:span 3; background:#0B0B0B; border:1px solid rgba(255,255,255,.1); border-radius:32px; padding:30px; display:flex; flex-direction:column; justify-content:space-between; gap:18px; transition:border-color .25s ease, background .25s ease">
+          <div style="display:flex; align-items:center; gap:10px; font-size:14px; color:#9A9A9A">
+            <span aria-hidden="true" style="width:8px; height:8px; border-radius:50%; background:#1CE15F"></span>InnerAlly
+          </div>
+          <div style="display:flex; flex-direction:column; gap:6px">
+            <div data-count="300" data-suffix="+" style="font-size:clamp(40px,4.2vw,60px); font-weight:600; line-height:1; letter-spacing:-2px; white-space:nowrap; color:#1CE15F">300+</div>
+            <div style="font-size:18px; color:#fff; line-height:1.3">Sessions per month</div>
+            <div style="font-size:15px; color:#9A9A9A">Anonymous, with no account required</div>
+          </div>
+        </div>
+
+        <div data-reveal class="hv-wide" data-mob="grid-column:auto; flex-direction:column; align-items:flex-start; gap:16px; padding:24px 22px; border-radius:28px" style="grid-column:span 12; background:#0B0B0B; border:1px solid rgba(255,255,255,.1); border-radius:999px; padding:22px 34px; display:flex; align-items:center; justify-content:space-between; gap:32px; min-height:0; transition:background .25s ease">
+          <div style="display:flex; align-items:baseline; gap:20px; flex-wrap:wrap">
+            <div data-count="4" data-suffix="K+" style="font-size:clamp(32px,3.4vw,48px); font-weight:600; line-height:1; letter-spacing:-1.5px; white-space:nowrap">4K+</div>
+            <div style="font-size:17px; color:#fff">meals delivered at <span style="color:#9A9A9A">Massoi, the home-chef marketplace I founded and later sold</span></div>
+          </div>
+          <div style="display:flex; gap:10px; flex-wrap:wrap">
+            <span style="border:1px solid rgba(255,255,255,.18); color:#9A9A9A; font-size:14px; padding:9px 20px; border-radius:999px">Founded 2021</span>
+            <span style="border:1px solid rgba(255,255,255,.18); color:#9A9A9A; font-size:14px; padding:9px 20px; border-radius:999px">Sold 2023</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <div data-mob="grid-template-columns:1fr; gap:14px; padding:80px 0 70px" style="padding:140px 0 120px; display:grid; grid-template-columns:200px 1fr; gap:40px">
-      <div data-reveal style="font-size:14px; color:#9A9A9A; padding-top:16px">001 / How I work</div>
-      <div data-reveal style="font-size:clamp(24px,3.3vw,46px); font-weight:500; line-height:1.22; max-width:940px; text-wrap:pretty">Most roadmaps stop making sense the moment real users touch the product. I write the version that <span style="color:#1CE15F">still holds up</span> in week six, when the data disagrees and the room already has an opinion.</div>
+      <div data-reveal style="font-size:14px; color:#9A9A9A; padding-top:16px">002 / How I work</div>
+      <div data-reveal style="font-size:clamp(24px,3.3vw,46px); font-weight:500; line-height:1.22; max-width:940px; text-wrap:pretty">I turn ambiguous problems into roadmaps that <span style="color:#1CE15F">survive real users</span>, changing data and strong opinions. The goal is simple: a product the team can ship, measure and improve.</div>
     </div>
 
     <section class="case-index" id="case-index" aria-labelledby="case-index-title">
       <div class="case-index__head">
         <div>
           <span style="display:block; font-size:14px; color:#9A9A9A; margin-bottom:8px">Selected outcomes</span>
-          <h2 id="case-index-title" style="margin:0; font-size:clamp(28px,3.4vw,46px); font-weight:600; line-height:1.1">Proof, without the long scroll.</h2>
+          <h2 id="case-index-title" style="margin:0; font-size:clamp(28px,3.4vw,46px); font-weight:600; line-height:1.1">Selected work, at a glance.</h2>
         </div>
         <span style="font-size:14px; color:#9A9A9A">Open any case, or keep scrolling for the product flows.</span>
       </div>
@@ -414,7 +493,7 @@
         <a class="case-index__item" href="#case=vlcc"><span class="case-index__name">VLCC</span><span class="case-index__result">AI recommendations · +25% per-store sales</span><span class="case-index__arrow">→</span></a>
         <a class="case-index__item" href="#case=authbridge"><span class="case-index__name">AuthBridge</span><span class="case-index__result">B2B SaaS · 70% less engineering dependency</span><span class="case-index__arrow">→</span></a>
         <a class="case-index__item" href="#case=massoi"><span class="case-index__name">Massoi</span><span class="case-index__result">Founder · 4,000+ meals · later sold</span><span class="case-index__arrow">→</span></a>
-        <a class="case-index__item" href="#case=jiomart"><span class="case-index__name">Jio Mart</span><span class="case-index__result">30+ stores · four days to same-day</span><span class="case-index__arrow">→</span></a>
+        <a class="case-index__item" href="#case=jiomart"><span class="case-index__name">Jio Mart</span><span class="case-index__result">30+ stores · four days → same-day delivery</span><span class="case-index__arrow">→</span></a>
         <a class="case-index__item" href="#case=amazon"><span class="case-index__name">Amazon</span><span class="case-index__result">100K shipments/day · 20+ centres</span><span class="case-index__arrow">→</span></a>
       </div>
     </section>
@@ -422,10 +501,10 @@
     <div id="work" style="padding:20px 0 0">
       <div data-mob="flex-direction:column; align-items:flex-start; gap:10px" style="display:flex; align-items:baseline; justify-content:space-between; margin-bottom:38px">
         <div data-reveal style="display:flex; flex-direction:column; gap:8px">
-          <span style="font-size:14px; color:#9A9A9A">002 / Work</span>
+          <span style="font-size:14px; color:#9A9A9A">003 / Work</span>
           <h2 style="margin:0; font-size:clamp(32px,4.4vw,60px); font-weight:600; line-height:1.1">Where I&#8217;ve shipped.</h2>
         </div>
-        <span data-reveal style="font-size:16px; color:#9A9A9A">Five prior teams, newest first.</span>
+        <span data-reveal style="font-size:16px; color:#9A9A9A">Five teams, newest first.</span>
       </div>
 
       <div data-mob="padding-bottom:60px" style="display:flex; flex-direction:column; gap:26px; padding-bottom:120px">
@@ -487,7 +566,7 @@
                 </div>
               </div>
               <div data-mob="gap:12px" style="display:flex; flex-direction:column; gap:22px; flex:1 1 auto; min-width:0">
-                <div data-mob="font-size:21px" style="font-size:clamp(28px,3.2vw,44px); font-weight:600; line-height:1.12; max-width:720px">A four-product B2B SaaS portfolio with 70% less engineering dependency.</div>
+                <div data-mob="font-size:21px" style="font-size:clamp(28px,3.2vw,44px); font-weight:600; line-height:1.12; max-width:720px">A four-product B2B SaaS portfolio with engineering dependency reduced by 70%.</div>
                 <hr style="border:0; border-top:1px solid rgba(7,7,7,.2); margin:0">
                 <div data-mob="gap:5px 14px; font-size:15px" style="display:flex; flex-wrap:wrap; gap:40px; font-size:20px; font-weight:500"><span>₹50Cr annual revenue</span><span>4 products</span><span>70% less eng dependency</span></div>
               </div>
@@ -517,9 +596,9 @@
                 <div data-dash aria-label="Jio Mart metrics" data-mob="width:min(100%,430px); height:min(36vh,300px); height:min(36dvh,300px)" style="box-sizing:border-box; width:clamp(250px,27vw,330px); height:clamp(400px,54vh,520px); background:#0D0D0D; border:1px solid rgba(255,255,255,.09); border-radius:24px; padding:14px; display:flex; flex-direction:column; gap:9px; box-shadow:0 22px 50px rgba(7,7,7,.32)"><div style="display:flex; justify-content:space-between; align-items:center"><span style="color:#fff; font-size:14px; font-weight:600">Launch metrics</span><span style="width:8.5px; height:8.5px; border-radius:50%; background:#ECE42E"></span></div><div style="background:rgba(255,255,255,.05); border-radius:15.9px; padding:13px; display:flex; flex-direction:column; gap:6px"><span style="color:rgba(255,255,255,.5); font-size:9.2px; font-weight:600">Delivery time</span><div style="display:flex; align-items:baseline; gap:6px"><span style="color:#ECE42E; font-size:20.7px; font-weight:600; line-height:1">Same day</span><span style="color:rgba(255,255,255,.32); font-size:9.5px; text-decoration:line-through">4 days</span></div><svg viewBox="0 0 60 20" preserveAspectRatio="none" style="width:100%; height:22px; display:block"><polyline data-pspark points="0,3 10,5 20,4 30,8 40,11 50,15 60,17" fill="none" stroke="#ECE42E" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div style="display:flex; gap:9px"><div style="flex:1; background:rgba(255,255,255,.05); border-radius:15.9px; padding:13px; display:flex; flex-direction:column; gap:6px"><span style="color:rgba(255,255,255,.5); font-size:9.2px; font-weight:600">Stores live</span><span data-pnum="30" data-pnum-prefix="" data-pnum-suffix="+" style="color:#fff; font-size:20.7px; font-weight:600; line-height:1">0+</span></div><div style="flex:1; background:rgba(255,255,255,.05); border-radius:15.9px; padding:13px; display:flex; flex-direction:column; gap:6px"><span style="color:rgba(255,255,255,.5); font-size:9.2px; font-weight:600">Revenue</span><span data-pnum="10" data-pnum-prefix="₹" data-pnum-suffix="Cr" style="color:#fff; font-size:20.7px; font-weight:600; line-height:1">₹0Cr</span></div></div><div style="flex:1; min-height:0; background:rgba(255,255,255,.05); border-radius:15.9px; padding:13px; display:flex; flex-direction:column; gap:6px"><span style="color:rgba(255,255,255,.5); font-size:9.2px; font-weight:600">Rollout progress</span><div style="flex:1; min-height:0; display:flex; align-items:flex-end; gap:4px"><span data-pbar="34" style="flex:1; height:4%; background:rgba(255,255,255,.13); border-radius:3px; transition:height .8s cubic-bezier(.16,1,.3,1) 0.00s"></span><span data-pbar="46" style="flex:1; height:4%; background:rgba(255,255,255,.13); border-radius:3px; transition:height .8s cubic-bezier(.16,1,.3,1) 0.07s"></span><span data-pbar="58" style="flex:1; height:4%; background:rgba(255,255,255,.13); border-radius:3px; transition:height .8s cubic-bezier(.16,1,.3,1) 0.14s"></span><span data-pbar="52" style="flex:1; height:4%; background:rgba(255,255,255,.13); border-radius:3px; transition:height .8s cubic-bezier(.16,1,.3,1) 0.21s"></span><span data-pbar="74" style="flex:1; height:4%; background:rgba(255,255,255,.13); border-radius:3px; transition:height .8s cubic-bezier(.16,1,.3,1) 0.28s"></span><span data-pbar="95" style="flex:1; height:4%; background:#ECE42E; border-radius:3px; transition:height .8s cubic-bezier(.16,1,.3,1) 0.35s"></span></div></div></div>
               </div>
               <div data-mob="gap:12px" style="display:flex; flex-direction:column; gap:22px; flex:1 1 auto; min-width:0">
-                <div data-mob="font-size:21px" style="font-size:clamp(28px,3.2vw,44px); font-weight:600; line-height:1.12; max-width:720px">Thirty-plus store launches that cut delivery from four days to same-day.</div>
+                <div data-mob="font-size:21px" style="font-size:clamp(28px,3.2vw,44px); font-weight:600; line-height:1.12; max-width:720px">Thirty-plus store launches that cut delivery from four days to same-day delivery.</div>
                 <hr style="border:0; border-top:1px solid rgba(7,7,7,.2); margin:0">
-                <div data-mob="gap:5px 14px; font-size:15px" style="display:flex; flex-wrap:wrap; gap:40px; font-size:20px; font-weight:500"><span>₹10Cr revenue</span><span>30+ stores</span><span>4 days to same day</span><span>₹15L saved</span></div>
+                <div data-mob="gap:5px 14px; font-size:15px" style="display:flex; flex-wrap:wrap; gap:40px; font-size:20px; font-weight:500"><span>₹10Cr revenue</span><span>30+ stores</span><span>4 days → same day</span><span>₹15L saved</span></div>
               </div>
             </div>
           </div>
@@ -530,21 +609,21 @@
     <div id="ventures" data-mob="padding:20px 0 0" style="padding:40px 0 0">
       <div data-mob="flex-direction:column; align-items:flex-start; gap:10px" style="display:flex; align-items:baseline; justify-content:space-between; margin-bottom:38px">
         <div data-reveal style="display:flex; flex-direction:column; gap:8px">
-          <span style="font-size:14px; color:#9A9A9A">003 / Entrepreneurship</span>
+          <span style="font-size:14px; color:#9A9A9A">004 / Entrepreneurship</span>
           <h2 style="margin:0; font-size:clamp(32px,4.4vw,60px); font-weight:600; line-height:1.1">Built my own.</h2>
         </div>
-        <span data-reveal style="font-size:16px; color:#9A9A9A">Two ventures. One sold, one running.</span>
+        <span data-reveal style="font-size:16px; color:#9A9A9A">Two ventures. One sold, one growing.</span>
       </div>
 
       <div data-mob="padding-bottom:80px" style="display:flex; flex-direction:column; gap:26px; padding-bottom:140px">
         <div data-mob="top:66px" style="position:sticky; top:110px">
           <div data-stack data-case="innerally" data-mob="padding:20px 16px; border-radius:24px; min-height:0; gap:12px" style="background:#1CE15F; color:#070707; border-radius:44px; padding:44px 52px; min-height:340px; display:flex; flex-direction:column; justify-content:space-between; gap:24px">
-            <div data-mob="flex-direction:column; align-items:flex-start; gap:4px; font-size:13px" style="display:flex; justify-content:space-between; align-items:center; gap:16px; font-size:15px; font-weight:600"><span style="display:flex; align-items:center; gap:10px"><span style="width:24px; height:24px; border-radius:7px; background:rgba(7,7,7,.15); color:#070707; display:flex; align-items:center; justify-content:center; font-size:10px; font-weight:600; flex:none">IA</span>InnerAlly</span><span style="display:flex; align-items:center; gap:12px; flex-wrap:wrap"><span>Feb 2025 to present, 0 to 1</span><span class="cs-pill">Case study →</span></span></div>
+            <div data-mob="flex-direction:column; align-items:flex-start; gap:4px; font-size:13px" style="display:flex; justify-content:space-between; align-items:center; gap:16px; font-size:15px; font-weight:600"><span style="display:flex; align-items:center; gap:10px"><span style="width:24px; height:24px; border-radius:7px; background:rgba(7,7,7,.15); color:#070707; display:flex; align-items:center; justify-content:center; font-size:10px; font-weight:600; flex:none">IA</span>InnerAlly</span><span style="display:flex; align-items:center; gap:12px; flex-wrap:wrap"><span>Feb 2025 to present, 0-to-1</span><span class="cs-pill">Case study →</span></span></div>
             <div data-mob="flex-direction:column-reverse; align-items:stretch; gap:16px" style="display:flex; align-items:center; gap:52px">
               <div data-mob="align-self:center" style="flex:none">
                 <div data-mob="height:min(38vh,330px); height:min(38dvh,330px)" style="position:relative; box-sizing:border-box; height:clamp(400px,54vh,520px); aspect-ratio:9/19.5; background:#070707; border-radius:26px; padding:7px; box-shadow:0 22px 50px rgba(7,7,7,.32)">
                   <div style="position:relative; width:100%; height:100%; background:#0B0B0B; border-radius:20px; overflow:hidden">
-                    <div data-flow aria-label="InnerAlly app flow" style="position:absolute; inset:0; background:#0D0D0D; overflow:hidden"><div data-fscreen="1"><div style="display:flex; justify-content:space-between; font-size:8px; font-weight:600; color:rgba(255,255,255,.45)"><span>9:41</span><span>●●●</span></div><div data-fstep="1"><div style="color:#fff; font-size:13px; font-weight:600; line-height:1.25">Talk to someone<br>in 90 seconds</div><div style="color:rgba(255,255,255,.5); font-size:8.5px; margin-top:2px">Anonymous · no sign up</div></div><div data-fstep="2" style="display:flex; gap:4px; flex-wrap:wrap"><span style="font-size:7px; font-weight:600; padding:3.4px 6.9px; border-radius:99px; background:#1CE15F; color:#070707">Anxiety</span><span style="font-size:7px; font-weight:600; padding:3.4px 6.9px; border-radius:99px; background:rgba(255,255,255,.09); color:rgba(255,255,255,.75)">Sleep</span><span style="font-size:7px; font-weight:600; padding:3.4px 6.9px; border-radius:99px; background:rgba(255,255,255,.09); color:rgba(255,255,255,.75)">Work</span></div><div data-fstep="3" style="display:flex; flex-direction:column; gap:5px"><div data-fstep="3" style="display:flex; align-items:center; gap:7px; background:rgba(255,255,255,.05); border-radius:10px; padding:7px"><span style="width:19px; height:19px; border-radius:50%; background:#1CE15F; flex:none"></span><span style="display:flex; flex-direction:column; gap:3px; flex:1"><span style="height:5px; width:72%; background:rgba(255,255,255,.45); border-radius:9px"></span><span style="height:4px; width:44%; background:rgba(255,255,255,.18); border-radius:9px"></span></span><span style="width:6.5px; height:6.5px; border-radius:50%; background:#1CE15F; flex:none"></span></div><div data-fstep="3" style="display:flex; align-items:center; gap:7px; background:rgba(255,255,255,.05); border-radius:10px; padding:7px"><span style="width:19px; height:19px; border-radius:50%; background:#4791FF; flex:none"></span><span style="display:flex; flex-direction:column; gap:3px; flex:1"><span style="height:5px; width:60%; background:rgba(255,255,255,.45); border-radius:9px"></span><span style="height:4px; width:50%; background:rgba(255,255,255,.18); border-radius:9px"></span></span><span style="width:6.5px; height:6.5px; border-radius:50%; background:#1CE15F; flex:none"></span></div><div data-fstep="3" style="display:flex; align-items:center; gap:7px; background:rgba(255,255,255,.05); border-radius:10px; padding:7px"><span style="width:19px; height:19px; border-radius:50%; background:#ECE42E; flex:none"></span><span style="display:flex; flex-direction:column; gap:3px; flex:1"><span style="height:5px; width:66%; background:rgba(255,255,255,.45); border-radius:9px"></span><span style="height:4px; width:38%; background:rgba(255,255,255,.18); border-radius:9px"></span></span><span style="width:6.5px; height:6.5px; border-radius:50%; background:#1CE15F; flex:none"></span></div></div><div data-fstep="4" style="align-self:flex-start; background:rgba(255,255,255,.09); color:#fff; font-size:7px; font-weight:600; padding:3.4px 8px; border-radius:99px"><span style="display:inline-block; width:5px; height:5px; border-radius:50%; background:#1CE15F; margin-right:4px"></span>4 online now</div><div data-fstep="5" data-tap data-dur="900" data-push="1" style="margin-top:auto; background:#1CE15F; color:#070707; font-size:9.5px; font-weight:600; text-align:center; padding:8.5px; border-radius:99px">Connect now</div></div><div data-fscreen="2"><div style="display:flex; justify-content:space-between; font-size:8px; font-weight:600; color:rgba(255,255,255,.45)"><span>9:41</span><span>●●●</span></div><div data-fstep="6" style="display:flex; justify-content:space-between; align-items:center"><span style="color:#fff; font-size:13px; font-weight:600">Therapist matched</span><span style="background:#1CE15F; color:#070707; font-size:7px; font-weight:600; padding:3.4px 8px; border-radius:99px">CERTIFIED</span></div><div data-fstep="7" style="position:relative; flex:1; min-height:96px; border-radius:13px; background:linear-gradient(160deg,#141d16,#0B0B0B); overflow:hidden; display:flex; align-items:center; justify-content:center">
+                    <div data-flow aria-label="InnerAlly app flow" style="position:absolute; inset:0; background:#0D0D0D; overflow:hidden"><div data-fscreen="1"><div style="display:flex; justify-content:space-between; font-size:8px; font-weight:600; color:rgba(255,255,255,.45)"><span>9:41</span><span>●●●</span></div><div data-fstep="1"><div style="color:#fff; font-size:13px; font-weight:600; line-height:1.25">Talk to someone<br>in 90 seconds</div><div style="color:rgba(255,255,255,.5); font-size:8.5px; margin-top:2px">Anonymous · no account</div></div><div data-fstep="2" style="display:flex; gap:4px; flex-wrap:wrap"><span style="font-size:7px; font-weight:600; padding:3.4px 6.9px; border-radius:99px; background:#1CE15F; color:#070707">Anxiety</span><span style="font-size:7px; font-weight:600; padding:3.4px 6.9px; border-radius:99px; background:rgba(255,255,255,.09); color:rgba(255,255,255,.75)">Sleep</span><span style="font-size:7px; font-weight:600; padding:3.4px 6.9px; border-radius:99px; background:rgba(255,255,255,.09); color:rgba(255,255,255,.75)">Work</span></div><div data-fstep="3" style="display:flex; flex-direction:column; gap:5px"><div data-fstep="3" style="display:flex; align-items:center; gap:7px; background:rgba(255,255,255,.05); border-radius:10px; padding:7px"><span style="width:19px; height:19px; border-radius:50%; background:#1CE15F; flex:none"></span><span style="display:flex; flex-direction:column; gap:3px; flex:1"><span style="height:5px; width:72%; background:rgba(255,255,255,.45); border-radius:9px"></span><span style="height:4px; width:44%; background:rgba(255,255,255,.18); border-radius:9px"></span></span><span style="width:6.5px; height:6.5px; border-radius:50%; background:#1CE15F; flex:none"></span></div><div data-fstep="3" style="display:flex; align-items:center; gap:7px; background:rgba(255,255,255,.05); border-radius:10px; padding:7px"><span style="width:19px; height:19px; border-radius:50%; background:#4791FF; flex:none"></span><span style="display:flex; flex-direction:column; gap:3px; flex:1"><span style="height:5px; width:60%; background:rgba(255,255,255,.45); border-radius:9px"></span><span style="height:4px; width:50%; background:rgba(255,255,255,.18); border-radius:9px"></span></span><span style="width:6.5px; height:6.5px; border-radius:50%; background:#1CE15F; flex:none"></span></div><div data-fstep="3" style="display:flex; align-items:center; gap:7px; background:rgba(255,255,255,.05); border-radius:10px; padding:7px"><span style="width:19px; height:19px; border-radius:50%; background:#ECE42E; flex:none"></span><span style="display:flex; flex-direction:column; gap:3px; flex:1"><span style="height:5px; width:66%; background:rgba(255,255,255,.45); border-radius:9px"></span><span style="height:4px; width:38%; background:rgba(255,255,255,.18); border-radius:9px"></span></span><span style="width:6.5px; height:6.5px; border-radius:50%; background:#1CE15F; flex:none"></span></div></div><div data-fstep="4" style="align-self:flex-start; background:rgba(255,255,255,.09); color:#fff; font-size:7px; font-weight:600; padding:3.4px 8px; border-radius:99px"><span style="display:inline-block; width:5px; height:5px; border-radius:50%; background:#1CE15F; margin-right:4px"></span>4 online now</div><div data-fstep="5" data-tap data-dur="900" data-push="1" style="margin-top:auto; background:#1CE15F; color:#070707; font-size:9.5px; font-weight:600; text-align:center; padding:8.5px; border-radius:99px">Connect now</div></div><div data-fscreen="2"><div style="display:flex; justify-content:space-between; font-size:8px; font-weight:600; color:rgba(255,255,255,.45)"><span>9:41</span><span>●●●</span></div><div data-fstep="6" style="display:flex; justify-content:space-between; align-items:center"><span style="color:#fff; font-size:13px; font-weight:600">Therapist matched</span><span style="background:#1CE15F; color:#070707; font-size:7px; font-weight:600; padding:3.4px 8px; border-radius:99px">CERTIFIED</span></div><div data-fstep="7" style="position:relative; flex:1; min-height:96px; border-radius:13px; background:linear-gradient(160deg,#141d16,#0B0B0B); overflow:hidden; display:flex; align-items:center; justify-content:center">
         <span data-fpulse style="position:absolute; width:74px; height:74px; border-radius:50%; border:1px solid #1CE15F59"></span>
         <span data-fpulse style="position:absolute; width:74px; height:74px; border-radius:50%; border:1px solid #1CE15F59; animation-delay:.9s"></span>
         <span style="width:40px; height:40px; border-radius:50%; background:#1CE15F; color:#070707; display:flex; align-items:center; justify-content:center; font-size:13px; font-weight:600">DR</span>
@@ -556,7 +635,7 @@
                 </div>
               </div>
               <div data-mob="gap:12px" style="display:flex; flex-direction:column; gap:22px; flex:1 1 auto; min-width:0">
-                <div data-mob="font-size:21px" style="font-size:clamp(28px,3.2vw,44px); font-weight:600; line-height:1.12; max-width:720px">Therapy booked in under ninety seconds, with no account and no waiting room.</div>
+                <div data-mob="font-size:21px" style="font-size:clamp(28px,3.2vw,44px); font-weight:600; line-height:1.12; max-width:720px">Anonymous therapy access in under ninety seconds, with no account required.</div>
                 <hr style="border:0; border-top:1px solid rgba(7,7,7,.2); margin:0">
                 <div data-mob="gap:5px 14px; font-size:15px" style="display:flex; flex-wrap:wrap; gap:40px; font-size:20px; font-weight:500"><span>300+ sessions a month</span><span>50+ specialties</span><span>Anonymous by design</span></div>
               </div>
@@ -570,9 +649,9 @@
               <div data-mob="align-self:center" style="flex:none">
                 <div data-mob="height:min(38vh,330px); height:min(38dvh,330px)" style="position:relative; box-sizing:border-box; height:clamp(400px,54vh,520px); aspect-ratio:9/19.5; background:#070707; border-radius:26px; padding:7px; box-shadow:0 22px 50px rgba(7,7,7,.32)">
                   <div style="position:relative; width:100%; height:100%; background:#0B0B0B; border-radius:20px; overflow:hidden">
-                    <div data-flow aria-label="Massoi app flow" style="position:absolute; inset:0; background:#0D0D0D; overflow:hidden"><div data-fscreen="1"><div style="display:flex; justify-content:space-between; font-size:8px; font-weight:600; color:rgba(255,255,255,.45)"><span>9:41</span><span>●●●</span></div><div data-fstep="1"><div style="color:#fff; font-size:13px; font-weight:600; line-height:1.25">Home kitchens<br>near you</div><div style="color:rgba(255,255,255,.5); font-size:8.5px; margin-top:2px">Indiranagar · 6 cooking today</div></div><div data-fstep="2" style="position:relative; flex:1; min-height:84px; border-radius:13px; background:linear-gradient(150deg,#242424,#101010); overflow:hidden; display:flex; align-items:flex-end; padding:7px">
+                    <div data-flow aria-label="Massoi app flow" style="position:absolute; inset:0; background:#0D0D0D; overflow:hidden"><div data-fscreen="1"><div style="display:flex; justify-content:space-between; font-size:8px; font-weight:600; color:rgba(255,255,255,.45)"><span>9:41</span><span>●●●</span></div><div data-fstep="1"><div style="color:#fff; font-size:13px; font-weight:600; line-height:1.25">Home kitchens<br>near you</div><div style="color:rgba(255,255,255,.5); font-size:8.5px; margin-top:2px">Indiranagar · 6 kitchens open</div></div><div data-fstep="2" style="position:relative; flex:1; min-height:84px; border-radius:13px; background:linear-gradient(150deg,#242424,#101010); overflow:hidden; display:flex; align-items:flex-end; padding:7px">
           <span style="background:#FFFFFF; color:#070707; font-size:7px; font-weight:600; padding:3.4px 8px; border-radius:99px">30 min away</span>
-        </div><div data-fstep="3" style="display:flex; flex-direction:column; gap:5px"><div data-fstep="3" style="display:flex; align-items:center; gap:7px; background:rgba(255,255,255,.05); border-radius:10px; padding:7px"><span style="width:19px; height:19px; border-radius:6px; background:#FFFFFF; flex:none"></span><span style="display:flex; flex-direction:column; gap:3px; flex:1"><span style="height:5px; width:62%; background:rgba(255,255,255,.45); border-radius:9px"></span><span style="height:4px; width:44%; background:rgba(255,255,255,.18); border-radius:9px"></span></span><span style="width:6.5px; height:6.5px; border-radius:50%; background:#FFFFFF; flex:none"></span></div><div data-fstep="3" style="display:flex; align-items:center; gap:7px; background:rgba(255,255,255,.05); border-radius:10px; padding:7px"><span style="width:19px; height:19px; border-radius:6px; background:rgba(255,255,255,.16); flex:none"></span><span style="display:flex; flex-direction:column; gap:3px; flex:1"><span style="height:5px; width:70%; background:rgba(255,255,255,.45); border-radius:9px"></span><span style="height:4px; width:38%; background:rgba(255,255,255,.18); border-radius:9px"></span></span><span style="width:6.5px; height:6.5px; border-radius:50%; background:rgba(255,255,255,.25); flex:none"></span></div></div><div data-fstep="4" data-tap data-dur="900" data-push="1" style="margin-top:auto; background:#FFFFFF; color:#070707; font-size:9.5px; font-weight:600; text-align:center; padding:8.5px; border-radius:99px">View menu</div></div><div data-fscreen="2"><div style="display:flex; justify-content:space-between; font-size:8px; font-weight:600; color:rgba(255,255,255,.45)"><span>9:41</span><span>●●●</span></div><div data-fstep="5"><div style="color:#fff; font-size:13px; font-weight:600; line-height:1.25">Ghar ka khana</div><div style="color:rgba(255,255,255,.5); font-size:8.5px; margin-top:2px">Anu's kitchen · Indiranagar</div></div><div data-fstep="6" style="display:flex; flex-direction:column; gap:5px"><div data-fstep="6" style="display:flex; align-items:center; gap:7px; background:rgba(255,255,255,.05); border-radius:10px; padding:7px"><span style="width:19px; height:19px; border-radius:6px; background:#FFFFFF; flex:none"></span><span style="display:flex; flex-direction:column; gap:3px; flex:1"><span style="height:5px; width:58%; background:rgba(255,255,255,.45); border-radius:9px"></span><span style="height:4px; width:40%; background:rgba(255,255,255,.18); border-radius:9px"></span></span></div><div data-fstep="6" style="display:flex; align-items:center; gap:7px; background:rgba(255,255,255,.05); border-radius:10px; padding:7px"><span style="width:19px; height:19px; border-radius:6px; background:rgba(255,255,255,.16); flex:none"></span><span style="display:flex; flex-direction:column; gap:3px; flex:1"><span style="height:5px; width:66%; background:rgba(255,255,255,.45); border-radius:9px"></span><span style="height:4px; width:46%; background:rgba(255,255,255,.18); border-radius:9px"></span></span></div></div><div data-fstep="7" style="display:flex; flex-direction:column; gap:5px"><div style="display:flex; justify-content:space-between; align-items:baseline; border-bottom:1px solid rgba(255,255,255,.07); padding-bottom:4.5px"><span style="color:rgba(255,255,255,.4); font-size:7.5px">2 meals</span><span style="color:#fff; font-size:8.5px; font-weight:600">₹420</span></div><div style="display:flex; justify-content:space-between; align-items:baseline; border-bottom:1px solid rgba(255,255,255,.07); padding-bottom:4.5px"><span style="color:rgba(255,255,255,.4); font-size:7.5px">Delivery</span><span style="color:#fff; font-size:8.5px; font-weight:600">Cooked 1.2 km away</span></div></div><div data-fstep="8" data-tap data-dur="900" data-push="2" style="margin-top:auto; background:#FFFFFF; color:#070707; font-size:9.5px; font-weight:600; text-align:center; padding:8.5px; border-radius:99px">Place order</div></div><div data-fscreen="3"><div style="display:flex; justify-content:space-between; font-size:8px; font-weight:600; color:rgba(255,255,255,.45)"><span>9:41</span><span>●●●</span></div><div data-fstep="9" style="margin:auto; display:flex; flex-direction:column; align-items:center; gap:8px; text-align:center; padding:0 8px"><span style="width:30px; height:30px; border-radius:50%; background:#FFFFFF; color:#070707; display:flex; align-items:center; justify-content:center; font-size:14px; font-weight:600">✓</span><span style="color:#fff; font-size:10.5px; font-weight:600; line-height:1.3">Order placed</span><span data-fstep="9" data-num="32" data-num-prefix="" data-num-suffix=" min" style="color:#FFFFFF; font-size:21px; font-weight:600; line-height:1">0 min</span><span style="color:rgba(255,255,255,.55); font-size:8.2px; line-height:1.45">Anu is cooking, live updates on</span></div></div><span data-fripple style="position:absolute; width:30px; height:30px; margin:-15px 0 0 -15px; border-radius:50%; background:rgba(255,255,255,.55); opacity:0; pointer-events:none"></span></div>
+        </div><div data-fstep="3" style="display:flex; flex-direction:column; gap:5px"><div data-fstep="3" style="display:flex; align-items:center; gap:7px; background:rgba(255,255,255,.05); border-radius:10px; padding:7px"><span style="width:19px; height:19px; border-radius:6px; background:#FFFFFF; flex:none"></span><span style="display:flex; flex-direction:column; gap:3px; flex:1"><span style="height:5px; width:62%; background:rgba(255,255,255,.45); border-radius:9px"></span><span style="height:4px; width:44%; background:rgba(255,255,255,.18); border-radius:9px"></span></span><span style="width:6.5px; height:6.5px; border-radius:50%; background:#FFFFFF; flex:none"></span></div><div data-fstep="3" style="display:flex; align-items:center; gap:7px; background:rgba(255,255,255,.05); border-radius:10px; padding:7px"><span style="width:19px; height:19px; border-radius:6px; background:rgba(255,255,255,.16); flex:none"></span><span style="display:flex; flex-direction:column; gap:3px; flex:1"><span style="height:5px; width:70%; background:rgba(255,255,255,.45); border-radius:9px"></span><span style="height:4px; width:38%; background:rgba(255,255,255,.18); border-radius:9px"></span></span><span style="width:6.5px; height:6.5px; border-radius:50%; background:rgba(255,255,255,.25); flex:none"></span></div></div><div data-fstep="4" data-tap data-dur="900" data-push="1" style="margin-top:auto; background:#FFFFFF; color:#070707; font-size:9.5px; font-weight:600; text-align:center; padding:8.5px; border-radius:99px">View menu</div></div><div data-fscreen="2"><div style="display:flex; justify-content:space-between; font-size:8px; font-weight:600; color:rgba(255,255,255,.45)"><span>9:41</span><span>●●●</span></div><div data-fstep="5"><div style="color:#fff; font-size:13px; font-weight:600; line-height:1.25">Ghar ka khana</div><div style="color:rgba(255,255,255,.5); font-size:8.5px; margin-top:2px">Anu's kitchen · Indiranagar</div></div><div data-fstep="6" style="display:flex; flex-direction:column; gap:5px"><div data-fstep="6" style="display:flex; align-items:center; gap:7px; background:rgba(255,255,255,.05); border-radius:10px; padding:7px"><span style="width:19px; height:19px; border-radius:6px; background:#FFFFFF; flex:none"></span><span style="display:flex; flex-direction:column; gap:3px; flex:1"><span style="height:5px; width:58%; background:rgba(255,255,255,.45); border-radius:9px"></span><span style="height:4px; width:40%; background:rgba(255,255,255,.18); border-radius:9px"></span></span></div><div data-fstep="6" style="display:flex; align-items:center; gap:7px; background:rgba(255,255,255,.05); border-radius:10px; padding:7px"><span style="width:19px; height:19px; border-radius:6px; background:rgba(255,255,255,.16); flex:none"></span><span style="display:flex; flex-direction:column; gap:3px; flex:1"><span style="height:5px; width:66%; background:rgba(255,255,255,.45); border-radius:9px"></span><span style="height:4px; width:46%; background:rgba(255,255,255,.18); border-radius:9px"></span></span></div></div><div data-fstep="7" style="display:flex; flex-direction:column; gap:5px"><div style="display:flex; justify-content:space-between; align-items:baseline; border-bottom:1px solid rgba(255,255,255,.07); padding-bottom:4.5px"><span style="color:rgba(255,255,255,.4); font-size:7.5px">2 meals</span><span style="color:#fff; font-size:8.5px; font-weight:600">₹420</span></div><div style="display:flex; justify-content:space-between; align-items:baseline; border-bottom:1px solid rgba(255,255,255,.07); padding-bottom:4.5px"><span style="color:rgba(255,255,255,.4); font-size:7.5px">Delivery</span><span style="color:#fff; font-size:8.5px; font-weight:600">Cooked 1.2 km away</span></div></div><div data-fstep="8" data-tap data-dur="900" data-push="2" style="margin-top:auto; background:#FFFFFF; color:#070707; font-size:9.5px; font-weight:600; text-align:center; padding:8.5px; border-radius:99px">Place order</div></div><div data-fscreen="3"><div style="display:flex; justify-content:space-between; font-size:8px; font-weight:600; color:rgba(255,255,255,.45)"><span>9:41</span><span>●●●</span></div><div data-fstep="9" style="margin:auto; display:flex; flex-direction:column; align-items:center; gap:8px; text-align:center; padding:0 8px"><span style="width:30px; height:30px; border-radius:50%; background:#FFFFFF; color:#070707; display:flex; align-items:center; justify-content:center; font-size:14px; font-weight:600">✓</span><span style="color:#fff; font-size:10.5px; font-weight:600; line-height:1.3">Order placed</span><span data-fstep="9" data-num="32" data-num-prefix="" data-num-suffix=" min" style="color:#FFFFFF; font-size:21px; font-weight:600; line-height:1">0 min</span><span style="color:rgba(255,255,255,.55); font-size:8.2px; line-height:1.45">Anu is cooking · updates are live</span></div></div><span data-fripple style="position:absolute; width:30px; height:30px; margin:-15px 0 0 -15px; border-radius:50%; background:rgba(255,255,255,.55); opacity:0; pointer-events:none"></span></div>
                   </div>
                   <span style="position:absolute; top:13px; left:50%; transform:translateX(-50%); width:42px; height:5px; border-radius:99px; background:rgba(255,255,255,.18)"></span>
                 </div>
@@ -583,100 +662,6 @@
                 <div data-mob="gap:5px 14px; font-size:15px" style="display:flex; flex-wrap:wrap; gap:40px; font-size:20px; font-weight:500"><span>4,000+ meals</span><span>₹4.8L revenue</span><span>Founded and sold</span></div>
               </div>
             </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div id="numbers" data-mob="padding:20px 0 0" style="padding:40px 0 0">
-      <div data-reveal style="display:flex; flex-direction:column; gap:8px; margin-bottom:38px">
-        <span style="font-size:14px; color:#9A9A9A">004 / Impact</span>
-        <h2 style="margin:0; font-size:clamp(32px,4.4vw,60px); font-weight:600; line-height:1.1">The numbers.</h2>
-      </div>
-      <div data-mob="grid-template-columns:1fr; grid-auto-rows:auto; gap:14px" style="display:grid; grid-template-columns:repeat(12,1fr); grid-auto-rows:minmax(180px,auto); gap:18px">
-
-        <div data-reveal data-mob="grid-column:auto; grid-row:auto; padding:26px 22px; border-radius:28px" style="grid-column:span 5; grid-row:span 2; background:#1CE15F; color:#070707; border-radius:32px; padding:34px; display:flex; flex-direction:column; gap:26px">
-          <div style="display:flex; align-items:flex-start; justify-content:space-between; gap:16px">
-            <div style="display:flex; flex-direction:column; gap:4px">
-              <div style="font-size:26px; font-weight:600; line-height:1.15">CRM portfolio</div>
-              <div style="font-size:16px; font-weight:500; opacity:.7">VLCC, ₹100Cr annual business</div>
-            </div>
-            <span style="font-size:26px; line-height:1">✦</span>
-          </div>
-          <div data-count="100" data-prefix="₹" data-suffix="Cr" data-mob="font-size:64px" style="font-size:clamp(56px,6.4vw,100px); font-weight:600; line-height:.9; letter-spacing:-3px; white-space:nowrap">₹100Cr</div>
-          <div style="display:flex; flex-direction:column; gap:10px; margin-top:auto">
-            <div style="display:flex; align-items:center; justify-content:space-between; font-size:14px; font-weight:600; opacity:.75"><span>Loyalty</span><span>Offers</span><span>Skin analyzer</span></div>
-            <div style="height:44px; background:#070707; border-radius:999px; display:flex; align-items:center; padding:0 8px; gap:8px">
-              <span style="width:26px; height:26px; border-radius:50%; background:#1CE15F"></span>
-              <span style="flex:1; height:6px; border-radius:999px; background:rgba(255,255,255,.16)"></span>
-              <span style="width:26px; height:26px; border-radius:50%; background:#fff"></span>
-              <span style="flex:1; height:6px; border-radius:999px; background:rgba(255,255,255,.16)"></span>
-              <span style="width:26px; height:26px; border-radius:50%; background:#fff"></span>
-            </div>
-            <div style="font-size:15px; font-weight:500; opacity:.75; text-wrap:pretty">In-house CRM improved sales tracking, inventory and team productivity.</div>
-          </div>
-        </div>
-
-        <div data-reveal data-mob="grid-column:auto; padding:24px 22px; border-radius:28px" style="grid-column:span 4; background:#4791FF; color:#070707; border-radius:32px; padding:30px; display:flex; flex-direction:column; justify-content:space-between; gap:18px">
-          <div style="display:flex; align-items:flex-start; justify-content:space-between; gap:12px">
-            <div style="font-size:22px; font-weight:600; line-height:1.2">Shipments daily<br><span style="font-size:15px; font-weight:500; opacity:.7">Amazon, three regions</span></div>
-            <span style="font-size:22px">✦</span>
-          </div>
-          <div style="display:flex; align-items:flex-end; justify-content:space-between; gap:14px">
-            <div data-count="100" data-suffix="K" style="font-size:clamp(44px,4.6vw,66px); font-weight:600; line-height:1; letter-spacing:-2px; white-space:nowrap">100K</div>
-            <svg data-spark viewBox="0 0 120 44" preserveAspectRatio="none" style="width:100%; max-width:120px; min-width:0; height:44px; flex:1 1 60px">
-              <polyline points="0,36 20,30 40,33 60,18 80,22 100,9 120,4" fill="none" stroke="#070707" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"></polyline>
-            </svg>
-          </div>
-        </div>
-
-        <div data-reveal class="hv-card-yellow" data-mob="grid-column:auto; padding:24px 22px; border-radius:28px" style="grid-column:span 3; background:#0B0B0B; border:1px solid rgba(255,255,255,.1); border-radius:32px; padding:30px; display:flex; flex-direction:column; justify-content:space-between; gap:18px; transition:border-color .25s ease, background .25s ease">
-          <div style="display:flex; align-items:center; gap:10px; font-size:14px; color:#9A9A9A">
-            <span style="width:8px; height:8px; border-radius:50%; background:#ECE42E"></span>AuthBridge
-          </div>
-          <div style="display:flex; flex-direction:column; gap:6px">
-            <div data-count="50" data-prefix="₹" data-suffix="Cr" style="font-size:clamp(40px,4.2vw,60px); font-weight:600; line-height:1; letter-spacing:-2px; white-space:nowrap; color:#ECE42E">₹50Cr</div>
-            <div style="font-size:18px; color:#fff; line-height:1.3">Annual revenue across four products</div>
-            <div style="font-size:15px; color:#9A9A9A">Ergon · DKYC · Signdrive · OnboardX</div>
-          </div>
-        </div>
-
-        <div data-reveal data-mob="grid-column:auto; padding:24px 22px; border-radius:28px" style="grid-column:span 4; background:#EB6BA8; color:#070707; border-radius:32px; padding:30px; display:flex; flex-direction:column; justify-content:space-between; gap:18px">
-          <div style="display:flex; align-items:flex-start; justify-content:space-between; gap:12px">
-            <div style="font-size:22px; font-weight:600; line-height:1.2">Per-store sales lift<br><span style="font-size:15px; font-weight:500; opacity:.7">AI skin analyzer, in store</span></div>
-            <span style="font-size:22px">✦</span>
-          </div>
-          <div style="display:flex; align-items:flex-end; gap:18px">
-            <div data-count="25" data-prefix="+" data-suffix="%" style="font-size:clamp(48px,5vw,74px); font-weight:600; line-height:.95; letter-spacing:-2.5px; white-space:nowrap">+25%</div>
-            <div style="flex:1; display:flex; align-items:flex-end; gap:6px; height:52px">
-              <span data-bar="34" style="flex:1; height:34%; background:rgba(7,7,7,.35); border-radius:6px"></span>
-              <span data-bar="52" style="flex:1; height:52%; background:rgba(7,7,7,.45); border-radius:6px"></span>
-              <span data-bar="46" style="flex:1; height:46%; background:rgba(7,7,7,.35); border-radius:6px"></span>
-              <span data-bar="74" style="flex:1; height:74%; background:rgba(7,7,7,.6); border-radius:6px"></span>
-              <span data-bar="100" style="flex:1; height:100%; background:#070707; border-radius:6px"></span>
-            </div>
-          </div>
-        </div>
-
-        <div data-reveal class="hv-card-green" data-mob="grid-column:auto; padding:24px 22px; border-radius:28px" style="grid-column:span 3; background:#0B0B0B; border:1px solid rgba(255,255,255,.1); border-radius:32px; padding:30px; display:flex; flex-direction:column; justify-content:space-between; gap:18px; transition:border-color .25s ease, background .25s ease">
-          <div style="display:flex; align-items:center; gap:10px; font-size:14px; color:#9A9A9A">
-            <span style="width:8px; height:8px; border-radius:50%; background:#1CE15F"></span>InnerAlly
-          </div>
-          <div style="display:flex; flex-direction:column; gap:6px">
-            <div data-count="300" data-suffix="+" style="font-size:clamp(40px,4.2vw,60px); font-weight:600; line-height:1; letter-spacing:-2px; white-space:nowrap; color:#1CE15F">300+</div>
-            <div style="font-size:18px; color:#fff; line-height:1.3">Sessions a month</div>
-            <div style="font-size:15px; color:#9A9A9A">with no sign ups</div>
-          </div>
-        </div>
-
-        <div data-reveal class="hv-wide" data-mob="grid-column:auto; flex-direction:column; align-items:flex-start; gap:16px; padding:24px 22px; border-radius:28px" style="grid-column:span 12; background:#0B0B0B; border:1px solid rgba(255,255,255,.1); border-radius:999px; padding:22px 34px; display:flex; align-items:center; justify-content:space-between; gap:32px; min-height:0; transition:background .25s ease">
-          <div style="display:flex; align-items:baseline; gap:20px; flex-wrap:wrap">
-            <div data-count="4" data-suffix="K+" style="font-size:clamp(32px,3.4vw,48px); font-weight:600; line-height:1; letter-spacing:-1.5px; white-space:nowrap">4K+</div>
-            <div style="font-size:17px; color:#fff">meals delivered at <span style="color:#9A9A9A">Massoi, a food side project I founded and later sold</span></div>
-          </div>
-          <div style="display:flex; gap:10px">
-            <span style="border:1px solid rgba(255,255,255,.18); color:#9A9A9A; font-size:14px; padding:9px 20px; border-radius:999px">Founded 2021</span>
-            <span style="border:1px solid rgba(255,255,255,.18); color:#9A9A9A; font-size:14px; padding:9px 20px; border-radius:999px">Sold 2023</span>
           </div>
         </div>
       </div>
@@ -696,7 +681,7 @@
     <div id="rail-wrap" data-mob="padding:30px 0; margin:80px 0 0; border-radius:24px" style="position:relative; border:1px solid rgba(255,255,255,.08); border-radius:32px; background:#0B0B0B; overflow:hidden; padding:40px 0; margin:120px 0 0">
       <div data-mob="padding:0 20px 20px; align-items:flex-start" style="display:flex; align-items:baseline; justify-content:space-between; gap:16px; padding:0 34px 26px">
         <span style="font-size:14px; color:#fff; font-weight:600">Product toolkit</span>
-        <span data-mob="display:none" style="font-size:14px; color:#9A9A9A">The tools support the work; the outcomes stay above.</span>
+        <span data-mob="display:none" style="font-size:14px; color:#9A9A9A">Tools change. Product judgement travels.</span>
       </div>
 
       <div style="display:flex; flex-direction:column; gap:12px">
@@ -723,7 +708,7 @@
         </div>
       </div>
       <div data-mob="flex-direction:column; gap:6px; padding:22px 4px 0" style="display:flex; justify-content:space-between; font-size:14px; color:#9A9A9A; padding:30px 10px 0">
-        <span>© 2026 Rachit Tiwari <span style="opacity:.45; font-size:12px">· b15</span></span><span>Bangalore, India</span><span>Open to new roles</span>
+        <span>© 2026 Rachit Tiwari <span style="opacity:.45; font-size:12px">· b16</span></span><span>Bangalore, India</span><span>Open to new roles</span>
       </div>
     </div>
   </div>
@@ -781,12 +766,12 @@
     { name: 'Confluence', icon: si('confluence') }
   ];
   var CAPS = [
-    { n: '01', label: 'Product strategy', aside: 'positioning to roadmap', items: ['Positioning and narrative', 'Roadmap planning', 'Pricing and packaging'] },
-    { n: '02', label: 'AI and ML product', aside: 'discovery, evals, guardrails', items: ['Discovery and JTBD', 'Eval design', 'Human in the loop flows'] },
-    { n: '03', label: '0 to 1 and GTM', aside: 'launch to first revenue', items: ['Launch management', 'Channel tests', 'First hundred customers'] },
-    { n: '04', label: 'Enterprise SaaS', aside: 'pricing, security, admin', items: ['Multi product pricing', 'Security reviews', 'Admin and permissions'] },
-    { n: '05', label: 'Growth and retention', aside: 'activation and experiments', items: ['Activation loops', 'Experimentation', 'Cohort analysis'] },
-    { n: '06', label: 'Data and decisioning', aside: 'instrumentation and SQL', items: ['Instrumentation', 'Analytics and SQL', 'Decision memos'] }
+    { n: '01', label: 'Product strategy', aside: 'problem to roadmap', items: ['Customer and problem framing', 'Roadmap prioritisation', 'Success metrics'] },
+    { n: '02', label: 'AI product delivery', aside: 'use case to rollout', items: ['AI use-case design', 'Cross-functional delivery', 'Human review flows'] },
+    { n: '03', label: '0 to 1 and GTM', aside: 'idea to adoption', items: ['Product vision', 'Launch management', 'User acquisition'] },
+    { n: '04', label: 'Enterprise SaaS', aside: 'workflow to scale', items: ['Tenant workflows', 'REST API integrations', 'Compliance delivery'] },
+    { n: '05', label: 'Adoption and growth', aside: 'onboarding to retention', items: ['Onboarding journeys', 'Feature adoption', 'Product experiments'] },
+    { n: '06', label: 'Data and decisions', aside: 'signals to priorities', items: ['Instrumentation', 'Analytics and SQL', 'OKRs and operating reviews'] }
   ];
   var FILLS = ['#1CE15F', '#4791FF', '#ECE42E', '#EB6BA8', '#1CE15F', '#4791FF'];
 
@@ -1158,11 +1143,11 @@
   var coarse = window.matchMedia && window.matchMedia('(pointer: coarse)').matches;
 
   var PILLS = [
-    ["Let's circle back", '#1CE15F'], ['Engineering says no', '#EB6BA8'],
-    ['Can we ship Friday?', '#4791FF'], ['Works on my machine', '#ECE42E'],
-    ['One more meeting', '#FFFFFF'], ['Need more data', 'dark'],
-    ['Out of scope', '#1CE15F'], ['Back to Figma', '#EB6BA8'],
-    ['Too many edge cases', '#4791FF'], ['Ship it', '#ECE42E']
+    ['Quick question', '#1CE15F'], ['Tiny scope change', '#EB6BA8'],
+    ['Can we ship Friday?', '#4791FF'], ['One more edge case', '#ECE42E'],
+    ['Need more data', '#FFFFFF'], ['Back to Figma', 'dark'],
+    ['Worth a test', '#1CE15F'], ['Works on staging', '#EB6BA8'],
+    ['Check the funnel', '#4791FF'], ['Okay, ship it', '#ECE42E']
   ];
 
   function build(n) {
@@ -1416,13 +1401,20 @@
         }
         if (el.dataset.tap != null && !silent && ripple) {
           var x = el.offsetLeft + el.offsetWidth / 2, y = el.offsetTop + el.offsetHeight / 2;
+          el.classList.remove('fs-press');
+          void el.offsetWidth;
+          el.classList.add('fs-press');
           ripple.style.left = x + 'px';
           ripple.style.top = y + 'px';
           ripple.classList.remove('fs-tapping');
           void ripple.offsetWidth;
           ripple.classList.add('fs-tapping');
         }
-        if (el.dataset.push && !silent) flow.classList.add(el.dataset.push === '1' ? 'fs-push' : 'fs-push2');
+        if (el.dataset.push && !silent) {
+          (function (push) {
+            timers.push(setTimeout(function () { flow.classList.add(push === '1' ? 'fs-push' : 'fs-push2'); }, 320));
+          })(el.dataset.push);
+        }
       });
     }
     function reset() {
@@ -1431,6 +1423,7 @@
       Object.keys(steps).forEach(function (k) {
         steps[k].forEach(function (el) {
           el.classList.remove('fs-in');
+          el.classList.remove('fs-press');
           if (el.dataset.grow) el.style.width = '0%';
           if (el.dataset.left != null && el.dataset.left !== '') el.style.left = '0%';
           if (el.dataset.num) el.textContent = (el.dataset.numPrefix || '') + '0' + (el.dataset.numSuffix || '');
@@ -1438,6 +1431,7 @@
       });
       screens.forEach(function (s) { s.style.transition = 'none'; });
       flow.classList.remove('fs-push', 'fs-push2');
+      if (ripple) ripple.classList.remove('fs-tapping');
       void flow.offsetWidth;
       screens.forEach(function (s) { s.style.transition = ''; });
     }
@@ -1447,9 +1441,10 @@
       var t = 200;
       for (var n = 1; n <= max; n++) {
         (function (s, when) { timers.push(setTimeout(function () { fire(s); }, when)); })(n, t);
-        t += at(n).some(function (el) { return el.dataset.dur; }) ? 620 : 380;
+        var paced = at(n).filter(function (el) { return el.dataset.dur; })[0];
+        t += paced ? Math.max(760, parseInt(paced.dataset.dur, 10) || 900) : 420;
       }
-      timers.push(setTimeout(function () { if (live) run(); }, t + 1400));
+      timers.push(setTimeout(function () { if (live) run(); }, t + 2400));
     }
     if (reduce) {
       for (var n = 1; n <= max; n++) fire(n, true);
@@ -1543,7 +1538,7 @@
         ['Scope', 'As Product Manager for enterprise SaaS, I led end-to-end product development for CRM implementations serving large accounts. The work connected product decisions directly to customers generating more than ₹10Cr in annual revenue.'],
         ['Product challenge', 'Enterprise customers needed tailored implementations, but treating every request as one-off delivery would fragment the product. The roadmap had to balance account-specific needs with reusable capabilities and stronger adoption across clients.'],
         ['My role', 'I translated enterprise requirements into a prioritised roadmap and backlog, using OKRs and product data to decide what moved first. I worked across onboarding and implementation so account commitments, feature adoption and product capacity stayed visible in the same plan.'],
-        ['Result', 'Key enterprise accounts were onboarded against a ₹10Cr+ annual-revenue portfolio, while the roadmap became more outcome-led and data-informed. The work strengthened adoption without reducing product management to a queue of custom requests.'],
+        ['Result', 'Key enterprise accounts were onboarded against a ₹10Cr+ annual-revenue portfolio, while the roadmap became more outcome-led and data-informed. The work strengthened adoption while keeping the roadmap reusable across accounts.'],
       ],
       chips: ['₹10Cr+ annual revenue', 'End-to-end CRM ownership', 'OKR + data-led prioritisation'],
     },
@@ -1576,18 +1571,18 @@
         ['Scope', 'I managed operations across 20+ fulfilment and delivery centres in Punjab, Himachal Pradesh and Jammu & Kashmir. The network covered 500 pincodes, handled roughly 100K shipments a day and involved more than 200 professionals.'],
         ['Operating challenge', 'At that scale, yearly goals had to become centre-level targets and daily signals. Leadership needed a consistent way to spot red flags early, compare performance and turn audit findings into action across a distributed network.'],
         ['My role', 'I led north-zone analytics for target setting, red alerts and operational audits. The work created a shared operating cadence for reviewing performance, surfacing risk and keeping centre teams aligned to yearly goals.'],
-        ['Result', 'The analytics and audit discipline supported decision-making across one of the largest operating scopes in my résumé: 20+ centres, 200+ professionals, 100K daily shipments and 500 pincodes.'],
+        ['Result', 'The analytics and audit discipline supported decisions across 20+ centres, 200+ professionals, roughly 100K daily shipments and 500 pincodes.'],
       ],
       chips: ['100K daily shipments', '20+ centres', '200+ professionals', '500 pincodes'],
     },
     jiomart: {
       name: 'Jio Mart', badge: 'JM', accent: '#ECE42E', sub: 'Nov 2020 – Dec 2021 · Assistant Manager, Program Management',
-      title: 'Launching 30+ stores while cutting delivery from four days to same-day.',
+      title: 'Launching 30+ stores while cutting delivery from four days to same-day delivery.',
       body: [
         ['Scope', 'As Assistant Manager in Program Management, I helped launch JioMart across more than 30 retail stores. The programme turned a new digital retail channel into meaningful store-level operations and revenue.'],
         ['Programme challenge', 'Delivery turnaround time was four days. The launch needed to scale across stores while making the operating model faster and more cost-efficient.'],
         ['My role', 'I led the multi-store rollout and the programme changes required to improve delivery turnaround. The work connected launch execution, store operations, revenue contribution and cost savings in one operating plan.'],
-        ['Impact', 'The programme reduced delivery turnaround from four days to same-day, contributed ₹10Cr in revenue and saved ₹15L across 30+ stores.'],
+        ['Impact', 'The programme reduced delivery turnaround from four days to same-day delivery, contributed ₹10Cr in revenue and saved ₹15L across 30+ stores.'],
       ],
       chips: ['4 days → same day', '30+ stores', '₹10Cr revenue', '₹15L saved'],
     },
@@ -1609,7 +1604,7 @@
         ['Scope', 'I founded Massoi as a 0-to-1 marketplace connecting customers with meals prepared by home chefs. I took the venture from an initial product idea into a working consumer marketplace.'],
         ['Marketplace challenge', 'A two-sided food marketplace needs useful local choice for customers and enough reliable demand for home chefs. The product, supply and acquisition motions had to grow together rather than as separate workstreams.'],
         ['My role', 'I owned the product vision, go-to-market strategy and user acquisition. That meant shaping the marketplace experience while building the demand needed to turn listed home kitchens into completed orders.'],
-        ['Outcome', 'Massoi delivered more than 4,000 meals and generated ₹4.8L in revenue. The venture was later sold, completing the journey from idea to operating marketplace to exit.'],
+        ['Outcome', 'Massoi delivered more than 4,000 meals and generated ₹4.8L in revenue. I later sold the venture after taking it from product idea to an operating marketplace.'],
       ],
       chips: ['4,000+ meals', '₹4.8L revenue', 'Product + GTM + acquisition', 'Founded · later sold'],
     },
