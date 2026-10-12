@@ -347,7 +347,7 @@
   [data-flow].fs-live [data-fscan]{animation:fs-scan 2.1s cubic-bezier(.16,1,.3,1) infinite alternate}
   [data-flow].fs-live [data-fpulse]{animation:fs-pulse 1.8s ease-out infinite}
   [data-flow].fs-live [data-fwave]{animation:fs-wave .9s ease-in-out infinite}
-  @media (prefers-reduced-motion:reduce){[data-flow]::before{width:calc(100% - 24px);transition:none}[data-fscreen],[data-fstep]{transition:none;filter:none}[data-tap].fs-press,[data-fripple].fs-tapping{animation:none}}
+  
 </style>
 <noscript><style>#loader { display: none !important; }</style></noscript>
 </head>
@@ -731,7 +731,7 @@
     </div>
 
 <style>
-#people{padding:140px 0 0;position:relative}
+#people{padding:140px 0 0;position:relative;scroll-margin-top:90px}
 #people .ppl-head{display:flex;align-items:baseline;justify-content:space-between;gap:16px;margin-bottom:34px;flex-wrap:wrap}
 #people h2{margin:0;font-size:clamp(32px,4.4vw,60px);font-weight:600;line-height:1.1}
 #people h2 .ppl-w{display:inline-block;background:linear-gradient(90deg,#fff 0%,#EB6BA8 35%,#1CE15F 65%,#fff 100%);background-size:300% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:pplShine 6s linear infinite}
@@ -742,7 +742,7 @@
 .ppl-grid.in .ppl-card{opacity:1;transform:none}
 .ppl-card:hover{border-color:var(--c);box-shadow:0 0 0 1px var(--c),0 24px 60px -18px var(--c)}
 .ppl-card:hover:before{opacity:.18}
-.ppl-card:nth-child(7){grid-column:span 3}
+.ppl-card:nth-child(7){grid-column:span 3;flex-direction:row;align-items:center;gap:28px}.ppl-card:nth-child(7) .ppl-top{flex:0 0 38%}.ppl-card:nth-child(7) .ppl-note{flex:1;border-top:0;border-left:1px solid rgba(255,255,255,.08);padding:0 0 0 28px}
 .ppl-top{display:flex;align-items:center;gap:16px}
 .ppl-av{position:relative;flex:none;width:64px;height:64px;border-radius:50%;display:grid;place-items:center;padding:3px;background:conic-gradient(from var(--a,0deg),var(--c),transparent 40%,var(--c));animation:pplSpin 4s linear infinite}
 .ppl-av span,.ppl-av img{width:100%;height:100%;border-radius:50%;background:#070707;display:grid;place-items:center;font-weight:600;font-size:20px;color:var(--c);object-fit:cover}
@@ -755,6 +755,7 @@
 .ppl-note{position:relative;display:block;font-size:15.5px;line-height:1.55;color:#e9e9e9;padding-top:16px;border-top:1px solid rgba(255,255,255,.08)}
 .ppl-note small{display:block;font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--c);margin-bottom:8px}
 @media (max-width:1000px){.ppl-grid{grid-template-columns:1fr 1fr}.ppl-card:nth-child(7){grid-column:span 2}}
+@media (max-width:640px){.ppl-card:nth-child(7){flex-direction:column;align-items:stretch;gap:18px}.ppl-card:nth-child(7) .ppl-note{border-left:0;border-top:1px solid rgba(255,255,255,.08);padding:16px 0 0}}
 @media (max-width:640px){#people{padding:80px 0 0}.ppl-grid{grid-template-columns:1fr}.ppl-card:nth-child(7){grid-column:auto}.ppl-card{padding:20px;border-radius:22px}.ppl-av{width:54px;height:54px}}
 @media (prefers-reduced-motion:reduce){.ppl-av,#people h2 .ppl-w{animation:none}.ppl-card{opacity:1;transform:none;transition:none}}
 </style>
@@ -855,7 +856,7 @@
     { name: 'Miro', icon: LOGO.miro }, { name: 'Postman', icon: LOGO.postman }, { name: 'GitHub', icon: LOGO.github }, { name: 'Slack', icon: LOGO.slack }
   ];
   var TOOLS_B = [
-    { name: 'Amplitude', icon: LOGO.amplitude, full: true }, { name: 'Mixpanel', icon: LOGO.mixpanel }, { name: 'Looker', icon: LOGO.looker },
+    { name: 'Amplitude', icon: LOGO.amplitude, round: true }, { name: 'Mixpanel', icon: LOGO.mixpanel }, { name: 'Looker', icon: LOGO.looker },
     { name: 'SQL · PostgreSQL', icon: LOGO.postgresql }, { name: 'Claude', icon: LOGO.claude }, { name: 'ChatGPT', icon: LOGO.openai }
   ];
   var CAPS = [
@@ -887,7 +888,7 @@
         var ic = document.createElement('span');
         ic.setAttribute('role', 'img');
         ic.setAttribute('aria-label', t.name);
-        ic.style.cssText = (t.full ? 'width:44px; height:44px;' : 'width:24px; height:24px;') + ' display:block; background-repeat:no-repeat; background-position:center; background-size:contain; background-image:url("' + t.icon + '")';
+        ic.style.cssText = (t.round ? 'width:28px; height:28px; border-radius:50%;' : 'width:24px; height:24px;') + ' display:block; background-repeat:no-repeat; background-position:center; background-size:contain; background-image:url("' + t.icon + '")';
         chip.appendChild(ic);
       } else if (t.mono) {
         var m = document.createElement('span');
@@ -1473,7 +1474,7 @@
 /* ---- app flow + dashboard engines ---- */
 (function () {
   'use strict';
-  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var reduce = false; /* product flows always play: they are the work demo */
   var DESIGN_W = 171;
   var flows = Array.prototype.slice.call(document.querySelectorAll('[data-flow]'));
   var visibilityChecks = [];
