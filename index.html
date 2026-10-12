@@ -51,7 +51,9 @@
 <link rel="apple-touch-icon" href="apple-touch-icon.png?v=2">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+<noscript><link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet"></noscript>
 <style>
   html { scroll-behavior: smooth; }
   body { margin: 0; background: #070707; color: #fff; font-family: 'Poppins', system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
@@ -353,6 +355,9 @@
 </head>
 <body>
 
+<script>/* failsafe: the decorative loader can never block the page */
+(function(){function kill(){var l=document.getElementById('loader');if(l&&l.parentNode){l.style.transition='opacity .3s';l.style.opacity='0';setTimeout(function(){if(l.parentNode)l.parentNode.removeChild(l)},320)}}
+setTimeout(kill,2500);window.addEventListener('error',function(){setTimeout(kill,300)});window.addEventListener('pageshow',function(e){if(e.persisted)kill()});})();</script>
 <div id="scroll" style="position:relative; background:#070707; overflow-x:clip">
   <div id="loader" data-mob="padding:28px 20px" style="position:fixed; inset:0; z-index:200; background:#070707; display:flex; flex-direction:column; justify-content:space-between; padding:44px; transition:transform .5s cubic-bezier(.76,0,.24,1)">
     <div style="display:flex; align-items:baseline; justify-content:space-between; gap:16px">
@@ -1430,7 +1435,7 @@
   }
 
   function boot() { setTimeout(start, 1900); }
-  if (document.fonts && document.fonts.ready) document.fonts.ready.then(boot); else boot();
+  var booted=false;function boot1(){if(!booted){booted=true;boot();}} if (document.fonts && document.fonts.ready) document.fonts.ready.then(boot1); setTimeout(boot1, 2500);
 })();
 </script>
 
