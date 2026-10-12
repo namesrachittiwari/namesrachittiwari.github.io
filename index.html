@@ -1061,7 +1061,7 @@ setTimeout(kill,2500);window.addEventListener('error',function(){setTimeout(kill
   var screenVids = Array.prototype.slice.call(sc.querySelectorAll('video[data-screen-video]'));
 
   var links = nav ? Array.prototype.slice.call(nav.querySelectorAll('[data-nav]')) : [];
-  var sections = ['work', 'ventures', 'numbers', 'caps'].map(function (id) { return sc.querySelector('#' + id); }).filter(Boolean);
+  var sections = ['numbers', 'work', 'ventures', 'caps'].map(function (id) { return sc.querySelector('#' + id); }).filter(Boolean);
 
   // ---- odometer: each digit column rolls up to its final value ----
   function buildOdometer(el) {
