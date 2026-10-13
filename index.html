@@ -353,7 +353,7 @@
 
   /* RESUME CTA: download icon in a circle, bouncing continuously */
   .resume-cta > a { display:inline-flex; align-items:center; gap:12px }
-  .resume-cta__circle { flex:none; width:30px; height:30px; border-radius:50%; display:inline-flex; align-items:center; justify-content:center; background:rgba(255,255,255,.10); border:1px solid rgba(255,255,255,.35); box-shadow:inset 0 0 8px rgba(226,232,240,.12); overflow:hidden }
+  .resume-cta__circle { flex:none; width:32px; height:32px; margin-right:-14px; border-radius:50%; display:inline-flex; align-items:center; justify-content:center; background:#fff; color:#070707; box-shadow:0 0 14px rgba(255,255,255,.55), 0 0 0 3px rgba(255,255,255,.12); overflow:hidden }
   .resume-cta__ico { display:block; animation: resumeIcoBounce 1.1s cubic-bezier(.45,0,.55,1) infinite }
   @keyframes resumeIcoBounce { 0%,100% { transform: translateY(-3px) } 50% { transform: translateY(3px) } }
 </style>
@@ -442,7 +442,7 @@ setTimeout(kill,2500);window.addEventListener('error',function(){setTimeout(kill
 
           <div class="hero__ctas om-load-4">
             <span class="glow-ring"><a href="#case-index" id="cta-primary" class="btn btn--primary" data-track="selected_work_click">See selected work</a></span>
-            <span class="glow-ring glow-ring--ghost resume-cta"><a href="Rachit-Tiwari-Resume.pdf" download="Rachit-Tiwari-Resume.pdf" class="btn btn--ghost" data-track="resume_download"><span class="resume-cta__circle" aria-hidden="true"><svg class="resume-cta__ico" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v11"/><path d="M7 10l5 5 5-5"/><path d="M5 20h14"/></svg></span>Download résumé</a></span>
+            <span class="glow-ring glow-ring--ghost resume-cta"><a href="Rachit-Tiwari-Resume.pdf" download="Rachit-Tiwari-Resume.pdf" class="btn btn--ghost" data-track="resume_download">Download résumé<span class="resume-cta__circle" aria-hidden="true"><svg class="resume-cta__ico" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v11"/><path d="M7 10l5 5 5-5"/><path d="M5 20h14"/></svg></span></a></span>
           </div>
         </div>
       </div>
